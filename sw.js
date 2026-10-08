@@ -1,1 +1,38 @@
-const C='camprover-final-v1';self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['./','./index.html','./manifest.json']))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+const CACHE_NAME = 'camprover-level-v2';
+
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './sw.js',
+  './assets/pitch_discovery.jpg',
+  './assets/roll_discovery.jpg'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request);
+    })
+  );
+});
