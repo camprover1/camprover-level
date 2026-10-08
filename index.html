@@ -27,7 +27,7 @@
     --text:#f4f7f8;
     --muted:#8d989d;
 
-    /* MAVİ TONUNU BURADAN DEĞİŞTİREBİLİRSİN */
+    /* MAVİ TONU */
     --level-blue:#00A8FF;
 
     --green:#22ff75;
@@ -65,6 +65,46 @@ body{
     justify-content:center;
 }
 
+
+/* ==================================================
+   CAMPROVER LOGO
+================================================== */
+
+.brand{
+
+    position:fixed;
+
+    top:10px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:100;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    letter-spacing:6px;
+
+    color:#dfe7e9;
+
+    opacity:.85;
+
+    text-shadow:
+        0 0 8px rgba(0,168,255,.18),
+        0 0 14px rgba(34,255,117,.08);
+
+    pointer-events:none;
+
+    user-select:none;
+}
+
+
+/* ==================================================
+   DASHBOARD
+================================================== */
+
 .dashboard{
 
     width:100%;
@@ -84,9 +124,10 @@ body{
     padding:18px;
 }
 
-/* --------------------------------------------------
+
+/* ==================================================
    PANELS
--------------------------------------------------- */
+================================================== */
 
 .panel{
 
@@ -131,9 +172,10 @@ body{
     z-index:10;
 }
 
-/* --------------------------------------------------
-   PITCH / ROLL VALUE
--------------------------------------------------- */
+
+/* ==================================================
+   VALUE
+================================================== */
 
 .value{
 
@@ -163,9 +205,10 @@ body{
     opacity:.75;
 }
 
-/* --------------------------------------------------
+
+/* ==================================================
    VEHICLE IMAGE
--------------------------------------------------- */
+================================================== */
 
 .vehicleWrap{
 
@@ -204,9 +247,10 @@ body{
     -webkit-user-drag:none;
 }
 
-/* --------------------------------------------------
-   LEVEL BORDER STATES
--------------------------------------------------- */
+
+/* ==================================================
+   BLUE LEVEL STATES
+================================================== */
 
 .panel.level-5{
     border-color:var(--border);
@@ -268,9 +312,10 @@ body{
             );
 }
 
-/* --------------------------------------------------
-   CENTER LEVEL
--------------------------------------------------- */
+
+/* ==================================================
+   CENTER PANEL
+================================================== */
 
 .centerPanel{
 
@@ -279,6 +324,11 @@ body{
     align-items:center;
     justify-content:center;
 }
+
+
+/* ==================================================
+   CIRCULAR LEVEL
+================================================== */
 
 .level{
 
@@ -305,7 +355,10 @@ body{
         0 0 25px rgba(0,255,100,.05);
 }
 
-/* green liquid */
+
+/* ==================================================
+   GREEN LIQUID
+================================================== */
 
 .liquid{
 
@@ -327,8 +380,6 @@ body{
 
     overflow:hidden;
 }
-
-/* subtle liquid glow */
 
 .liquid::before{
 
@@ -364,9 +415,10 @@ body{
     }
 }
 
-/* --------------------------------------------------
-   LEVEL AXIS
--------------------------------------------------- */
+
+/* ==================================================
+   AXIS
+================================================== */
 
 .axis{
 
@@ -401,9 +453,10 @@ body{
     transform:translateX(-50%);
 }
 
-/* --------------------------------------------------
-   DEGREE MARKS
--------------------------------------------------- */
+
+/* ==================================================
+   DEGREE TICKS
+================================================== */
 
 .tick{
 
@@ -444,9 +497,10 @@ body{
 .tick.y3{ top:62.5%; }
 .tick.y4{ top:75%; }
 
-/* --------------------------------------------------
+
+/* ==================================================
    LEVEL LABELS
--------------------------------------------------- */
+================================================== */
 
 .levelLabel{
 
@@ -496,9 +550,10 @@ body{
     transform:translateY(-50%);
 }
 
-/* --------------------------------------------------
+
+/* ==================================================
    CENTER DOT
--------------------------------------------------- */
+================================================== */
 
 .center-dot{
 
@@ -523,9 +578,10 @@ body{
     z-index:10;
 }
 
-/* --------------------------------------------------
+
+/* ==================================================
    BUBBLE
--------------------------------------------------- */
+================================================== */
 
 .bubble{
 
@@ -572,9 +628,10 @@ body{
     will-change:transform;
 }
 
-/* --------------------------------------------------
+
+/* ==================================================
    START SCREEN
--------------------------------------------------- */
+================================================== */
 
 .startScreen{
 
@@ -624,14 +681,24 @@ body{
     transform:scale(.97);
 }
 
-/* --------------------------------------------------
+
+/* ==================================================
    MOBILE
--------------------------------------------------- */
+================================================== */
 
 @media (max-width:700px){
 
     body{
         align-items:stretch;
+    }
+
+    .brand{
+
+        top:7px;
+
+        font-size:15px;
+
+        letter-spacing:5px;
     }
 
     .dashboard{
@@ -640,7 +707,7 @@ body{
         height:100dvh;
 
         padding:
-            max(8px, env(safe-area-inset-top))
+            max(30px, env(safe-area-inset-top))
             8px
             max(8px, env(safe-area-inset-bottom))
             8px;
@@ -732,7 +799,10 @@ body{
     }
 }
 
-/* very short phones */
+
+/* ==================================================
+   SHORT MOBILE
+================================================== */
 
 @media (max-height:700px) and (max-width:700px){
 
@@ -769,11 +839,29 @@ body{
 </style>
 </head>
 
+
 <body>
+
+
+<!-- ==================================================
+     CAMPROVER
+================================================== -->
+
+<div class="brand">
+    CAMPROVER
+</div>
+
+
+<!-- ==================================================
+     DASHBOARD
+================================================== -->
 
 <div class="dashboard">
 
-    <!-- PITCH -->
+
+    <!-- ==============================================
+         PITCH
+    =============================================== -->
 
     <section
         class="panel pitchPanel"
@@ -786,7 +874,9 @@ body{
         <div
             class="value"
             id="pitchValue">
+
             +0<span class="unit">°</span>
+
         </div>
 
         <div class="vehicleWrap">
@@ -801,7 +891,9 @@ body{
     </section>
 
 
-    <!-- CENTER -->
+    <!-- ==============================================
+         CENTER LEVEL
+    =============================================== -->
 
     <section
         class="panel centerPanel"
@@ -812,17 +904,27 @@ body{
             <div class="liquid">
 
                 <div class="axis horizontal"></div>
+
                 <div class="axis vertical"></div>
+
+
+                <!-- Horizontal ticks -->
 
                 <div class="tick horizontal x1"></div>
                 <div class="tick horizontal x2"></div>
                 <div class="tick horizontal x3"></div>
                 <div class="tick horizontal x4"></div>
 
+
+                <!-- Vertical ticks -->
+
                 <div class="tick vertical y1"></div>
                 <div class="tick vertical y2"></div>
                 <div class="tick vertical y3"></div>
                 <div class="tick vertical y4"></div>
+
+
+                <!-- Degree labels -->
 
                 <div class="levelLabel labelTop">
                     +10°
@@ -840,7 +942,13 @@ body{
                     +10°
                 </div>
 
+
+                <!-- Center -->
+
                 <div class="center-dot"></div>
+
+
+                <!-- Bubble -->
 
                 <div
                     class="bubble"
@@ -854,7 +962,9 @@ body{
     </section>
 
 
-    <!-- ROLL -->
+    <!-- ==============================================
+         ROLL
+    =============================================== -->
 
     <section
         class="panel rollPanel"
@@ -867,7 +977,9 @@ body{
         <div
             class="value"
             id="rollValue">
+
             +0<span class="unit">°</span>
+
         </div>
 
         <div class="vehicleWrap">
@@ -888,20 +1000,26 @@ body{
 
 (async function(){
 
-    /*
-     * --------------------------------------------------
-     * SERVICE WORKER / CACHE TEMİZLEME
-     * --------------------------------------------------
-     */
+
+    /* ==================================================
+       SERVICE WORKER / CACHE TEMİZLEME
+    ================================================== */
 
     try{
 
-        if("serviceWorker" in navigator){
+        if(
+            "serviceWorker" in navigator
+        ){
 
             const registrations =
-                await navigator.serviceWorker.getRegistrations();
+                await navigator
+                    .serviceWorker
+                    .getRegistrations();
 
-            for(const registration of registrations){
+            for(
+                const registration
+                of registrations
+            ){
 
                 await registration.unregister();
 
@@ -909,20 +1027,29 @@ body{
 
         }
 
-        if("caches" in window){
+
+        if(
+            "caches" in window
+        ){
 
             const cacheNames =
                 await caches.keys();
 
-            for(const cacheName of cacheNames){
+            for(
+                const cacheName
+                of cacheNames
+            ){
 
-                await caches.delete(cacheName);
+                await caches.delete(
+                    cacheName
+                );
 
             }
 
         }
 
-    }catch(error){
+    }
+    catch(error){
 
         console.log(
             "Cache temizleme:",
@@ -932,14 +1059,13 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * IMAGE VERSION
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       IMAGE VERSION
+    ================================================== */
 
     const IMAGE_VERSION =
-        "20261008-13";
+        "20261008-14";
+
 
     const pitchImage =
         document.getElementById(
@@ -951,6 +1077,7 @@ body{
             "rollImage"
         );
 
+
     pitchImage.src =
         "pitch_discovery.png?v=" +
         IMAGE_VERSION;
@@ -960,45 +1087,25 @@ body{
         IMAGE_VERSION;
 
 
-    /*
-     * --------------------------------------------------
-     * SENSOR FILTER
-     * --------------------------------------------------
-     *
-     * Daha yüksek filtre:
-     *
-     * SENSOR_ALPHA
-     * 0.08 = oldukça sakin sensör
-     *
-     * BUBBLE_ALPHA
-     * 0.08 = baloncuk daha sakin
-     *
-     * VEHICLE_ALPHA
-     * 0.20 = araç görselleri biraz daha hızlı
-     *
-     */
+    /* ==================================================
+       SENSOR FILTER
+    ================================================== */
 
     const SENSOR_ALPHA =
         0.08;
 
+
     const BUBBLE_ALPHA =
         0.08;
+
 
     const VEHICLE_ALPHA =
         0.20;
 
 
     /*
-     * Çok küçük sensör oynamalarını
-     * bastırmak için deadband.
-     *
-     * Örneğin:
-     *
-     * 3.00 -> 3.08 -> 2.94
-     *
-     * gibi küçük değişiklikler
-     * ekranda gereksiz titreşim
-     * oluşturmayacak.
+     * Çok küçük sensör hareketlerini
+     * bastırır.
      */
 
     const DEAD_BAND =
@@ -1006,20 +1113,16 @@ body{
 
 
     /*
-     * Görsel maksimum:
-     *
-     * -10° ... +10°
+     * Görsel ölçüm sınırı.
      */
 
     const MAX_ANGLE =
         10;
 
 
-    /*
-     * --------------------------------------------------
-     * ELEMENTLER
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       ELEMENTLER
+    ================================================== */
 
     const pitchPanel =
         document.getElementById(
@@ -1047,49 +1150,33 @@ body{
         );
 
 
-    /*
-     * --------------------------------------------------
-     * SENSOR DEĞİŞKENLERİ
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       SENSOR VARIABLES
+    ================================================== */
 
     let filteredAx = 0;
     let filteredAy = 0;
     let filteredAz = 0;
 
-    let sensorInitialized = false;
+    let sensorInitialized =
+        false;
 
 
     let pitchRaw = 0;
     let rollRaw = 0;
 
 
-    /*
-     * Ekrandaki baloncuk için
-     * ayrıca filtrelenmiş değerler.
-     */
-
     let bubblePitch = 0;
     let bubbleRoll = 0;
 
-
-    /*
-     * Araç görselleri için
-     * daha hızlı filtre.
-     */
 
     let visualPitch = 0;
     let visualRoll = 0;
 
 
-    /*
-     * --------------------------------------------------
-     * DEAD BAND
-     * --------------------------------------------------
-     *
-     * Önceki değer ile yeni değer arasındaki
-     * çok küçük değişimleri yok sayar.
-     */
+    /* ==================================================
+       STABILIZE / DEAD BAND
+    ================================================== */
 
     function stabilize(
         value,
@@ -1098,7 +1185,8 @@ body{
 
         if(
             Math.abs(
-                value - previous
+                value -
+                previous
             ) < DEAD_BAND
         ){
 
@@ -1111,11 +1199,9 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * CLAMP
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       CLAMP
+    ================================================== */
 
     function clampAngle(
         value
@@ -1132,13 +1218,9 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * ROUND DISPLAY
-     * --------------------------------------------------
-     *
-     * Değerleri tam derece göster.
-     */
+    /* ==================================================
+       FORMAT DEGREE
+    ================================================== */
 
     function formatDegree(
         value
@@ -1149,6 +1231,7 @@ body{
                 value
             );
 
+
         if(
             rounded > 0
         ){
@@ -1158,6 +1241,7 @@ body{
 
         }
 
+
         return String(
             rounded
         );
@@ -1165,19 +1249,9 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * CARD BLUE LEVEL
-     * --------------------------------------------------
-     *
-     * 0°       = maksimum mavi
-     * ±1°      = güçlü
-     * ±2°      = orta güçlü
-     * ±3°      = orta
-     * ±4°      = hafif
-     * ±5°      = çok hafif
-     * >5°      = normal
-     */
+    /* ==================================================
+       CARD BLUE LEVEL
+    ================================================== */
 
     function updateCardLevel(
         panel,
@@ -1193,38 +1267,52 @@ body{
             "level-5"
         );
 
-        const abs =
-            Math.abs(value);
 
-        if(abs <= 0.5){
+        const abs =
+            Math.abs(
+                value
+            );
+
+
+        if(
+            abs <= 0.5
+        ){
 
             panel.classList.add(
                 "level-0"
             );
 
         }
-        else if(abs <= 1){
+        else if(
+            abs <= 1
+        ){
 
             panel.classList.add(
                 "level-1"
             );
 
         }
-        else if(abs <= 2){
+        else if(
+            abs <= 2
+        ){
 
             panel.classList.add(
                 "level-2"
             );
 
         }
-        else if(abs <= 3){
+        else if(
+            abs <= 3
+        ){
 
             panel.classList.add(
                 "level-3"
             );
 
         }
-        else if(abs <= 5){
+        else if(
+            abs <= 5
+        ){
 
             panel.classList.add(
                 "level-4"
@@ -1242,22 +1330,22 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * LEVEL UPDATE
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       UPDATE LEVEL
+    ================================================== */
 
     function updateLevel(){
 
+
         /*
-         * ±10° ile sınırlandır.
+         * Display değerlerini ±10° ile sınırla.
          */
 
         const displayPitch =
             clampAngle(
                 pitchRaw
             );
+
 
         const displayRoll =
             clampAngle(
@@ -1266,7 +1354,7 @@ body{
 
 
         /*
-         * Sayısal değerler.
+         * Sayısal değer.
          */
 
         pitchValue.innerHTML =
@@ -1274,6 +1362,7 @@ body{
                 displayPitch
             ) +
             '<span class="unit">°</span>';
+
 
         rollValue.innerHTML =
             formatDegree(
@@ -1291,17 +1380,16 @@ body{
             displayPitch
         );
 
+
         updateCardLevel(
             rollPanel,
             displayRoll
         );
 
 
-        /*
-         * --------------------------------------------------
-         * BUBBLE FILTER
-         * --------------------------------------------------
-         */
+        /* ==================================================
+           BUBBLE FILTER
+        ================================================== */
 
         bubblePitch +=
             (
@@ -1309,6 +1397,7 @@ body{
                 bubblePitch
             ) *
             BUBBLE_ALPHA;
+
 
         bubbleRoll +=
             (
@@ -1319,7 +1408,7 @@ body{
 
 
         /*
-         * Bubble hareket alanı.
+         * Bubble maksimum hareketi.
          *
          * ±10° = ±112 px
          */
@@ -1327,12 +1416,14 @@ body{
         const maxMove =
             112;
 
+
         const moveX =
             (
                 bubbleRoll /
                 MAX_ANGLE
             ) *
             maxMove;
+
 
         const moveY =
             (
@@ -1353,11 +1444,9 @@ body{
             ")";
 
 
-        /*
-         * --------------------------------------------------
-         * VEHICLE FILTER
-         * --------------------------------------------------
-         */
+        /* ==================================================
+           VEHICLE FILTER
+        ================================================== */
 
         visualPitch +=
             (
@@ -1365,6 +1454,7 @@ body{
                 visualPitch
             ) *
             VEHICLE_ALPHA;
+
 
         visualRoll +=
             (
@@ -1375,7 +1465,7 @@ body{
 
 
         /*
-         * Pitch aracı döndür.
+         * Pitch görseli.
          */
 
         pitchImage.style.transform =
@@ -1387,7 +1477,7 @@ body{
 
 
         /*
-         * Roll aracı döndür.
+         * Roll görseli.
          */
 
         rollImage.style.transform =
@@ -1398,10 +1488,6 @@ body{
             "deg)";
 
 
-        /*
-         * Animasyon devam etsin.
-         */
-
         requestAnimationFrame(
             updateLevel
         );
@@ -1409,11 +1495,9 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * DEVICE MOTION
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       DEVICE MOTION
+    ================================================== */
 
     function handleMotion(
         event
@@ -1422,7 +1506,10 @@ body{
         const acceleration =
             event.accelerationIncludingGravity;
 
-        if(!acceleration){
+
+        if(
+            !acceleration
+        ){
 
             return;
 
@@ -1434,10 +1521,12 @@ body{
                 acceleration.x
             ) || 0;
 
+
         let ay =
             Number(
                 acceleration.y
             ) || 0;
+
 
         let az =
             Number(
@@ -1446,16 +1535,24 @@ body{
 
 
         /*
-         * İlk ölçümde direkt başlat.
+         * İlk ölçüm.
          */
 
-        if(!sensorInitialized){
+        if(
+            !sensorInitialized
+        ){
 
-            filteredAx = ax;
-            filteredAy = ay;
-            filteredAz = az;
+            filteredAx =
+                ax;
 
-            sensorInitialized = true;
+            filteredAy =
+                ay;
+
+            filteredAz =
+                az;
+
+            sensorInitialized =
+                true;
 
         }
         else{
@@ -1471,12 +1568,14 @@ body{
                 ) *
                 SENSOR_ALPHA;
 
+
             filteredAy +=
                 (
                     ay -
                     filteredAy
                 ) *
                 SENSOR_ALPHA;
+
 
             filteredAz +=
                 (
@@ -1488,11 +1587,9 @@ body{
         }
 
 
-        /*
-         * --------------------------------------------------
-         * PITCH
-         * --------------------------------------------------
-         */
+        /* ==================================================
+           PITCH
+        ================================================== */
 
         const newPitch =
             Math.atan2(
@@ -1508,11 +1605,9 @@ body{
             Math.PI;
 
 
-        /*
-         * --------------------------------------------------
-         * ROLL
-         * --------------------------------------------------
-         */
+        /* ==================================================
+           ROLL
+        ================================================== */
 
         const newRoll =
             Math.atan2(
@@ -1529,7 +1624,7 @@ body{
 
 
         /*
-         * Küçük sensör oynamalarını bastır.
+         * Küçük değişimleri bastır.
          */
 
         pitchRaw =
@@ -1537,6 +1632,7 @@ body{
                 newPitch,
                 pitchRaw
             );
+
 
         rollRaw =
             stabilize(
@@ -1547,30 +1643,32 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * START SENSOR
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       START SENSOR
+    ================================================== */
 
     async function startSensor(){
 
         try{
 
+
             /*
-             * iPhone / iOS
+             * iOS sensor permission.
              */
 
             if(
                 typeof DeviceMotionEvent !==
                 "undefined" &&
-                typeof DeviceMotionEvent.requestPermission ===
+
+                typeof DeviceMotionEvent
+                    .requestPermission ===
                 "function"
             ){
 
                 const permission =
                     await DeviceMotionEvent
                         .requestPermission();
+
 
                 if(
                     permission !==
@@ -1589,7 +1687,7 @@ body{
 
 
             /*
-             * Sensor listener
+             * Motion listener.
              */
 
             window.addEventListener(
@@ -1602,7 +1700,7 @@ body{
 
 
             /*
-             * Start ekranını kaldır.
+             * Başlangıç ekranını kaldır.
              */
 
             const startScreen =
@@ -1610,12 +1708,14 @@ body{
                     ".startScreen"
                 );
 
-            if(startScreen){
+
+            if(
+                startScreen
+            ){
 
                 startScreen.remove();
 
             }
-
 
         }
         catch(error){
@@ -1623,6 +1723,7 @@ body{
             console.error(
                 error
             );
+
 
             alert(
                 "Hareket sensörü başlatılamadı."
@@ -1633,19 +1734,19 @@ body{
     }
 
 
-    /*
-     * --------------------------------------------------
-     * START SCREEN
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       START SCREEN
+    ================================================== */
 
     const startScreen =
         document.createElement(
             "div"
         );
 
+
     startScreen.className =
         "startScreen";
+
 
     startScreen.innerHTML = `
         <button
@@ -1654,6 +1755,7 @@ body{
             ÖLÇÜMÜ BAŞLAT
         </button>
     `;
+
 
     document.body.appendChild(
         startScreen
@@ -1670,15 +1772,14 @@ body{
         );
 
 
-    /*
-     * --------------------------------------------------
-     * LEVEL LOOP
-     * --------------------------------------------------
-     */
+    /* ==================================================
+       START LEVEL LOOP
+    ================================================== */
 
     requestAnimationFrame(
         updateLevel
     );
+
 
 })();
 
