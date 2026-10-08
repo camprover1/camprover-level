@@ -27,7 +27,6 @@
     --text:#f4f7f8;
     --muted:#8d989d;
 
-    /* MAVİ TONU */
     --level-blue:#00A8FF;
 
     --green:#22ff75;
@@ -67,14 +66,14 @@ body{
 
 
 /* ==================================================
-   CAMPROVER LOGO
+   CAMPROVER
 ================================================== */
 
 .brand{
 
     position:fixed;
 
-    top:10px;
+    top:8px;
     left:50%;
 
     transform:translateX(-50%);
@@ -98,6 +97,62 @@ body{
     pointer-events:none;
 
     user-select:none;
+}
+
+
+/* ==================================================
+   ALTITUDE
+================================================== */
+
+.altitude{
+
+    position:fixed;
+
+    top:38px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:100;
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:6px;
+
+    white-space:nowrap;
+
+    pointer-events:none;
+
+    user-select:none;
+}
+
+.altitudeLabel{
+
+    font-size:9px;
+
+    font-weight:600;
+
+    letter-spacing:2px;
+
+    color:#758086;
+
+    opacity:.85;
+}
+
+.altitudeValue{
+
+    font-size:13px;
+
+    font-weight:600;
+
+    letter-spacing:.5px;
+
+    color:#b9c3c7;
+
+    text-shadow:
+        0 0 6px rgba(255,255,255,.05);
 }
 
 
@@ -701,13 +756,32 @@ body{
         letter-spacing:5px;
     }
 
+    .altitude{
+
+        top:29px;
+
+        gap:5px;
+    }
+
+    .altitudeLabel{
+
+        font-size:8px;
+
+        letter-spacing:1.5px;
+    }
+
+    .altitudeValue{
+
+        font-size:12px;
+    }
+
     .dashboard{
 
         width:100%;
         height:100dvh;
 
         padding:
-            max(30px, env(safe-area-inset-top))
+            max(47px, env(safe-area-inset-top))
             8px
             max(8px, env(safe-area-inset-bottom))
             8px;
@@ -853,6 +927,25 @@ body{
 
 
 <!-- ==================================================
+     ALTITUDE
+================================================== -->
+
+<div class="altitude">
+
+    <span class="altitudeLabel">
+        RAKIM
+    </span>
+
+    <span
+        class="altitudeValue"
+        id="altitudeValue">
+        -- m
+    </span>
+
+</div>
+
+
+<!-- ==================================================
      DASHBOARD
 ================================================== -->
 
@@ -860,7 +953,7 @@ body{
 
 
     <!-- ==============================================
-         PITCH
+         ÖN - ARKA DENGE
     =============================================== -->
 
     <section
@@ -908,23 +1001,17 @@ body{
                 <div class="axis vertical"></div>
 
 
-                <!-- Horizontal ticks -->
-
                 <div class="tick horizontal x1"></div>
                 <div class="tick horizontal x2"></div>
                 <div class="tick horizontal x3"></div>
                 <div class="tick horizontal x4"></div>
 
 
-                <!-- Vertical ticks -->
-
                 <div class="tick vertical y1"></div>
                 <div class="tick vertical y2"></div>
                 <div class="tick vertical y3"></div>
                 <div class="tick vertical y4"></div>
 
-
-                <!-- Degree labels -->
 
                 <div class="levelLabel labelTop">
                     +10°
@@ -943,12 +1030,8 @@ body{
                 </div>
 
 
-                <!-- Center -->
-
                 <div class="center-dot"></div>
 
-
-                <!-- Bubble -->
 
                 <div
                     class="bubble"
@@ -963,7 +1046,7 @@ body{
 
 
     <!-- ==============================================
-         ROLL
+         SAĞ - SOL DENGE
     =============================================== -->
 
     <section
@@ -1064,7 +1147,7 @@ body{
     ================================================== */
 
     const IMAGE_VERSION =
-        "20261008-14";
+        "20261008-15";
 
 
     const pitchImage =
@@ -1094,27 +1177,14 @@ body{
     const SENSOR_ALPHA =
         0.08;
 
-
     const BUBBLE_ALPHA =
         0.08;
-
 
     const VEHICLE_ALPHA =
         0.20;
 
-
-    /*
-     * Çok küçük sensör hareketlerini
-     * bastırır.
-     */
-
     const DEAD_BAND =
         0.15;
-
-
-    /*
-     * Görsel ölçüm sınırı.
-     */
 
     const MAX_ANGLE =
         10;
@@ -1149,6 +1219,11 @@ body{
             "bubble"
         );
 
+    const altitudeValue =
+        document.getElementById(
+            "altitudeValue"
+        );
+
 
     /* ==================================================
        SENSOR VARIABLES
@@ -1161,21 +1236,35 @@ body{
     let sensorInitialized =
         false;
 
-
     let pitchRaw = 0;
     let rollRaw = 0;
 
-
     let bubblePitch = 0;
     let bubbleRoll = 0;
-
 
     let visualPitch = 0;
     let visualRoll = 0;
 
 
     /* ==================================================
-       STABILIZE / DEAD BAND
+       GPS ALTITUDE VARIABLES
+    ================================================== */
+
+    let altitudeFiltered = null;
+
+    /*
+     * GPS rakım filtresi.
+     *
+     * Düşük değer = daha sakin
+     * Yüksek değer = daha hızlı
+     */
+
+    const ALTITUDE_ALPHA =
+        0.08;
+
+
+    /* ==================================================
+       DEAD BAND
     ================================================== */
 
     function stabilize(
@@ -1200,7 +1289,7 @@ body{
 
 
     /* ==================================================
-       CLAMP
+       ANGLE CLAMP
     ================================================== */
 
     function clampAngle(
@@ -1219,7 +1308,7 @@ body{
 
 
     /* ==================================================
-       FORMAT DEGREE
+       DEGREE FORMAT
     ================================================== */
 
     function formatDegree(
@@ -1231,7 +1320,6 @@ body{
                 value
             );
 
-
         if(
             rounded > 0
         ){
@@ -1241,7 +1329,6 @@ body{
 
         }
 
-
         return String(
             rounded
         );
@@ -1250,7 +1337,7 @@ body{
 
 
     /* ==================================================
-       CARD BLUE LEVEL
+       CARD LEVEL
     ================================================== */
 
     function updateCardLevel(
@@ -1337,10 +1424,6 @@ body{
     function updateLevel(){
 
 
-        /*
-         * Display değerlerini ±10° ile sınırla.
-         */
-
         const displayPitch =
             clampAngle(
                 pitchRaw
@@ -1352,10 +1435,6 @@ body{
                 rollRaw
             );
 
-
-        /*
-         * Sayısal değer.
-         */
 
         pitchValue.innerHTML =
             formatDegree(
@@ -1371,10 +1450,6 @@ body{
             '<span class="unit">°</span>';
 
 
-        /*
-         * Kart kenarları.
-         */
-
         updateCardLevel(
             pitchPanel,
             displayPitch
@@ -1388,7 +1463,7 @@ body{
 
 
         /* ==================================================
-           BUBBLE FILTER
+           BUBBLE
         ================================================== */
 
         bubblePitch +=
@@ -1406,12 +1481,6 @@ body{
             ) *
             BUBBLE_ALPHA;
 
-
-        /*
-         * Bubble maksimum hareketi.
-         *
-         * ±10° = ±112 px
-         */
 
         const maxMove =
             112;
@@ -1445,7 +1514,7 @@ body{
 
 
         /* ==================================================
-           VEHICLE FILTER
+           VEHICLE
         ================================================== */
 
         visualPitch +=
@@ -1464,10 +1533,6 @@ body{
             VEHICLE_ALPHA;
 
 
-        /*
-         * Pitch görseli.
-         */
-
         pitchImage.style.transform =
             "rotate(" +
             clampAngle(
@@ -1475,10 +1540,6 @@ body{
             ) +
             "deg)";
 
-
-        /*
-         * Roll görseli.
-         */
 
         rollImage.style.transform =
             "rotate(" +
@@ -1534,10 +1595,6 @@ body{
             ) || 0;
 
 
-        /*
-         * İlk ölçüm.
-         */
-
         if(
             !sensorInitialized
         ){
@@ -1556,10 +1613,6 @@ body{
 
         }
         else{
-
-            /*
-             * LOW PASS FILTER
-             */
 
             filteredAx +=
                 (
@@ -1623,10 +1676,6 @@ body{
             Math.PI;
 
 
-        /*
-         * Küçük değişimleri bastır.
-         */
-
         pitchRaw =
             stabilize(
                 newPitch,
@@ -1644,6 +1693,118 @@ body{
 
 
     /* ==================================================
+       GPS ALTITUDE
+    ================================================== */
+
+    function startAltitude(){
+
+        if(
+            !("geolocation" in navigator)
+        ){
+
+            altitudeValue.textContent =
+                "-- m";
+
+            return;
+
+        }
+
+
+        navigator.geolocation.watchPosition(
+
+            function(position){
+
+                const altitude =
+                    position.coords.altitude;
+
+
+                /*
+                 * Bazı cihazlarda GPS rakımı
+                 * null gelebilir.
+                 */
+
+                if(
+                    altitude === null ||
+                    !Number.isFinite(
+                        altitude
+                    )
+                ){
+
+                    altitudeValue.textContent =
+                        "-- m";
+
+                    return;
+
+                }
+
+
+                /*
+                 * İlk değer.
+                 */
+
+                if(
+                    altitudeFiltered === null
+                ){
+
+                    altitudeFiltered =
+                        altitude;
+
+                }
+                else{
+
+                    /*
+                     * Rakım filtresi.
+                     */
+
+                    altitudeFiltered +=
+                        (
+                            altitude -
+                            altitudeFiltered
+                        ) *
+                        ALTITUDE_ALPHA;
+
+                }
+
+
+                /*
+                 * Tam metre olarak göster.
+                 */
+
+                altitudeValue.textContent =
+                    Math.round(
+                        altitudeFiltered
+                    ) +
+                    " m";
+
+            },
+
+            function(error){
+
+                console.log(
+                    "GPS altitude:",
+                    error
+                );
+
+                altitudeValue.textContent =
+                    "-- m";
+
+            },
+
+            {
+                enableHighAccuracy:true,
+
+                maximumAge:1000,
+
+                timeout:10000
+
+            }
+
+        );
+
+    }
+
+
+    /* ==================================================
        START SENSOR
     ================================================== */
 
@@ -1652,9 +1813,9 @@ body{
         try{
 
 
-            /*
-             * iOS sensor permission.
-             */
+            /* ==============================================
+               MOTION PERMISSION
+            ============================================== */
 
             if(
                 typeof DeviceMotionEvent !==
@@ -1686,9 +1847,9 @@ body{
             }
 
 
-            /*
-             * Motion listener.
-             */
+            /* ==============================================
+               MOTION LISTENER
+            ============================================== */
 
             window.addEventListener(
                 "devicemotion",
@@ -1699,9 +1860,16 @@ body{
             );
 
 
-            /*
-             * Başlangıç ekranını kaldır.
-             */
+            /* ==============================================
+               GPS
+            ============================================== */
+
+            startAltitude();
+
+
+            /* ==============================================
+               START SCREEN
+            ============================================== */
 
             const startScreen =
                 document.querySelector(
@@ -1726,7 +1894,7 @@ body{
 
 
             alert(
-                "Hareket sensörü başlatılamadı."
+                "Sensörler başlatılamadı."
             );
 
         }
