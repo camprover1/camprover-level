@@ -19,23 +19,17 @@
 :root{
   --bg:#080c10;
   --panel:#10161c;
-  --panel2:#0c1217;
-
   --text:#f1f5f8;
   --muted:#7f8b96;
-
   --border:#27313a;
 
   /* MAVİ RENGİ BURADAN DEĞİŞTİREBİLİRSİN */
   --level-blue:#00A8FF;
 
   --green:#35e27a;
-  --green-dark:#173c27;
-
-  --red:#ff4d5f;
 }
 
-/* -------------------- GENEL -------------------- */
+/* ==================== GENEL ==================== */
 
 *{
   box-sizing:border-box;
@@ -72,12 +66,9 @@ body{
   align-items:center;
 }
 
-/* -------------------- ANA KONTEYNER -------------------- */
-
 .app{
   width:100%;
   max-width:1450px;
-
   min-height:100vh;
 
   padding:28px;
@@ -86,7 +77,7 @@ body{
   flex-direction:column;
 }
 
-/* -------------------- BAŞLIK -------------------- */
+/* ==================== BAŞLIK ==================== */
 
 .header{
   text-align:center;
@@ -111,7 +102,7 @@ body{
   letter-spacing:1.5px;
 }
 
-/* -------------------- ANA GRID -------------------- */
+/* ==================== ANA GRID ==================== */
 
 .dashboard{
   flex:1;
@@ -128,7 +119,7 @@ body{
   align-items:stretch;
 }
 
-/* -------------------- KART -------------------- */
+/* ==================== KART ==================== */
 
 .card{
   position:relative;
@@ -185,7 +176,7 @@ body{
   font-variant-numeric:tabular-nums;
 }
 
-/* -------------------- ARAÇ GÖRSELLERİ -------------------- */
+/* ==================== ARAÇ GÖRSELLERİ ==================== */
 
 .vehicle-area{
   flex:1;
@@ -218,7 +209,7 @@ body{
   -webkit-user-drag:none;
 }
 
-/* -------------------- MERKEZ TERAZİ -------------------- */
+/* ==================== MERKEZ PANEL ==================== */
 
 .center-panel{
   position:relative;
@@ -237,7 +228,7 @@ body{
     );
 }
 
-/* -------------------- YEŞİL TERAZİ -------------------- */
+/* ==================== YEŞİL TERAZİ ==================== */
 
 .level{
   position:relative;
@@ -264,7 +255,7 @@ body{
   overflow:hidden;
 }
 
-/* -------------------- TERAZİ ÇİZGİLERİ -------------------- */
+/* ==================== TERAZİ ÇİZGİLERİ ==================== */
 
 .level::before{
   content:"";
@@ -322,7 +313,7 @@ body{
   left:0;
 }
 
-/* -------------------- DERECE TİKLERİ -------------------- */
+/* ==================== DERECE TİKLERİ ==================== */
 
 .tick{
   position:absolute;
@@ -347,7 +338,7 @@ body{
   transform:rotate(-10deg);
 }
 
-/* -------------------- YEŞİL BALON -------------------- */
+/* ==================== YEŞİL BALON ==================== */
 
 .bubble{
   position:absolute;
@@ -377,14 +368,14 @@ body{
     0 0 16px rgba(53,226,122,.55),
     inset 0 3px 8px rgba(255,255,255,.35);
 
-  z-index:5;
+  z-index:6;
 
   transition:
     left .08s linear,
     top .08s linear;
 }
 
-/* -------------------- MERKEZ ARAÇ -------------------- */
+/* ==================== MERKEZ ARAÇ ==================== */
 
 .center-car{
   position:absolute;
@@ -407,12 +398,7 @@ body{
   opacity:.92;
 }
 
-/* Balon aracın üzerinde olsun */
-.bubble{
-  z-index:6;
-}
-
-/* -------------------- MERKEZ ROZET -------------------- */
+/* ==================== MERKEZ ROZET ==================== */
 
 .level-badge{
   position:absolute;
@@ -438,7 +424,7 @@ body{
   z-index:10;
 }
 
-/* -------------------- SIFIRLAMA BUTONU -------------------- */
+/* ==================== SIFIRLAMA BUTONU ==================== */
 
 .zero-button{
   position:absolute;
@@ -459,14 +445,20 @@ body{
 
   color:#aeb9c2;
 
-  font-size:15px;
-  font-weight:700;
+  font-size:25px;
+  font-weight:400;
+
+  line-height:1;
 
   cursor:pointer;
 
   outline:none;
 
   z-index:30;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
   transition:
     border-color .25s ease,
@@ -495,7 +487,7 @@ body{
     0 0 30px rgba(0,168,255,.28);
 }
 
-/* -------------------- ALT BİLGİ -------------------- */
+/* ==================== FOOTER ==================== */
 
 .footer{
   text-align:center;
@@ -509,7 +501,7 @@ body{
   margin-top:18px;
 }
 
-/* -------------------- BAŞLAT EKRANI -------------------- */
+/* ==================== BAŞLAT EKRANI ==================== */
 
 .start-screen{
   position:fixed;
@@ -602,7 +594,7 @@ body{
     0 0 25px rgba(0,168,255,.25);
 }
 
-/* -------------------- MOBİL -------------------- */
+/* ==================== MOBİL ==================== */
 
 @media(max-width:900px){
 
@@ -664,6 +656,8 @@ body{
 
     width:42px;
     height:42px;
+
+    font-size:23px;
   }
 
   .value{
@@ -675,7 +669,8 @@ body{
   }
 }
 
-/* Çok dar ekran */
+/* ==================== DAR EKRAN ==================== */
+
 @media(max-width:430px){
 
   .center-panel{
@@ -699,7 +694,8 @@ body{
 
 <div class="app">
 
-  <!-- BAŞLIK -->
+  <!-- ==================== BAŞLIK ==================== -->
+
   <div class="header">
 
     <h1>CAMPROVER LEVEL</h1>
@@ -711,19 +707,26 @@ body{
   </div>
 
 
-  <!-- ANA PANEL -->
+  <!-- ==================== ANA PANEL ==================== -->
+
   <div class="dashboard">
 
 
     <!-- ==================== PITCH ==================== -->
 
-    <div class="card" id="pitchCard">
+    <div
+      class="card"
+      id="pitchCard"
+    >
 
       <div class="card-title">
         PITCH
       </div>
 
-      <div class="value" id="pitch">
+      <div
+        class="value"
+        id="pitch"
+      >
         0°
       </div>
 
@@ -740,9 +743,10 @@ body{
     </div>
 
 
-    <!-- ==================== MERKEZ TERAZİ ==================== -->
+    <!-- ==================== MERKEZ ==================== -->
 
     <div class="center-panel">
+
 
       <!-- SIFIRLAMA BUTONU -->
 
@@ -750,15 +754,18 @@ body{
         id="zeroButton"
         class="zero-button"
         aria-label="Ölçümü sıfırla"
-        title="Sıfırla"
+        title="Ölçümü sıfırla"
       >
-        0
+        ↻
       </button>
 
 
       <!-- YEŞİL TERAZİ -->
 
-      <div class="level" id="level">
+      <div
+        class="level"
+        id="level"
+      >
 
         <div class="line vertical"></div>
 
@@ -768,10 +775,11 @@ body{
         <!-- DERECE TİKLERİ -->
 
         <div class="tick t1"></div>
+
         <div class="tick t2"></div>
 
 
-        <!-- MERKEZ ARAÇ -->
+        <!-- ORTADAKİ ARAÇ -->
 
         <img
           id="centerCar"
@@ -800,13 +808,19 @@ body{
 
     <!-- ==================== ROLL ==================== -->
 
-    <div class="card" id="rollCard">
+    <div
+      class="card"
+      id="rollCard"
+    >
 
       <div class="card-title">
         ROLL
       </div>
 
-      <div class="value" id="roll">
+      <div
+        class="value"
+        id="roll"
+      >
         0°
       </div>
 
@@ -824,6 +838,8 @@ body{
 
   </div>
 
+
+  <!-- ==================== FOOTER ==================== -->
 
   <div class="footer">
     CAMPROVER LEVEL • GRAVITY BASED MEASUREMENT
@@ -871,9 +887,7 @@ body{
    ========================================================= */
 
 
-/* -------------------------------
-   ESKİ SERVICE WORKER / CACHE TEMİZLİĞİ
--------------------------------- */
+/* ==================== CACHE TEMİZLEME ==================== */
 
 (async function(){
 
@@ -884,7 +898,10 @@ body{
       const registrations =
         await navigator.serviceWorker.getRegistrations();
 
-      for(const registration of registrations){
+      for(
+        const registration
+        of registrations
+      ){
 
         await registration.unregister();
 
@@ -892,14 +909,20 @@ body{
 
     }
 
+
     if("caches" in window){
 
       const cacheNames =
         await caches.keys();
 
-      for(const cacheName of cacheNames){
+      for(
+        const cacheName
+        of cacheNames
+      ){
 
-        await caches.delete(cacheName);
+        await caches.delete(
+          cacheName
+        );
 
       }
 
@@ -917,134 +940,133 @@ body{
 })();
 
 
-/* -------------------------------
-   GÖRSEL VERSİYONU
--------------------------------- */
+/* ==================== GÖRSEL VERSİYONU ==================== */
 
-const IMAGE_VERSION = "20261008-04";
+const IMAGE_VERSION =
+  "20261008-05";
 
 
 const pitchImage =
-  document.getElementById("pitchImg");
+  document.getElementById(
+    "pitchImg"
+  );
 
 const rollImage =
-  document.getElementById("rollImg");
+  document.getElementById(
+    "rollImg"
+  );
 
 const centerCar =
-  document.getElementById("centerCar");
+  document.getElementById(
+    "centerCar"
+  );
 
 
 pitchImage.src =
-  "pitch_discovery.png?v=" + IMAGE_VERSION;
+  "pitch_discovery.png?v=" +
+  IMAGE_VERSION;
 
 
 rollImage.src =
-  "roll_discovery.png?v=" + IMAGE_VERSION;
+  "roll_discovery.png?v=" +
+  IMAGE_VERSION;
 
 
 centerCar.src =
-  "center_discovery.png?v=" + IMAGE_VERSION;
+  "center_discovery.png?v=" +
+  IMAGE_VERSION;
 
 
-/* -------------------------------
-   ELEMENTLER
--------------------------------- */
+/* ==================== ELEMENTLER ==================== */
 
 const pitchElement =
-  document.getElementById("pitch");
+  document.getElementById(
+    "pitch"
+  );
 
 const rollElement =
-  document.getElementById("roll");
+  document.getElementById(
+    "roll"
+  );
 
 const pitchCard =
-  document.getElementById("pitchCard");
+  document.getElementById(
+    "pitchCard"
+  );
 
 const rollCard =
-  document.getElementById("rollCard");
+  document.getElementById(
+    "rollCard"
+  );
 
 const bubble =
-  document.getElementById("bubble");
+  document.getElementById(
+    "bubble"
+  );
 
 const zeroButton =
-  document.getElementById("zeroButton");
+  document.getElementById(
+    "zeroButton"
+  );
 
 
-/* -------------------------------
-   FİLTRELER
--------------------------------- */
+/* ==================== FİLTRELER ==================== */
 
-/*
-   Sensör değerlerinin sakinliği.
-
-   Daha küçük sayı =
-   daha yavaş / daha sakin
-
-   Daha büyük sayı =
-   daha hızlı / daha hareketli
-*/
-
-const SENSOR_ALPHA = 0.15;
+const SENSOR_ALPHA =
+  0.15;
 
 
-/*
-   Ortadaki yeşil balon için
-   ayrıca daha sakin filtre.
-*/
-
-const BUBBLE_ALPHA = 0.15;
+const BUBBLE_ALPHA =
+  0.15;
 
 
-/* -------------------------------
-   SENSOR DEĞERLERİ
--------------------------------- */
+/* ==================== FİLTRELENMİŞ SENSÖR ==================== */
 
 let filteredAx = 0;
+
 let filteredAy = 0;
+
 let filteredAz = 0;
 
-let sensorInitialized = false;
+let sensorInitialized =
+  false;
 
 
-/* -------------------------------
-   HAM AÇILAR
--------------------------------- */
+/* ==================== AÇILAR ==================== */
 
 let pitchRaw = 0;
+
 let rollRaw = 0;
 
 
-/* -------------------------------
-   SIFIRLAMA
--------------------------------- */
+/* ==================== SIFIRLAMA ==================== */
 
-let zeroActive = false;
+let zeroActive =
+  false;
 
-let zeroPitch = 0;
-let zeroRoll = 0;
+let zeroPitch =
+  0;
 
-
-/* -------------------------------
-   BALON DEĞERLERİ
--------------------------------- */
-
-let bubblePitch = 0;
-let bubbleRoll = 0;
+let zeroRoll =
+  0;
 
 
-/* -------------------------------
-   0° / + / - GÖSTERİMİ
--------------------------------- */
+/* ==================== BALON ==================== */
+
+let bubblePitch =
+  0;
+
+let bubbleRoll =
+  0;
+
+
+/* ==================== DERECE YAZISI ==================== */
 
 function signed(value){
 
   const number =
     Math.round(value);
 
-
-  /*
-     -0° ve +0°
-     göstermesin.
-  */
 
   if(number === 0){
 
@@ -1055,7 +1077,9 @@ function signed(value){
 
   if(number > 0){
 
-    return "+" + number + "°";
+    return "+" +
+      number +
+      "°";
 
   }
 
@@ -1065,20 +1089,16 @@ function signed(value){
 }
 
 
-/* -------------------------------
-   MAVİ ÇERÇEVE
--------------------------------- */
+/* ==================== ÇERÇEVE ==================== */
 
-function updateBorder(card, angle){
+function updateBorder(
+  card,
+  angle
+){
 
   const absolute =
     Math.abs(angle);
 
-
-  /*
-     ±5 dereceden sonra
-     normal koyu çerçeve.
-  */
 
   if(absolute > 5){
 
@@ -1093,27 +1113,26 @@ function updateBorder(card, angle){
   }
 
 
-  /*
-     5° = çok hafif
-     0° = maksimum
-  */
-
   const strength =
-    1 - (absolute / 5);
+    1 -
+    (absolute / 5);
 
 
   const alpha =
-    0.15 + (strength * 0.85);
+    0.15 +
+    (strength * 0.85);
 
 
   const glow =
-    8 + (strength * 25);
+    8 +
+    (strength * 25);
 
 
   card.style.borderColor =
     `color-mix(
       in srgb,
-      var(--level-blue) ${alpha * 100}%,
+      var(--level-blue)
+      ${alpha * 100}%,
       #27313a
     )`;
 
@@ -1122,62 +1141,43 @@ function updateBorder(card, angle){
     `0 0 ${glow}px
      color-mix(
        in srgb,
-       var(--level-blue) ${alpha * 45}%,
+       var(--level-blue)
+       ${alpha * 45}%,
        transparent
      )`;
 
 }
 
 
-/* -------------------------------
-   ÖLÇÜMÜ GÜNCELLE
--------------------------------- */
+/* ==================== SEVİYEYİ GÜNCELLE ==================== */
 
 function updateLevel(){
 
-  /*
-     Dünya referansına göre
-     ham açıları hesapla.
-  */
-
-  const rawPitch =
+  let displayPitch =
     pitchRaw;
 
-  const rawRoll =
+  let displayRoll =
     rollRaw;
 
 
-  /*
-     Sıfırlama aktifse:
-
-     mevcut dünya açısı
-     -
-     sıfırlama anındaki açı
-
-     = göreceli açı
-  */
-
-  let displayPitch =
-    rawPitch;
-
-  let displayRoll =
-    rawRoll;
-
+  /* Sıfırlama aktifse */
 
   if(zeroActive){
 
     displayPitch =
-      rawPitch - zeroPitch;
+      pitchRaw -
+      zeroPitch;
 
     displayRoll =
-      rawRoll - zeroRoll;
+      rollRaw -
+      zeroRoll;
 
   }
 
 
-  /* ---------------------------
-     YAZILAR
-  --------------------------- */
+  /* ====================
+     PITCH / ROLL YAZISI
+  ==================== */
 
   pitchElement.textContent =
     signed(displayPitch);
@@ -1187,9 +1187,9 @@ function updateLevel(){
     signed(displayRoll);
 
 
-  /* ---------------------------
-     MAVİ ÇERÇEVELER
-  --------------------------- */
+  /* ====================
+     MAVİ ÇERÇEVE
+  ==================== */
 
   updateBorder(
     pitchCard,
@@ -1203,9 +1203,9 @@ function updateLevel(){
   );
 
 
-  /* ---------------------------
-     PITCH ARAÇ GÖRSELİ
-  --------------------------- */
+  /* ====================
+     PITCH GÖRSELİ
+  ==================== */
 
   const pitchMove =
     Math.max(
@@ -1219,15 +1219,19 @@ function updateLevel(){
 
   pitchImage.style.transform =
     `
-    translateY(${pitchMove * 1.2}px)
-    rotate(${displayPitch * -0.55}deg)
+    translateY(
+      ${pitchMove * 1.2}px
+    )
+    rotate(
+      ${displayPitch * -0.55}deg
+    )
     scale(1.04)
     `;
 
 
-  /* ---------------------------
-     ROLL ARAÇ GÖRSELİ
-  --------------------------- */
+  /* ====================
+     ROLL GÖRSELİ
+  ==================== */
 
   const rollMove =
     Math.max(
@@ -1241,34 +1245,35 @@ function updateLevel(){
 
   rollImage.style.transform =
     `
-    rotate(${displayRoll * 0.7}deg)
-    translateX(${rollMove * 0.8}px)
+    rotate(
+      ${displayRoll * 0.7}deg
+    )
+    translateX(
+      ${rollMove * 0.8}px
+    )
     scale(1.04)
     `;
 
 
-  /* ---------------------------
+  /* ====================
      YEŞİL BALON
-  --------------------------- */
+  ==================== */
 
   bubblePitch +=
     (
       displayPitch -
       bubblePitch
-    ) * BUBBLE_ALPHA;
+    ) *
+    BUBBLE_ALPHA;
 
 
   bubbleRoll +=
     (
       displayRoll -
       bubbleRoll
-    ) * BUBBLE_ALPHA;
+    ) *
+    BUBBLE_ALPHA;
 
-
-  /*
-     Balonun hareket alanı
-     ±10 derece.
-  */
 
   const x =
     Math.max(
@@ -1291,18 +1296,126 @@ function updateLevel(){
 
 
   bubble.style.left =
-    (50 + x * 4) + "%";
+    (
+      50 +
+      x * 4
+    ) +
+    "%";
 
 
   bubble.style.top =
-    (50 - y * 4) + "%";
+    (
+      50 -
+      y * 4
+    ) +
+    "%";
 
 }
 
 
-/* -------------------------------
+/* =========================================================
+   SIFIRLAMA BUTONU
+   ========================================================= */
+
+zeroButton.addEventListener(
+  "click",
+  function(){
+
+    /*
+       İLK BASIŞ:
+       Mevcut pozisyonu referans yap.
+    */
+
+    if(!zeroActive){
+
+      zeroPitch =
+        pitchRaw;
+
+      zeroRoll =
+        rollRaw;
+
+
+      zeroActive =
+        true;
+
+
+      bubblePitch =
+        0;
+
+      bubbleRoll =
+        0;
+
+
+      zeroButton.classList.add(
+        "active"
+      );
+
+
+      zeroButton.setAttribute(
+        "aria-label",
+        "Sıfırlamayı iptal et"
+      );
+
+
+      zeroButton.title =
+        "Yerçekimi referansına dön";
+
+
+      updateLevel();
+
+    }
+
+    /*
+       İKİNCİ BASIŞ:
+       Dünya referansına dön.
+    */
+
+    else{
+
+      zeroActive =
+        false;
+
+
+      zeroPitch =
+        0;
+
+      zeroRoll =
+        0;
+
+
+      bubblePitch =
+        0;
+
+      bubbleRoll =
+        0;
+
+
+      zeroButton.classList.remove(
+        "active"
+      );
+
+
+      zeroButton.setAttribute(
+        "aria-label",
+        "Ölçümü sıfırla"
+      );
+
+
+      zeroButton.title =
+        "Ölçümü sıfırla";
+
+
+      updateLevel();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
    HAREKET SENSÖRÜ
--------------------------------- */
+   ========================================================= */
 
 function motion(event){
 
@@ -1327,52 +1440,67 @@ function motion(event){
     acceleration.z || 0;
 
 
-  /*
-     İlk sensör değerini
-     direkt kabul et.
-  */
+  /* İlk ölçüm */
 
   if(!sensorInitialized){
 
-    filteredAx = ax;
-    filteredAy = ay;
-    filteredAz = az;
+    filteredAx =
+      ax;
 
-    sensorInitialized = true;
+    filteredAy =
+      ay;
 
-  }else{
+    filteredAz =
+      az;
 
-    /*
-       Low-pass filter.
-    */
+    sensorInitialized =
+      true;
+
+  }
+
+  else{
+
+    /* Low-pass filter */
 
     filteredAx +=
-      (ax - filteredAx) *
+      (
+        ax -
+        filteredAx
+      ) *
       SENSOR_ALPHA;
 
 
     filteredAy +=
-      (ay - filteredAy) *
+      (
+        ay -
+        filteredAy
+      ) *
       SENSOR_ALPHA;
 
 
     filteredAz +=
-      (az - filteredAz) *
+      (
+        az -
+        filteredAz
+      ) *
       SENSOR_ALPHA;
 
   }
 
 
-  /* ---------------------------
+  /* ====================
      PITCH
-  --------------------------- */
+  ==================== */
 
   pitchRaw =
     Math.atan2(
       filteredAz,
       Math.sqrt(
-        filteredAx * filteredAx +
-        filteredAy * filteredAy
+        filteredAx *
+        filteredAx +
+
+        filteredAy *
+        filteredAy
       )
     )
     *
@@ -1380,16 +1508,19 @@ function motion(event){
     Math.PI;
 
 
-  /* ---------------------------
+  /* ====================
      ROLL
-  --------------------------- */
+  ==================== */
 
   rollRaw =
     Math.atan2(
       filteredAx,
       Math.sqrt(
-        filteredAy * filteredAy +
-        filteredAz * filteredAz
+        filteredAy *
+        filteredAy +
+
+        filteredAz *
+        filteredAz
       )
     )
     *
@@ -1400,110 +1531,6 @@ function motion(event){
   updateLevel();
 
 }
-
-
-/* =========================================================
-   SIFIRLAMA BUTONU
-   ========================================================= */
-
-zeroButton.addEventListener(
-  "click",
-  function(){
-
-    /*
-       Şu anda sıfırlama aktif değilse
-       mevcut pozisyonu referans olarak kaydet.
-    */
-
-    if(!zeroActive){
-
-      zeroPitch =
-        pitchRaw;
-
-      zeroRoll =
-        rollRaw;
-
-
-      zeroActive =
-        true;
-
-
-      /*
-         Yeşil balonu da
-         anında merkeze yaklaştır.
-      */
-
-      bubblePitch = 0;
-      bubbleRoll = 0;
-
-
-      zeroButton.classList.add(
-        "active"
-      );
-
-
-      zeroButton.setAttribute(
-        "aria-label",
-        "Sıfırlamayı iptal et"
-      );
-
-
-      zeroButton.title =
-        "Yerçekimi referansına dön";
-
-
-    }else{
-
-      /*
-         Tekrar basılırsa
-         Dünya referansına dön.
-      */
-
-      zeroActive =
-        false;
-
-
-      zeroPitch =
-        0;
-
-      zeroRoll =
-        0;
-
-
-      /*
-         Balonu da tekrar
-         dünya referansına göre
-         çalıştır.
-      */
-
-      bubblePitch =
-        0;
-
-      bubbleRoll =
-        0;
-
-
-      zeroButton.classList.remove(
-        "active"
-      );
-
-
-      zeroButton.setAttribute(
-        "aria-label",
-        "Ölçümü sıfırla"
-      );
-
-
-      zeroButton.title =
-        "Sıfırla";
-
-
-      updateLevel();
-
-    }
-
-  }
-);
 
 
 /* =========================================================
@@ -1527,7 +1554,7 @@ startButton.addEventListener(
 
     /*
        iPhone Safari
-       DeviceMotion izni.
+       sensör izni.
     */
 
     if(
@@ -1544,7 +1571,10 @@ startButton.addEventListener(
           await DeviceMotionEvent.requestPermission();
 
 
-        if(permission !== "granted"){
+        if(
+          permission !==
+          "granted"
+        ){
 
           alert(
             "Hareket sensörü izni verilmedi."
@@ -1554,13 +1584,17 @@ startButton.addEventListener(
 
         }
 
-      }catch(error){
+      }
+
+      catch(error){
 
         alert(
           "Hareket sensörü başlatılamadı."
         );
 
-        console.error(error);
+        console.error(
+          error
+        );
 
         return;
 
@@ -1569,9 +1603,7 @@ startButton.addEventListener(
     }
 
 
-    /*
-       Sensörü başlat.
-    */
+    /* Sensörü başlat */
 
     window.addEventListener(
       "devicemotion",
@@ -1580,22 +1612,17 @@ startButton.addEventListener(
     );
 
 
-    /*
-       Başlangıç ekranını kapat.
-    */
+    /* Başlangıç ekranını kapat */
 
     startScreen.classList.add(
       "hidden"
     );
 
-
   }
 );
 
 
-/* =========================================================
-   İLK GÖRÜNTÜ
-   ========================================================= */
+/* ==================== İLK GÖRÜNTÜ ==================== */
 
 updateLevel();
 
