@@ -73,14 +73,14 @@ body{
 
     position:fixed;
 
-    top:8px;
+    top:7px;
     left:50%;
 
     transform:translateX(-50%);
 
     z-index:100;
 
-    font-size:18px;
+    font-size:19px;
 
     font-weight:700;
 
@@ -88,7 +88,7 @@ body{
 
     color:#dfe7e9;
 
-    opacity:.85;
+    opacity:.88;
 
     text-shadow:
         0 0 8px rgba(0,168,255,.18),
@@ -101,14 +101,14 @@ body{
 
 
 /* ==================================================
-   ALTITUDE
+   GPS INFORMATION
 ================================================== */
 
-.altitude{
+.gpsInfo{
 
     position:fixed;
 
-    top:38px;
+    top:36px;
     left:50%;
 
     transform:translateX(-50%);
@@ -119,7 +119,9 @@ body{
 
     align-items:baseline;
 
-    gap:6px;
+    justify-content:center;
+
+    gap:20px;
 
     white-space:nowrap;
 
@@ -128,31 +130,40 @@ body{
     user-select:none;
 }
 
-.altitudeLabel{
+.gpsItem{
 
-    font-size:9px;
+    display:flex;
+
+    align-items:baseline;
+
+    gap:7px;
+}
+
+.gpsLabel{
+
+    font-size:11px;
 
     font-weight:600;
 
     letter-spacing:2px;
 
-    color:#758086;
+    color:#8b979c;
 
-    opacity:.85;
+    opacity:.9;
 }
 
-.altitudeValue{
+.gpsValue{
 
-    font-size:13px;
+    font-size:18px;
 
-    font-weight:600;
+    font-weight:700;
 
-    letter-spacing:.5px;
+    letter-spacing:.3px;
 
-    color:#b9c3c7;
+    color:#cdd5d8;
 
     text-shadow:
-        0 0 6px rgba(255,255,255,.05);
+        0 0 7px rgba(255,255,255,.06);
 }
 
 
@@ -389,11 +400,11 @@ body{
 
     position:relative;
 
-    width:min(72vh,520px);
-    height:min(72vh,520px);
+    width:min(68vh,500px);
+    height:min(68vh,500px);
 
-    max-width:90%;
-    max-height:90%;
+    max-width:88%;
+    max-height:88%;
 
     aspect-ratio:1/1;
 
@@ -749,30 +760,32 @@ body{
 
     .brand{
 
-        top:7px;
+        top:6px;
 
-        font-size:15px;
+        font-size:17px;
 
         letter-spacing:5px;
     }
 
-    .altitude{
+    .gpsInfo{
 
-        top:29px;
+        top:31px;
 
-        gap:5px;
+        gap:16px;
     }
 
-    .altitudeLabel{
+    .gpsLabel{
 
-        font-size:8px;
+        font-size:10px;
 
-        letter-spacing:1.5px;
+        letter-spacing:1.7px;
     }
 
-    .altitudeValue{
+    .gpsValue{
 
-        font-size:12px;
+        font-size:16px;
+
+        font-weight:700;
     }
 
     .dashboard{
@@ -781,7 +794,7 @@ body{
         height:100dvh;
 
         padding:
-            max(47px, env(safe-area-inset-top))
+            max(49px, env(safe-area-inset-top))
             8px
             max(8px, env(safe-area-inset-bottom))
             8px;
@@ -850,21 +863,25 @@ body{
         width:90%;
     }
 
+    /*
+     * Mobilde yeşil teraziyi biraz küçülttük.
+     */
+
     .level{
 
-        width:min(78vw,390px);
-        height:min(78vw,390px);
+        width:min(68vw,350px);
+        height:min(68vw,350px);
 
-        max-width:82%;
-        max-height:82%;
+        max-width:74%;
+        max-height:76%;
 
         border-width:4px;
     }
 
     .bubble{
 
-        width:62px;
-        height:62px;
+        width:58px;
+        height:58px;
     }
 
     .levelLabel{
@@ -883,20 +900,23 @@ body{
     .dashboard{
 
         grid-template-rows:
-            minmax(235px,1.15fr)
+            minmax(225px,1.15fr)
             minmax(0,1fr);
     }
 
     .level{
 
-        max-width:68%;
-        max-height:82%;
+        width:min(62vw,310px);
+        height:min(62vw,310px);
+
+        max-width:70%;
+        max-height:75%;
     }
 
     .bubble{
 
-        width:54px;
-        height:54px;
+        width:52px;
+        height:52px;
     }
 
     .value{
@@ -927,20 +947,39 @@ body{
 
 
 <!-- ==================================================
-     ALTITUDE
+     GPS INFORMATION
 ================================================== -->
 
-<div class="altitude">
+<div class="gpsInfo">
 
-    <span class="altitudeLabel">
-        RAKIM
-    </span>
+    <div class="gpsItem">
 
-    <span
-        class="altitudeValue"
-        id="altitudeValue">
-        -- m
-    </span>
+        <span class="gpsLabel">
+            RAKIM
+        </span>
+
+        <span
+            class="gpsValue"
+            id="altitudeValue">
+            -- m
+        </span>
+
+    </div>
+
+
+    <div class="gpsItem">
+
+        <span class="gpsLabel">
+            HIZ
+        </span>
+
+        <span
+            class="gpsValue"
+            id="speedValue">
+            -- km/h
+        </span>
+
+    </div>
 
 </div>
 
@@ -1085,7 +1124,7 @@ body{
 
 
     /* ==================================================
-       SERVICE WORKER / CACHE TEMİZLEME
+       CACHE TEMİZLEME
     ================================================== */
 
     try{
@@ -1147,7 +1186,7 @@ body{
     ================================================== */
 
     const IMAGE_VERSION =
-        "20261008-15";
+        "20261008-17";
 
 
     const pitchImage =
@@ -1191,6 +1230,17 @@ body{
 
 
     /* ==================================================
+       GPS FILTER
+    ================================================== */
+
+    const ALTITUDE_ALPHA =
+        0.08;
+
+    const SPEED_ALPHA =
+        0.12;
+
+
+    /* ==================================================
        ELEMENTLER
     ================================================== */
 
@@ -1224,6 +1274,11 @@ body{
             "altitudeValue"
         );
 
+    const speedValue =
+        document.getElementById(
+            "speedValue"
+        );
+
 
     /* ==================================================
        SENSOR VARIABLES
@@ -1247,24 +1302,18 @@ body{
 
 
     /* ==================================================
-       GPS ALTITUDE VARIABLES
+       GPS VARIABLES
     ================================================== */
 
-    let altitudeFiltered = null;
+    let altitudeFiltered =
+        null;
 
-    /*
-     * GPS rakım filtresi.
-     *
-     * Düşük değer = daha sakin
-     * Yüksek değer = daha hızlı
-     */
-
-    const ALTITUDE_ALPHA =
-        0.08;
+    let speedFiltered =
+        null;
 
 
     /* ==================================================
-       DEAD BAND
+       STABILIZE
     ================================================== */
 
     function stabilize(
@@ -1289,7 +1338,7 @@ body{
 
 
     /* ==================================================
-       ANGLE CLAMP
+       CLAMP
     ================================================== */
 
     function clampAngle(
@@ -1320,6 +1369,7 @@ body{
                 value
             );
 
+
         if(
             rounded > 0
         ){
@@ -1328,6 +1378,7 @@ body{
                 rounded;
 
         }
+
 
         return String(
             rounded
@@ -1418,7 +1469,7 @@ body{
 
 
     /* ==================================================
-       UPDATE LEVEL
+       LEVEL UPDATE
     ================================================== */
 
     function updateLevel(){
@@ -1693,10 +1744,10 @@ body{
 
 
     /* ==================================================
-       GPS ALTITUDE
+       GPS ALTITUDE + SPEED
     ================================================== */
 
-    function startAltitude(){
+    function startGPS(){
 
         if(
             !("geolocation" in navigator)
@@ -1704,6 +1755,9 @@ body{
 
             altitudeValue.textContent =
                 "-- m";
+
+            speedValue.textContent =
+                "-- km/h";
 
             return;
 
@@ -1714,83 +1768,158 @@ body{
 
             function(position){
 
+                /* ==========================================
+                   ALTITUDE
+                ========================================== */
+
                 const altitude =
                     position.coords.altitude;
 
 
-                /*
-                 * Bazı cihazlarda GPS rakımı
-                 * null gelebilir.
-                 */
-
                 if(
-                    altitude === null ||
-                    !Number.isFinite(
+                    altitude !== null &&
+                    Number.isFinite(
                         altitude
                     )
                 ){
 
-                    altitudeValue.textContent =
-                        "-- m";
+                    if(
+                        altitudeFiltered === null
+                    ){
 
-                    return;
+                        altitudeFiltered =
+                            altitude;
+
+                    }
+                    else{
+
+                        altitudeFiltered +=
+                            (
+                                altitude -
+                                altitudeFiltered
+                            ) *
+                            ALTITUDE_ALPHA;
+
+                    }
+
+
+                    altitudeValue.textContent =
+                        Math.round(
+                            altitudeFiltered
+                        ) +
+                        " m";
 
                 }
 
 
-                /*
-                 * İlk değer.
-                 */
+                /* ==========================================
+                   SPEED
+                ========================================== */
+
+                const speed =
+                    position.coords.speed;
+
 
                 if(
-                    altitudeFiltered === null
+                    speed !== null &&
+                    Number.isFinite(
+                        speed
+                    )
                 ){
 
-                    altitudeFiltered =
-                        altitude;
+                    /*
+                     * GPS speed:
+                     *
+                     * m/s × 3.6 = km/h
+                     */
+
+                    let speedKmh =
+                        speed * 3.6;
+
+
+                    /*
+                     * GPS'in araç durmuşken
+                     * oluşturduğu küçük hızları
+                     * sıfır kabul et.
+                     */
+
+                    if(
+                        speedKmh < 1
+                    ){
+
+                        speedKmh = 0;
+
+                    }
+
+
+                    if(
+                        speedFiltered === null
+                    ){
+
+                        speedFiltered =
+                            speedKmh;
+
+                    }
+                    else{
+
+                        speedFiltered +=
+                            (
+                                speedKmh -
+                                speedFiltered
+                            ) *
+                            SPEED_ALPHA;
+
+                    }
+
+
+                    /*
+                     * 1 km/h altını tekrar sıfırla.
+                     */
+
+                    if(
+                        speedFiltered < 1
+                    ){
+
+                        speedFiltered = 0;
+
+                    }
+
+
+                    speedValue.textContent =
+                        Math.round(
+                            speedFiltered
+                        ) +
+                        " km/h";
 
                 }
                 else{
 
-                    /*
-                     * Rakım filtresi.
-                     */
-
-                    altitudeFiltered +=
-                        (
-                            altitude -
-                            altitudeFiltered
-                        ) *
-                        ALTITUDE_ALPHA;
+                    speedValue.textContent =
+                        "-- km/h";
 
                 }
 
-
-                /*
-                 * Tam metre olarak göster.
-                 */
-
-                altitudeValue.textContent =
-                    Math.round(
-                        altitudeFiltered
-                    ) +
-                    " m";
-
             },
+
 
             function(error){
 
                 console.log(
-                    "GPS altitude:",
+                    "GPS:",
                     error
                 );
 
                 altitudeValue.textContent =
                     "-- m";
 
+                speedValue.textContent =
+                    "-- km/h";
+
             },
 
+
             {
+
                 enableHighAccuracy:true,
 
                 maximumAge:1000,
@@ -1815,7 +1944,7 @@ body{
 
             /* ==============================================
                MOTION PERMISSION
-            ============================================== */
+            =============================================== */
 
             if(
                 typeof DeviceMotionEvent !==
@@ -1848,7 +1977,7 @@ body{
 
 
             /* ==============================================
-               MOTION LISTENER
+               MOTION
             ============================================== */
 
             window.addEventListener(
@@ -1864,7 +1993,7 @@ body{
                GPS
             ============================================== */
 
-            startAltitude();
+            startGPS();
 
 
             /* ==============================================
@@ -1941,7 +2070,7 @@ body{
 
 
     /* ==================================================
-       START LEVEL LOOP
+       LEVEL LOOP
     ================================================== */
 
     requestAnimationFrame(
