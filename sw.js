@@ -1,34 +1,46 @@
-const CACHE_NAME = "camprover-level-no-cache-v5";
+const CACHE_NAME = "camprover-level-v5";
 
 
 /*
 ====================================================
- CAMPROVER LEVEL SERVICE WORKER
+ CAMPROVER LEVEL - SERVICE WORKER
 ====================================================
 
-Eski sürümlerde index.html ve görseller cache'leniyordu.
-Bu nedenle iPhone eski tasarımı göstermeye devam ediyordu.
+ Bu sürüm eski cache'leri temizler.
 
-Bu sürüm:
-- index.html'i CACHE'lemez
-- PNG görselleri CACHE'lemez
-- CSS/JS içeren sayfayı CACHE'lemez
-- Eski cache'leri otomatik siler
-- Yeni sürüm geldiğinde hemen aktif olur
+ index.html
+ PNG görseller
+ CSS
+ JS
+ JSON
+
+ dosyaları eski cache'den kullanılmaz.
+
+ Her açılışta güncel dosya sunucudan alınır.
 ====================================================
 */
 
 
+/* ==================================================
+   SERVICE WORKER KURULUMU
+================================================== */
+
 self.addEventListener("install", event => {
 
+  /*
+   Yeni Service Worker'ı bekletmeden aktif et.
+  */
+
   event.waitUntil(
-
     self.skipWaiting()
-
   );
 
 });
 
+
+/* ==================================================
+   SERVICE WORKER AKTİFLEŞTİRME
+================================================== */
 
 self.addEventListener("activate", event => {
 
@@ -37,6 +49,19 @@ self.addEventListener("activate", event => {
     caches.keys()
 
       .then(keys => {
+
+        /*
+         Daha önce oluşturulmuş bütün cache'leri sil.
+
+         Böylece:
+         v1
+         v2
+         v3
+         v4
+         vb.
+
+         eski dosyalar kalmaz.
+        */
 
         return Promise.all(
 
@@ -52,6 +77,11 @@ self.addEventListener("activate", event => {
 
       .then(() => {
 
+        /*
+         Açık olan sayfayı yeni Service Worker
+         hemen kontrol etmeye başlasın.
+        */
+
         return self.clients.claim();
 
       })
@@ -61,47 +91,77 @@ self.addEventListener("activate", event => {
 });
 
 
+/* ==================================================
+   DOSYA İSTEKLERİ
+================================================== */
+
 self.addEventListener("fetch", event => {
 
   const request = event.request;
 
+
   /*
-  Sadece GET isteklerini ele al
+   Sadece GET isteklerini ele alıyoruz.
   */
 
   if(request.method !== "GET"){
+
     return;
+
   }
 
 
+  const url =
+    new URL(request.url);
+
+
   /*
-  HTML ve görseller için:
-  HER ZAMAN internetten güncel dosyayı al.
+   CAMPROVER LEVEL dosyaları
   */
 
-  const url = new URL(request.url);
-
-
   const isAppFile =
+
     url.pathname.endsWith("/") ||
+
     url.pathname.endsWith(".html") ||
+
     url.pathname.endsWith(".png") ||
+
     url.pathname.endsWith(".jpg") ||
+
     url.pathname.endsWith(".jpeg") ||
+
     url.pathname.endsWith(".webp") ||
+
     url.pathname.endsWith(".css") ||
+
     url.pathname.endsWith(".js") ||
+
     url.pathname.endsWith(".json");
 
+
+  /*
+   Uygulamanın dosyaları için:
+
+   CACHE KULLANMA.
+
+   Her zaman GitHub'daki güncel dosyayı
+   almaya çalış.
+  */
 
   if(isAppFile){
 
     event.respondWith(
 
       fetch(
-        new Request(request, {
-          cache: "no-store"
-        })
+
+        new Request(
+          request,
+          {
+            cache:"no-store"
+          }
+        )
+
       )
 
       .then(response => {
@@ -113,7 +173,8 @@ self.addEventListener("fetch", event => {
       .catch(() => {
 
         /*
-        İnternet yoksa son çare olarak cache'e bak.
+         İnternet yoksa son çare olarak
+         mevcut cache'e bak.
         */
 
         return caches.match(request);
