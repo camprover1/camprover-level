@@ -2,349 +2,614 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1,
+               viewport-fit=cover,
+               user-scalable=no">
+
 <meta name="theme-color" content="#05070a">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <title>Camprover Level</title>
+
 <link rel="manifest" href="manifest.json">
 
 <style>
-*{box-sizing:border-box}
+
+*{
+    box-sizing:border-box;
+}
+
 html,body{
-margin:0;width:100%;height:100%;overflow:hidden;
-background:#05070a;color:#fff;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#05070a;
+    color:#fff;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }
+
 body{
-padding:env(safe-area-inset-top) env(safe-area-inset-right)
-env(safe-area-inset-bottom) env(safe-area-inset-left)
+    padding:
+        env(safe-area-inset-top)
+        env(safe-area-inset-right)
+        env(safe-area-inset-bottom)
+        env(safe-area-inset-left);
 }
+
 .app{
-height:100%;display:flex;flex-direction:column;
-padding:9px 16px 7px
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:9px 16px 7px;
 }
+
 header{
-height:34px;display:flex;align-items:center
+    height:34px;
+    display:flex;
+    align-items:center;
 }
+
 .title{
-font-size:19px;font-weight:800;letter-spacing:2px
+    font-size:19px;
+    font-weight:800;
+    letter-spacing:2px;
 }
+
 .sub{
-font-size:19px;font-weight:300;letter-spacing:2px
+    font-size:19px;
+    font-weight:300;
+    letter-spacing:2px;
 }
-.spacer{flex:1}
+
+.spacer{
+    flex:1;
+}
+
 .vehicle{
-font-size:11px;color:#858e99;
-font-weight:800;letter-spacing:1px
+    font-size:11px;
+    color:#858e99;
+    font-weight:800;
+    letter-spacing:1px;
 }
+
 .caption{
-text-align:center;color:#56606b;
-font-size:9px;letter-spacing:1px;margin:0 0 7px
+    text-align:center;
+    color:#56606b;
+    font-size:9px;
+    letter-spacing:1px;
+    margin:0 0 7px;
 }
+
 .grid{
-flex:1;display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:10px;min-height:0
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    min-height:0;
 }
+
 .card{
-position:relative;background:#0d1217;
-border:2px solid #27313a;
-border-radius:20px;overflow:hidden;
-display:flex;flex-direction:column;
-align-items:center;justify-content:flex-start;
-min-width:0
+    position:relative;
+    background:#0d1217;
+    border:2px solid #27313a;
+    border-radius:20px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    min-width:0;
 }
+
 .pitch-ok{
-border:5px solid #31ed69;
-box-shadow:0 0 20px #31ed6930
+    border:5px solid #31ed69;
+    box-shadow:0 0 20px #31ed6930;
 }
+
 .roll-ok{
-border:5px solid #ff3030;
-box-shadow:0 0 20px #ff303030
+    border:5px solid #ff3030;
+    box-shadow:0 0 20px #ff303030;
 }
+
 .label{
-z-index:3;margin-top:10px;
-font-size:11px;color:#a7afb7;
-letter-spacing:3px;font-weight:800
+    z-index:3;
+    margin-top:10px;
+    font-size:11px;
+    color:#a7afb7;
+    letter-spacing:3px;
+    font-weight:800;
 }
+
 .value{
-z-index:3;font-size:clamp(46px,7vw,74px);
-font-weight:900;line-height:.9;
-margin:3px 0 4px;color:#fff;
-text-shadow:0 2px 8px #000
+    z-index:3;
+    font-size:clamp(46px,7vw,74px);
+    font-weight:900;
+    line-height:.9;
+    margin:3px 0 4px;
+    color:#fff;
+    text-shadow:0 2px 8px #000;
 }
+
 .photoWrap{
-position:absolute;left:4%;right:4%;
-top:31%;bottom:4%;overflow:hidden;
-border-radius:14px;
-display:flex;align-items:center;justify-content:center
+    position:absolute;
+    left:4%;
+    right:4%;
+    top:31%;
+    bottom:4%;
+    overflow:hidden;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
+
 .photo{
-width:100%;height:100%;
-object-fit:contain;
-object-position:center;
-filter:saturate(1.05) contrast(1.04);
-transition:transform .12s linear
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+    filter:saturate(1.05) contrast(1.04);
+    transition:transform .12s linear;
 }
+
 .photoShade{
-position:absolute;inset:0;
-background:linear-gradient(
-180deg,#05080bba 0%,
-#05080b22 30%,
-#05080b00 62%,
-#05080b55 100%
-);
-pointer-events:none
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(
+            180deg,
+            #05080bba 0%,
+            #05080b22 30%,
+            #05080b00 62%,
+            #05080b55 100%
+        );
+    pointer-events:none;
 }
+
 .center{
-position:relative;background:#0a0e13;
-border-radius:20px;overflow:hidden;
-display:flex;align-items:center;justify-content:center
+    position:relative;
+    background:#0a0e13;
+    border-radius:20px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
+
 .level{
-position:relative;width:min(30vw,225px);
-aspect-ratio:1;border-radius:50%;
-background:radial-gradient(
-circle,#79f51d 0%,#35a900 54%,#0a2608 100%
-);
-border:7px solid #172018;
-box-shadow:inset 0 0 28px #000,0 0 18px #35d93a30
+    position:relative;
+    width:min(30vw,225px);
+    aspect-ratio:1;
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #79f51d 0%,
+            #35a900 54%,
+            #0a2608 100%
+        );
+
+    border:7px solid #172018;
+
+    box-shadow:
+        inset 0 0 28px #000,
+        0 0 18px #35d93a30;
 }
+
 .level:before{
-content:"";position:absolute;inset:12%;
-border:2px solid #ffffffaa;border-radius:50%
+    content:"";
+    position:absolute;
+    inset:12%;
+    border:2px solid #ffffffaa;
+    border-radius:50%;
 }
+
 .level:after{
-content:"";position:absolute;inset:28%;
-border:2px solid #ffffff55;border-radius:50%
+    content:"";
+    position:absolute;
+    inset:28%;
+    border:2px solid #ffffff55;
+    border-radius:50%;
 }
-.lineH,.lineV{
-position:absolute;background:#101610aa;z-index:1
-}
-.lineH{
-left:6%;right:6%;top:50%;height:2px
-}
+
+.lineH,
 .lineV{
-top:6%;bottom:6%;left:50%;width:2px
+    position:absolute;
+    background:#101610aa;
+    z-index:1;
 }
+
+.lineH{
+    left:6%;
+    right:6%;
+    top:50%;
+    height:2px;
+}
+
+.lineV{
+    top:6%;
+    bottom:6%;
+    left:50%;
+    width:2px;
+}
+
 .tick{
-position:absolute;font-size:10px;
-font-weight:800;color:#eaffdf;
-z-index:2;text-shadow:0 1px 3px #000
+    position:absolute;
+    font-size:10px;
+    font-weight:800;
+    color:#eaffdf;
+    z-index:2;
+    text-shadow:0 1px 3px #000;
 }
+
 .tTop{
-top:3%;left:50%;
-transform:translateX(-50%)
+    top:3%;
+    left:50%;
+    transform:translateX(-50%);
 }
+
 .tBottom{
-bottom:3%;left:50%;
-transform:translateX(-50%)
+    bottom:3%;
+    left:50%;
+    transform:translateX(-50%);
 }
+
 .tLeft{
-left:2%;top:50%;
-transform:translateY(-50%)
+    left:2%;
+    top:50%;
+    transform:translateY(-50%);
 }
+
 .tRight{
-right:2%;top:50%;
-transform:translateY(-50%)
+    right:2%;
+    top:50%;
+    transform:translateY(-50%);
 }
+
 .bubble{
-position:absolute;z-index:3;
-width:28px;height:28px;border-radius:50%;
-background:radial-gradient(
-circle at 33% 28%,#fff 0,#e9ffd8 11%,
-#86ff2f 35%,#158300 100%
-);
-border:2px solid #0b3900;
-box-shadow:0 0 16px #9cff5588;
-left:50%;top:50%;
-transform:translate(-50%,-50%);
-transition:left .08s,top .08s
+    position:absolute;
+    z-index:3;
+
+    width:28px;
+    height:28px;
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 33% 28%,
+            #fff 0,
+            #e9ffd8 11%,
+            #86ff2f 35%,
+            #158300 100%
+        );
+
+    border:2px solid #0b3900;
+
+    box-shadow:
+        0 0 16px #9cff5588;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    transition:
+        left .08s,
+        top .08s;
 }
+
 .centerCar{
-position:absolute;bottom:3%;left:50%;
-width:86px;
-transform:translateX(-50%);
-filter:drop-shadow(0 3px 7px #000)
+    position:absolute;
+    bottom:3%;
+    left:50%;
+    width:86px;
+
+    transform:translateX(-50%);
+
+    filter:drop-shadow(0 3px 7px #000);
 }
+
 .badge{
-position:absolute;bottom:5px;left:50%;
-transform:translateX(-50%);
-z-index:4;background:#0009;
-border-radius:16px;padding:5px 9px;
-color:#aab2bb;font-size:8px;
-letter-spacing:1px;font-weight:800;
-white-space:nowrap
+    position:absolute;
+    bottom:5px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    z-index:4;
+
+    background:#0009;
+    border-radius:16px;
+
+    padding:5px 9px;
+
+    color:#aab2bb;
+    font-size:8px;
+
+    letter-spacing:1px;
+    font-weight:800;
+
+    white-space:nowrap;
 }
+
 footer{
-height:25px;display:flex;align-items:center;
-color:#66717b;font-size:9px;letter-spacing:.5px
+    height:25px;
+    display:flex;
+    align-items:center;
+
+    color:#66717b;
+
+    font-size:9px;
+    letter-spacing:.5px;
 }
+
 .ok{
-color:#42e878;font-weight:800
+    color:#42e878;
+    font-weight:800;
 }
+
 #start{
-position:fixed;inset:0;background:#05070aee;
-display:flex;align-items:center;
-justify-content:center;z-index:10
+    position:fixed;
+    inset:0;
+
+    background:#05070aee;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:10;
 }
+
 .modal{
-width:min(400px,90vw);
-background:#10151b;
-border:1px solid #29343e;
-border-radius:22px;padding:24px;
-text-align:center
+    width:min(400px,90vw);
+
+    background:#10151b;
+
+    border:1px solid #29343e;
+
+    border-radius:22px;
+
+    padding:24px;
+
+    text-align:center;
 }
+
 .modal h2{
-margin:0 0 8px
+    margin:0 0 8px;
 }
+
 .modal p{
-color:#a8b0b9;
-line-height:1.4;font-size:13px
+    color:#a8b0b9;
+    line-height:1.4;
+    font-size:13px;
 }
+
 button{
-background:#111820;
-border:1px solid #33414d;
-color:#fff;border-radius:12px;
-padding:10px 16px;font-weight:800
+    background:#111820;
+
+    border:1px solid #33414d;
+
+    color:#fff;
+
+    border-radius:12px;
+
+    padding:10px 16px;
+
+    font-weight:800;
 }
+
 .hidden{
-display:none!important
+    display:none!important;
 }
+
 @media(max-width:700px){
-.grid{
-grid-template-columns:1fr 1fr
+
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .center{
+        grid-column:1/3;
+        grid-row:1;
+    }
+
+    .card{
+        height:100%;
+    }
+
+    .vehicle{
+        display:none;
+    }
 }
-.center{
-grid-column:1/3;
-grid-row:1
-}
-.card{
-height:100%
-}
-.vehicle{
-display:none
-}
-}
+
 </style>
 </head>
 
 <body>
 
 <div id="start">
-<div class="modal">
-<h2>CAMPROVER LEVEL</h2>
 
-<p>
-Mevcut eğimi sıfırlamaz.
-Dünya'nın yerçekimini referans alır.
-</p>
+    <div class="modal">
 
-<button id="begin">ÖLÇÜMÜ BAŞLAT</button>
+        <h2>CAMPROVER LEVEL</h2>
 
-<p style="font-size:10px;color:#777">
-Telefonu araç eksenlerine paralel sabitle.
-</p>
+        <p>
+            Araç içindeki dikey telefon montajı için
+            yerçekimi referanslı ölçüm.
+        </p>
+
+        <button id="begin">
+            ÖLÇÜMÜ BAŞLAT
+        </button>
+
+        <p style="font-size:10px;color:#777">
+            Kamera aracın önüne bakacak şekilde telefonu sabitle.
+        </p>
+
+    </div>
+
 </div>
-</div>
+
 
 <div class="app">
 
 <header>
-<div class="title">CAMPROVER</div>
-<div class="sub"> LEVEL</div>
-<div class="spacer"></div>
-<div class="vehicle">DISCOVERY 2</div>
+
+    <div class="title">
+        CAMPROVER
+    </div>
+
+    <div class="sub">
+        LEVEL
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="vehicle">
+        DISCOVERY 2
+    </div>
+
 </header>
 
+
 <div class="caption">
-DÜNYA YERÇEKİMİ REFERANSI • SIFIRLAMA YOK
+    DÜNYA YERÇEKİMİ REFERANSI • SIFIRLAMA YOK
 </div>
+
 
 <section class="grid">
 
+
+<!-- PITCH -->
+
 <div id="pitchCard" class="card">
 
-<div class="label">PITCH</div>
+    <div class="label">
+        PITCH
+    </div>
 
-<div id="pitch" class="value">0°</div>
+    <div id="pitch" class="value">
+        0°
+    </div>
 
-<div class="photoWrap">
+    <div class="photoWrap">
 
-<img
-id="pitchImg"
-class="photo"
-src="assets/pitch_discovery.png"
->
+        <img
+            id="pitchImg"
+            class="photo"
+            src="assets/pitch_discovery.png"
+        >
 
-<div class="photoShade"></div>
+        <div class="photoShade"></div>
+
+    </div>
 
 </div>
 
-</div>
 
+<!-- MERKEZ -->
 
 <div class="center">
 
-<div class="level">
+    <div class="level">
 
-<div class="lineH"></div>
-<div class="lineV"></div>
+        <div class="lineH"></div>
+        <div class="lineV"></div>
 
-<div class="tick tTop">+10°</div>
-<div class="tick tBottom">-10°</div>
-<div class="tick tLeft">-10°</div>
-<div class="tick tRight">+10°</div>
+        <div class="tick tTop">
+            +10°
+        </div>
 
-<div id="bubble" class="bubble"></div>
+        <div class="tick tBottom">
+            -10°
+        </div>
+
+        <div class="tick tLeft">
+            -10°
+        </div>
+
+        <div class="tick tRight">
+            +10°
+        </div>
+
+        <div id="bubble" class="bubble"></div>
+
+    </div>
+
+
+    <div class="badge">
+        SU TERAZİSİ • ±10°
+    </div>
+
+
+    <img
+        class="centerCar"
+        src="assets/roll_discovery.png"
+        style="
+            height:55px;
+            object-fit:contain;
+            object-position:center;
+            opacity:.92;
+        "
+    >
 
 </div>
 
-<div class="badge">
-SU TERAZİSİ • ±10°
-</div>
 
-<img
-class="centerCar"
-src="assets/roll_discovery.png"
-style="height:55px;object-fit:contain;object-position:center;opacity:.92"
->
-
-</div>
-
+<!-- ROLL -->
 
 <div id="rollCard" class="card">
 
-<div class="label">ROLL</div>
+    <div class="label">
+        ROLL
+    </div>
 
-<div id="roll" class="value">0°</div>
+    <div id="roll" class="value">
+        0°
+    </div>
 
-<div class="photoWrap">
+    <div class="photoWrap">
 
-<img
-id="rollImg"
-class="photo"
-src="assets/roll_discovery.png"
->
+        <img
+            id="rollImg"
+            class="photo"
+            src="assets/roll_discovery.png"
+        >
 
-<div class="photoShade"></div>
+        <div class="photoShade"></div>
 
-</div>
+    </div>
 
 </div>
 
 </section>
 
+
 <footer>
 
-<span class="ok">● SENSÖR AKTİF</span>
+    <span class="ok">
+        ● SENSÖR AKTİF
+    </span>
 
-<span style="flex:1;text-align:center">
-Pitch / Roll tam derece • ±0,5° hassasiyet
-</span>
+    <span style="flex:1;text-align:center">
+        Pitch / Roll tam derece • ±0,5° hassasiyet
+    </span>
 
-<span>Ana Ekrana Ekle</span>
+    <span>
+        Ana Ekrana Ekle
+    </span>
 
 </footer>
 
@@ -353,184 +618,428 @@ Pitch / Roll tam derece • ±0,5° hassasiyet
 
 <script>
 
-let ax=0,ay=0,az=0;
+/*
+========================================================
+CAMPROVER LEVEL
+DİKEY ARAÇ MONTAJI
 
-const alpha=.055;
+Telefon:
+- Portrait / dikey
+- Ekran yolculara bakıyor
+- Kamera aracın önüne bakıyor
+- Telefon üstü tavana bakıyor
+- Telefon altı zemine bakıyor
 
-const p=document.getElementById('pitch');
-const r=document.getElementById('roll');
+DEVICE MOTION EKSENLERİ
 
-const pc=document.getElementById('pitchCard');
-const rc=document.getElementById('rollCard');
+X = telefonun sağ / sol ekseni
+Y = telefonun üst / alt ekseni
+Z = ekranın baktığı yön
 
-const bubble=document.getElementById('bubble');
+Bu montajda:
 
-const pi=document.getElementById('pitchImg');
-const ri=document.getElementById('rollImg');
+ROLL
+X eksenindeki yerçekimi bileşeninden hesaplanır.
 
+PITCH
+Z eksenindeki yerçekimi bileşeninden hesaplanır.
 
-function signed(v){
-
-return (v>=0?'+':'')+v+'°';
-
-}
-
-
-function update(){
-
-const pr=
-Math.atan2(
--ay,
-Math.sqrt(ax*ax+az*az)
-)*180/Math.PI;
+========================================================
+*/
 
 
-let rr=
-Math.atan2(ax,az)
-*180/Math.PI;
+let ax = 0;
+let ay = 0;
+let az = 0;
 
 
-if(rr>90)rr-=180;
+/*
+Smoothing
 
-if(rr<-90)rr+=180;
+Küçük titreşimleri filtreler.
+*/
 
-
-const pitch=Math.round(pr);
-
-const roll=Math.round(rr);
-
-
-p.textContent=signed(pitch);
-
-r.textContent=signed(roll);
+const alpha = 0.055;
 
 
-pc.className=
-'card'+
-(Math.abs(pr)<=.5?' pitch-ok':'');
+const pitchElement =
+    document.getElementById("pitch");
+
+const rollElement =
+    document.getElementById("roll");
+
+const pitchCard =
+    document.getElementById("pitchCard");
+
+const rollCard =
+    document.getElementById("rollCard");
+
+const bubble =
+    document.getElementById("bubble");
+
+const pitchImage =
+    document.getElementById("pitchImg");
+
+const rollImage =
+    document.getElementById("rollImg");
 
 
-rc.className=
-'card'+
-(Math.abs(rr)<=.5?' roll-ok':'');
+function signed(value){
 
-
-// PITCH görseli gerçek eğimi takip eder
-
-pi.style.transform=
-`translateY(${Math.max(-20,Math.min(20,pr))*1.2}px)
-rotate(${pr*.55}deg)
-scale(1.04)`;
-
-
-// ROLL görseli gerçek eğimi takip eder
-
-ri.style.transform=
-`rotate(${rr*.7}deg)
-translateX(${rr*0.8}px)
-scale(1.04)`;
-
-
-// Su terazisi ±10°
-
-const x=
-Math.max(-10,Math.min(10,rr));
-
-const y=
-Math.max(-10,Math.min(10,pr));
-
-
-bubble.style.left=
-(50+x*4.0)+'%';
-
-bubble.style.top=
-(50+y*4.0)+'%';
+    return (
+        value >= 0
+        ? "+"
+        : ""
+    ) + value + "°";
 
 }
 
 
-function motion(e){
-
-const a=e.accelerationIncludingGravity;
-
-if(!a)return;
+function updateLevel(){
 
 
-ax=
-ax*(1-alpha)+
-(a.x||0)*alpha;
+    /*
+    =====================================================
+    PITCH
 
-ay=
-ay*(1-alpha)+
-(a.y||0)*alpha;
+    Telefonun Z ekseni ekran yönüdür.
 
-az=
-az*(1-alpha)+
-(a.z||0)*alpha;
+    Kamera aracın önüne baktığı için:
+
+    Burun yukarı:
+    + pitch
+
+    Burun aşağı:
+    - pitch
+    =====================================================
+    */
 
 
-update();
+    let pitchRaw =
+        Math.atan2(
+            az,
+            Math.sqrt(
+                ax * ax +
+                ay * ay
+            )
+        ) *
+        180 /
+        Math.PI;
+
+
+    /*
+    =====================================================
+    ROLL
+
+    Telefonun X ekseni sağ-sol yönüdür.
+
+    Araç sağa yattığında:
+    + roll
+
+    Araç sola yattığında:
+    - roll
+    =====================================================
+    */
+
+
+    let rollRaw =
+        Math.atan2(
+            ax,
+            Math.sqrt(
+                ay * ay +
+                az * az
+            )
+        ) *
+        180 /
+        Math.PI;
+
+
+    /*
+    Sayısal gösterim
+    */
+
+    const pitch =
+        Math.round(pitchRaw);
+
+    const roll =
+        Math.round(rollRaw);
+
+
+    pitchElement.textContent =
+        signed(pitch);
+
+    rollElement.textContent =
+        signed(roll);
+
+
+    /*
+    =====================================================
+    SIFIR NOKTASI KALİBRASYONU YOK
+
+    Dünya yerçekimi referansı kullanılıyor.
+    =====================================================
+    */
+
+
+    /*
+    Pitch ±0.5°
+    */
+
+    pitchCard.className =
+        "card" +
+        (
+            Math.abs(pitchRaw) <= 0.5
+            ? " pitch-ok"
+            : ""
+        );
+
+
+    /*
+    Roll ±0.5°
+    */
+
+    rollCard.className =
+        "card" +
+        (
+            Math.abs(rollRaw) <= 0.5
+            ? " roll-ok"
+            : ""
+        );
+
+
+    /*
+    =====================================================
+    PITCH ARAÇ GÖRSELİ
+
+    Araç burnunun hareketini görsel olarak gösteriyoruz.
+    =====================================================
+    */
+
+    const pitchMove =
+        Math.max(
+            -20,
+            Math.min(
+                20,
+                pitchRaw
+            )
+        );
+
+
+    pitchImage.style.transform =
+        `
+        translateY(${pitchMove * -1.2}px)
+        rotate(${pitchRaw * -0.55}deg)
+        scale(1.04)
+        `;
+
+
+    /*
+    =====================================================
+    ROLL ARAÇ GÖRSELİ
+    =====================================================
+    */
+
+    const rollMove =
+        Math.max(
+            -20,
+            Math.min(
+                20,
+                rollRaw
+            )
+        );
+
+
+    rollImage.style.transform =
+        `
+        rotate(${rollRaw * 0.7}deg)
+        translateX(${rollMove * 0.8}px)
+        scale(1.04)
+        `;
+
+
+    /*
+    =====================================================
+    MERKEZ SU TERAZİSİ
+
+    ±10 derece sınırlandırılmıştır.
+    =====================================================
+    */
+
+
+    const x =
+        Math.max(
+            -10,
+            Math.min(
+                10,
+                rollRaw
+            )
+        );
+
+
+    const y =
+        Math.max(
+            -10,
+            Math.min(
+                10,
+                pitchRaw
+            )
+        );
+
+
+    bubble.style.left =
+        (50 + x * 4) + "%";
+
+
+    /*
+    Pitch pozitif olduğunda
+    baloncuk yukarı hareket eder.
+
+    Çünkü aracın burnu yukarı kalkıyor.
+    */
+
+    bubble.style.top =
+        (50 - y * 4) + "%";
 
 }
 
 
-async function start(){
+/*
+=========================================================
+HAREKET SENSÖRÜ
+=========================================================
+*/
 
-try{
+function motion(event){
+
+    const acceleration =
+        event.accelerationIncludingGravity;
+
+
+    if(!acceleration){
+        return;
+    }
+
+
+    /*
+    Low-pass filter
+    */
+
+    ax =
+        ax * (1 - alpha) +
+        (acceleration.x || 0) * alpha;
+
+
+    ay =
+        ay * (1 - alpha) +
+        (acceleration.y || 0) * alpha;
+
+
+    az =
+        az * (1 - alpha) +
+        (acceleration.z || 0) * alpha;
+
+
+    updateLevel();
+
+}
+
+
+/*
+=========================================================
+BAŞLAT
+=========================================================
+*/
+
+async function startMeasurement(){
+
+    try{
+
+
+        /*
+        iOS Safari motion permission
+        */
+
+        if(
+            typeof DeviceMotionEvent !==
+            "undefined" &&
+
+            typeof DeviceMotionEvent.requestPermission ===
+            "function"
+        ){
+
+            const permission =
+                await DeviceMotionEvent.requestPermission();
+
+
+            if(
+                permission !== "granted"
+            ){
+
+                alert(
+                    "Hareket sensörü izni verilmedi."
+                );
+
+                return;
+            }
+
+        }
+
+
+        window.addEventListener(
+            "devicemotion",
+            motion,
+            true
+        );
+
+
+        document
+            .getElementById("start")
+            .classList
+            .add("hidden");
+
+
+    }catch(error){
+
+        alert(
+            "Sensör başlatılamadı: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/*
+Başlat butonu
+*/
+
+document
+    .getElementById("begin")
+    .addEventListener(
+        "click",
+        startMeasurement
+    );
+
+
+/*
+=========================================================
+SERVICE WORKER
+=========================================================
+*/
 
 if(
-typeof DeviceMotionEvent!=='undefined' &&
-typeof DeviceMotionEvent.requestPermission==='function'
+    "serviceWorker" in navigator
 ){
 
-const ok=
-await DeviceMotionEvent.requestPermission();
-
-if(ok!=='granted'){
-
-alert(
-'Hareket sensörü izni verilmedi.'
-);
-
-return;
+    navigator
+        .serviceWorker
+        .register("sw.js")
+        .catch(
+            () => {}
+        );
 
 }
-
-}
-
-
-window.addEventListener(
-'devicemotion',
-motion,
-true
-);
-
-
-document
-.getElementById('start')
-.classList.add('hidden');
-
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-}
-
-
-document
-.getElementById('begin')
-.onclick=start;
-
-
-if('serviceWorker' in navigator)
-
-navigator
-.serviceWorker
-.register('sw.js')
-.catch(()=>{});
 
 </script>
 
