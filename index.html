@@ -341,9 +341,7 @@ body{
 
   object-fit:contain;
 
-  transition:
-    transform .14s ease;
-
+  transition:none;
 }
 
 
@@ -2347,6 +2345,10 @@ let bubblePitch =
 
 let bubbleRoll =
   0;
+const VEHICLE_ALPHA = 0.28;
+
+let visualPitch = 0;
+let visualRoll = 0;
 
 
 
@@ -2628,47 +2630,69 @@ function updateLevel(){
 
 
 
-  /* ================================================= */
-  /* PITCH ARACI */
+/* ================================================= */
+/* ARAÇ GÖRSELLERİ */
 /* ================================================= */
 
-  const pitchMove =
-    Math.max(
-      -100,
+/*
+   Sayısal değerlerden bağımsız olarak
+   görseller için ayrı ve daha hızlı filtre.
+*/
 
-      Math.min(
-        100,
-
-        displayPitch * 5
-      )
-    );
-
-
-  pitchImage.style.transform =
-    `translateY(${pitchMove * 1.6}px)`;
+visualPitch +=
+  (
+    displayPitch -
+    visualPitch
+  ) *
+  VEHICLE_ALPHA;
 
 
+visualRoll +=
+  (
+    displayRoll -
+    visualRoll
+  ) *
+  VEHICLE_ALPHA;
 
-  /* ================================================= */
-  /* ROLL ARACI */
+
+/* ================================================= */
+/* PITCH GÖRSELİ */
 /* ================================================= */
 
-  const rollMove =
-    Math.max(
-      -100,
+const pitchMove =
+  Math.max(
+    -100,
 
-      Math.min(
-        100,
+    Math.min(
+      100,
 
-        displayRoll * 5
-      )
-    );
+      visualPitch * 5
+    )
+  );
 
 
-  rollImage.style.transform =
-      `rotate(${rollMove * 1.35}deg)`;
+pitchImage.style.transform =
+  `translateY(${pitchMove * 1.2}px)`;
 
-}
+
+/* ================================================= */
+/* ROLL GÖRSELİ */
+/* ================================================= */
+
+const rollMove =
+  Math.max(
+    -100,
+
+    Math.min(
+      100,
+
+      visualRoll * 5
+    )
+  );
+
+
+rollImage.style.transform =
+  `rotate(${rollMove}deg)`;
 
 
 
