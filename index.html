@@ -475,50 +475,6 @@ body{
 
 
 /* ================================================= */
-/* YEŞİL BALON */
-/* ================================================= */
-
-.bubble{
-
-  position:absolute;
-
-  width:36px;
-
-  height:36px;
-
-  border-radius:50%;
-
-  background:
-
-    radial-gradient(
-      circle at 35% 30%,
-      rgba(255,255,255,.95),
-      rgba(30,232,144,.8) 25%,
-      rgba(20,180,110,.75) 65%,
-      rgba(0,0,0,.25) 100%
-    );
-
-  box-shadow:
-
-    0 0 12px rgba(32,232,144,.75),
-
-    inset 0 0 8px rgba(255,255,255,.35);
-
-  transform:
-    translate(
-      var(--bubble-x,0px),
-      var(--bubble-y,0px)
-    );
-
-  transition:
-    transform .18s ease;
-
-  z-index:5;
-
-}
-
-
-/* ================================================= */
 /* MERKEZ DISCOVERY */
 /* ================================================= */
 
@@ -542,44 +498,180 @@ body{
 
 
 /* ================================================= */
-/* GRAVITY LEVEL */
+/* YEŞİL YATAY SU TERAZİSİ */
 /* ================================================= */
 
-.gravity-label{
+.gravity-level{
 
   position:absolute;
 
   left:50%;
 
-  bottom:9%;
+  bottom:8%;
 
   transform:translateX(-50%);
 
-  padding:12px 25px;
+  width:72%;
 
-  border-radius:30px;
+  z-index:15;
 
-  background:rgba(5,15,12,.72);
+}
 
-  border:1px solid rgba(32,232,144,.18);
 
-  color:#9aa7a7;
+/* ================================================= */
+/* DERECE ÖLÇEĞİ */
+/* ================================================= */
 
-  font-size:12px;
+.gravity-scale{
 
-  font-weight:500;
+  display:flex;
 
-  letter-spacing:4px;
+  justify-content:space-between;
 
-  white-space:nowrap;
+  align-items:center;
 
-  z-index:10;
+  width:100%;
+
+  margin-bottom:5px;
+
+  padding:0 2px;
+
+  color:var(--green);
+
+  font-size:7px;
+
+  font-weight:600;
+
+  letter-spacing:.5px;
+
+}
+
+
+/* ================================================= */
+/* SU TERAZİSİ DIŞ TÜP */
+/* ================================================= */
+
+.spirit-level{
+
+  width:100%;
+
+  height:34px;
+
+  padding:4px;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #183c2d,
+      #07150e
+    );
+
+  border:2px solid var(--green);
 
   box-shadow:
 
-    0 0 12px rgba(32,232,144,.08),
+    0 0 8px rgba(32,232,144,.65),
 
-    inset 0 0 12px rgba(32,232,144,.04);
+    inset 0 0 8px rgba(32,232,144,.25);
+
+}
+
+
+/* ================================================= */
+/* SU TERAZİSİ İÇ TÜP */
+/* ================================================= */
+
+.level-tube{
+
+  position:relative;
+
+  width:100%;
+
+  height:100%;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(32,232,144,.20),
+      rgba(32,232,144,.05)
+    );
+
+  overflow:hidden;
+
+}
+
+
+/* ================================================= */
+/* ORTA REFERANS ÇİZGİSİ */
+/* ================================================= */
+
+.level-tube::before{
+
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+
+  top:0;
+
+  bottom:0;
+
+  width:2px;
+
+  background:var(--green);
+
+  opacity:.8;
+
+  transform:translateX(-50%);
+
+}
+
+
+/* ================================================= */
+/* SU TERAZİSİ BALONU */
+/* ================================================= */
+
+.level-bubble{
+
+  position:absolute;
+
+  left:50%;
+
+  top:50%;
+
+  width:22px;
+
+  height:22px;
+
+  border-radius:50%;
+
+  background:
+
+    radial-gradient(
+      circle at 35% 30%,
+      #ffffff,
+      #50ffad 25%,
+      #20e890 60%,
+      #08784b 100%
+    );
+
+  box-shadow:
+
+    0 0 8px var(--green),
+
+    0 0 18px rgba(32,232,144,.55),
+
+    inset 0 0 5px rgba(255,255,255,.5);
+
+  transform:
+    translate(-50%,-50%);
+
+  will-change:transform;
 
 }
 
@@ -778,7 +870,7 @@ body{
 
   /* ================================================= */
   /* ANA MOBİL DÜZEN */
-  /* ================================================= */
+/* ================================================= */
 
   .dashboard{
 
@@ -807,7 +899,7 @@ body{
 
   /* ================================================= */
   /* TERAZİ ÜSTTE */
-  /* ================================================= */
+/* ================================================= */
 
   .center-panel{
 
@@ -858,35 +950,49 @@ body{
   }
 
 
-  .bubble{
+  /* ================================================= */
+  /* YEŞİL TERAZİ MOBİL */
+/* ================================================= */
 
-    width:40px;
+  .gravity-level{
 
-    height:40px;
+    width:72%;
+
+    bottom:8%;
 
   }
 
 
-  /* ================================================= */
-  /* GRAVITY LEVEL */
-  /* ================================================= */
+  .gravity-scale{
 
-  .gravity-label{
+    font-size:6px;
 
-    bottom:10%;
+    margin-bottom:4px;
 
-    padding:10px 20px;
+  }
 
-    font-size:10px;
 
-    letter-spacing:3px;
+  .spirit-level{
+
+    height:30px;
+
+    padding:3px;
+
+  }
+
+
+  .level-bubble{
+
+    width:20px;
+
+    height:20px;
 
   }
 
 
   /* ================================================= */
   /* PITCH */
-  /* ================================================= */
+/* ================================================= */
 
   .card:first-child{
 
@@ -913,7 +1019,7 @@ body{
 
   /* ================================================= */
   /* ROLL */
-  /* ================================================= */
+/* ================================================= */
 
   .card:last-child{
 
@@ -960,7 +1066,7 @@ body{
 
   /* ================================================= */
   /* PITCH + ROLL GÖRSELLERİ TAM MERKEZ */
-  /* ================================================= */
+/* ================================================= */
 
   .card:first-child .vehicle-area,
   .card:last-child .vehicle-area{
@@ -998,7 +1104,7 @@ body{
 
   /* ================================================= */
   /* RESET */
-  /* ================================================= */
+/* ================================================= */
 
   .zero-button{
 
@@ -1017,10 +1123,6 @@ body{
 
   }
 
-
-  /* ================================================= */
-  /* FOOTER */
-  /* ================================================= */
 
   .footer{
 
@@ -1095,6 +1197,48 @@ body{
   }
 
 
+  /* ================================================= */
+  /* TERAZİ */
+/* ================================================= */
+
+  .gravity-level{
+
+    width:72%;
+
+    bottom:8%;
+
+  }
+
+
+  .gravity-scale{
+
+    font-size:6px;
+
+  }
+
+
+  .spirit-level{
+
+    height:27px;
+
+    padding:3px;
+
+  }
+
+
+  .level-bubble{
+
+    width:18px;
+
+    height:18px;
+
+  }
+
+
+  /* ================================================= */
+  /* PITCH + ROLL */
+/* ================================================= */
+
   .card:first-child,
   .card:last-child{
 
@@ -1125,15 +1269,6 @@ body{
   }
 
 
-  .vehicle-area{
-
-    margin-top:2px;
-
-  }
-
-
-  /* GÖRSELLER TAM MERKEZDE */
-
   .card:first-child .vehicle-area,
   .card:last-child .vehicle-area{
 
@@ -1154,18 +1289,9 @@ body{
   }
 
 
-  .gravity-label{
-
-    bottom:9%;
-
-    padding:9px 18px;
-
-    font-size:9px;
-
-    letter-spacing:2.5px;
-
-  }
-
+  /* ================================================= */
+  /* RESET */
+/* ================================================= */
 
   .zero-button{
 
@@ -1268,11 +1394,7 @@ body{
       >
 
 
-        <div
-          id="bubble"
-          class="bubble"
-        ></div>
-
+        <!-- MERKEZ DISCOVERY -->
 
         <img
           id="centerCar"
@@ -1281,13 +1403,49 @@ body{
         >
 
 
-        <div class="gravity-label">
-          GRAVITY LEVEL
+        <!-- ================================================= -->
+        <!-- YEŞİL SU TERAZİSİ -->
+        <!-- ================================================= -->
+
+        <div class="gravity-level">
+
+
+          <div class="gravity-scale">
+
+            <span>-10°</span>
+
+            <span>-5°</span>
+
+            <span>0°</span>
+
+            <span>+5°</span>
+
+            <span>+10°</span>
+
+          </div>
+
+
+          <div class="spirit-level">
+
+            <div class="level-tube">
+
+              <div
+                id="gravityBubble"
+                class="level-bubble"
+              ></div>
+
+            </div>
+
+          </div>
+
+
         </div>
 
 
       </div>
 
+
+      <!-- RESET -->
 
       <button
         id="zeroButton"
@@ -1418,7 +1576,7 @@ body{
 /* ================================================= */
 
 const IMAGE_VERSION =
-  "20261008-09";
+  "20261008-10";
 
 
 
@@ -1441,6 +1599,12 @@ const rollImage =
 const centerCar =
   document.getElementById(
     "centerCar"
+  );
+
+
+const gravityBubble =
+  document.getElementById(
+    "gravityBubble"
   );
 
 
@@ -1488,12 +1652,6 @@ const rollCard =
   );
 
 
-const bubble =
-  document.getElementById(
-    "bubble"
-  );
-
-
 const zeroButton =
   document.getElementById(
     "zeroButton"
@@ -1513,17 +1671,22 @@ const BUBBLE_ALPHA =
   0.15;
 
 
-/*
-  Görseller daha hızlı tepki veriyor.
-*/
-
 const VEHICLE_ALPHA =
   0.28;
 
 
 
 /* ================================================= */
-/* SENSOR DEĞERLERİ */
+/* ÖLÇÜM SINIRI */
+/* ================================================= */
+
+const MAX_ANGLE =
+  10;
+
+
+
+/* ================================================= */
+/* SENSOR */
 /* ================================================= */
 
 let filteredAx =
@@ -1557,7 +1720,7 @@ let bubbleRoll =
 
 
 /* ================================================= */
-/* GÖRSEL FİLTRE */
+/* GÖRSELLER */
 /* ================================================= */
 
 let visualPitch =
@@ -1687,7 +1850,7 @@ function updateCardLevel(
 
 
 /* ================================================= */
-/* DERECE */
+/* DERECE FORMAT */
 /* ================================================= */
 
 function formatDegree(
@@ -1717,11 +1880,38 @@ function formatDegree(
 
 
 /* ================================================= */
-/* LEVEL GÜNCELLEME */
+/* DEĞERİ ±10° ARALIĞINA SINIRLA */
+/* ================================================= */
+
+function clampAngle(
+  value
+){
+
+  return Math.max(
+
+    -MAX_ANGLE,
+
+    Math.min(
+      MAX_ANGLE,
+      value
+    )
+
+  );
+
+}
+
+
+
+/* ================================================= */
+/* ANA GÜNCELLEME */
 /* ================================================= */
 
 function updateLevel(){
 
+
+  /* ================================================= */
+  /* GÖSTERİLECEK DEĞERLER */
+/* ================================================= */
 
   let displayPitch =
     pitchRaw;
@@ -1733,7 +1923,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* RESET AKTİFSE */
+  /* RESET */
 /* ================================================= */
 
   if(
@@ -1754,7 +1944,24 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* SAYISAL DEĞER */
+  /* ±10° SINIR */
+/* ================================================= */
+
+  displayPitch =
+    clampAngle(
+      displayPitch
+    );
+
+
+  displayRoll =
+    clampAngle(
+      displayRoll
+    );
+
+
+
+  /* ================================================= */
+  /* SAYISAL DEĞERLER */
 /* ================================================= */
 
   pitchValue.textContent =
@@ -1788,7 +1995,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* BALON FİLTRESİ */
+  /* SU TERAZİSİ FİLTRESİ */
 /* ================================================= */
 
   bubblePitch +=
@@ -1809,61 +2016,39 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* BALON HAREKETİ */
+  /* YEŞİL SU TERAZİSİ */
 /* ================================================= */
 
-  const maxMove =
-    115;
+  /*
+    Su terazisi Roll eksenini gösteriyor.
+
+    -10° = sol uç
+     0°  = orta
+    +10° = sağ uç
+  */
+
+  const gravityMaxMove =
+    42;
 
 
-  const bubbleX =
-    Math.max(
-
-      -maxMove,
-
-      Math.min(
-
-        maxMove,
-
-        bubbleRoll * 7
-
-      )
-
-    );
+  const gravityMove =
+    (
+      bubbleRoll /
+      MAX_ANGLE
+    ) *
+    gravityMaxMove;
 
 
-  const bubbleY =
-    Math.max(
-
-      -maxMove,
-
-      Math.min(
-
-        maxMove,
-
-        bubblePitch * 7
-
-      )
-
-    );
-
-
-
-  bubble.style.setProperty(
-    "--bubble-x",
-    bubbleX + "px"
-  );
-
-
-  bubble.style.setProperty(
-    "--bubble-y",
-    bubbleY + "px"
-  );
+  gravityBubble.style.transform =
+    `translate(
+      calc(-50% + ${gravityMove}px),
+      -50%
+    )`;
 
 
 
   /* ================================================= */
-  /* ARAÇ GÖRSELLERİ FİLTRESİ */
+  /* ARAÇ GÖRSELİ FİLTRESİ */
 /* ================================================= */
 
   visualPitch +=
@@ -1888,27 +2073,10 @@ function updateLevel(){
 /* ================================================= */
 
   const pitchAngle =
-    Math.max(
-
-      -45,
-
-      Math.min(
-
-        45,
-
-        visualPitch
-
-      )
-
+    clampAngle(
+      visualPitch
     );
 
-
-  /*
-    PITCH:
-
-    Yukarı/aşağı hareket yok.
-    Sadece kendi merkezinde dönüyor.
-  */
 
   pitchImage.style.transform =
     `rotate(${pitchAngle}deg)`;
@@ -1920,18 +2088,8 @@ function updateLevel(){
 /* ================================================= */
 
   const rollAngle =
-    Math.max(
-
-      -45,
-
-      Math.min(
-
-        45,
-
-        visualRoll
-
-      )
-
+    clampAngle(
+      visualRoll
     );
 
 
@@ -1943,7 +2101,7 @@ function updateLevel(){
 
 
 /* ================================================= */
-/* SENSOR */
+/* SENSOR OKUMA */
 /* ================================================= */
 
 function handleMotion(
