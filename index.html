@@ -2,16 +2,10 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport"
-      content="width=device-width,
-               initial-scale=1,
-               maximum-scale=1,
-               user-scalable=no,
-               viewport-fit=cover">
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta http-equiv="Cache-Control"
-      content="no-cache,no-store,must-revalidate">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
@@ -20,1100 +14,943 @@
 <style>
 
 :root{
-    --bg:#050607;
-    --panel:#0c0f11;
-    --panel2:#101416;
-    --border:#20272b;
-    --text:#f4f7f8;
-    --muted:#8d989d;
+  --bg:#070b0f;
+  --panel:#0d1319;
+  --panel-border:#202b33;
+  --text:#f4f7f9;
+  --muted:#7d8992;
 
-    --level-blue:#00A8FF;
+  /* MAVİ TONU BURADAN DEĞİŞTİREBİLİRSİN */
+  --level-blue:#00A8FF;
 
-    --green:#22ff75;
-    --green-soft:#18d965;
+  --green:#25e87a;
 }
 
+/* =========================
+   GENEL
+========================= */
+
 *{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html,
 body{
-    width:100%;
-    height:100%;
-    margin:0;
-    padding:0;
-
-    overflow:hidden;
-
-    background:var(--bg);
-    color:var(--text);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "Segoe UI",
-        sans-serif;
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 body{
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  position:relative;
 }
 
-
-/* ==================================================
+/* =========================
    CAMPROVER
-================================================== */
+========================= */
 
 .brand{
+  position:absolute;
+  top:7px;
+  left:50%;
+  transform:translateX(-50%);
 
-    position:fixed;
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:4px;
 
-    top:7px;
-    left:50%;
+  color:#f1f5f7;
 
-    transform:translateX(-50%);
-
-    z-index:100;
-
-    font-size:19px;
-
-    font-weight:700;
-
-    letter-spacing:6px;
-
-    color:#dfe7e9;
-
-    opacity:.88;
-
-    text-shadow:
-        0 0 8px rgba(0,168,255,.18),
-        0 0 14px rgba(34,255,117,.08);
-
-    pointer-events:none;
-
-    user-select:none;
+  z-index:20;
+  white-space:nowrap;
 }
 
-
-/* ==================================================
-   GPS INFORMATION
-================================================== */
+/* =========================
+   GPS BİLGİ KUTUSU
+========================= */
 
 .gpsInfo{
+  position:absolute;
 
-    position:fixed;
+  top:38px;
+  left:50%;
+  transform:translateX(-50%);
 
-    top:36px;
-    left:50%;
+  width:min(420px,72vw);
 
-    transform:translateX(-50%);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
 
-    z-index:100;
+  padding:8px 18px;
 
-    display:flex;
+  border:2px solid rgba(0,168,255,.35);
+  border-radius:12px;
 
-    align-items:baseline;
+  background:rgba(8,12,16,.88);
 
-    justify-content:center;
+  box-shadow:
+    0 0 14px rgba(0,168,255,.08);
 
-    gap:20px;
-
-    white-space:nowrap;
-
-    pointer-events:none;
-
-    user-select:none;
+  z-index:20;
 }
 
 .gpsItem{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 
-    display:flex;
-
-    align-items:baseline;
-
-    gap:7px;
+  min-width:120px;
 }
 
 .gpsLabel{
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:1.5px;
 
-    font-size:11px;
-
-    font-weight:600;
-
-    letter-spacing:2px;
-
-    color:#8b979c;
-
-    opacity:.9;
+  color:#8e9aa3;
 }
 
 .gpsValue{
+  font-size:26px;
+  font-weight:700;
+  line-height:1.1;
 
-    font-size:18px;
+  letter-spacing:.5px;
 
-    font-weight:700;
+  color:#f5f8fa;
 
-    letter-spacing:.3px;
-
-    color:#cdd5d8;
-
-    text-shadow:
-        0 0 7px rgba(255,255,255,.06);
+  white-space:nowrap;
 }
 
-
-/* ==================================================
-   DASHBOARD
-================================================== */
+/* =========================
+   ANA DASHBOARD
+========================= */
 
 .dashboard{
+  width:100%;
+  height:100%;
 
-    width:100%;
-    height:100%;
+  display:grid;
+  grid-template-columns:1fr 1.05fr 1fr;
+  gap:18px;
 
-    max-width:1500px;
+  align-items:center;
 
-    display:grid;
-
-    grid-template-columns:
-        minmax(220px,1fr)
-        minmax(360px,1.5fr)
-        minmax(220px,1fr);
-
-    gap:18px;
-
-    padding:18px;
+  padding:85px 25px 25px;
 }
 
-
-/* ==================================================
-   PANELS
-================================================== */
+/* =========================
+   PANELLER
+========================= */
 
 .panel{
+  position:relative;
 
-    position:relative;
+  height:calc(100vh - 110px);
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.025),
-            rgba(255,255,255,.005)
-        ),
-        var(--panel);
+  min-height:430px;
 
-    border:4px solid var(--border);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17,24,31,.96),
+      rgba(8,12,16,.96)
+    );
 
-    border-radius:24px;
+  border:4px solid var(--panel-border);
 
-    overflow:hidden;
+  border-radius:22px;
 
-    transition:
-        border-color .25s ease,
-        box-shadow .25s ease;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  overflow:hidden;
+
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease;
 }
+
+/* =========================
+   PANEL BAŞLIKLARI
+========================= */
 
 .panelTitle{
+  margin-top:24px;
 
-    position:absolute;
+  font-size:14px;
+  font-weight:700;
 
-    top:20px;
-    left:0;
-    right:0;
+  letter-spacing:2px;
 
-    text-align:center;
+  color:#9aa5ad;
 
-    font-size:15px;
-    font-weight:700;
-
-    letter-spacing:2px;
-
-    color:var(--muted);
-
-    z-index:10;
+  text-align:center;
 }
 
-
-/* ==================================================
-   VALUE
-================================================== */
+/* =========================
+   DERECE DEĞERİ
+========================= */
 
 .value{
+  margin-top:8px;
 
-    position:absolute;
+  font-size:58px;
+  line-height:1;
 
-    left:0;
-    right:0;
+  font-weight:700;
 
-    top:62px;
+  letter-spacing:-2px;
 
-    text-align:center;
-
-    font-size:52px;
-
-    font-weight:700;
-
-    letter-spacing:-2px;
-
-    line-height:1;
-
-    z-index:20;
+  color:#f5f7f8;
 }
 
 .unit{
-    font-size:.5em;
-    margin-left:2px;
-    opacity:.75;
+  font-size:.45em;
+  margin-left:3px;
+  vertical-align:top;
+  position:relative;
+  top:5px;
 }
 
-
-/* ==================================================
-   VEHICLE IMAGE
-================================================== */
+/* =========================
+   ARAÇ GÖRSELİ
+========================= */
 
 .vehicleWrap{
+  width:100%;
+  flex:1;
 
-    position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-    left:12%;
-    right:12%;
+  min-height:0;
 
-    top:50%;
-    bottom:10%;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    overflow:hidden;
+  padding:15px 25px 25px;
 }
 
 .vehicle{
+  width:90%;
+  max-width:480px;
 
-    width:82%;
-    max-width:330px;
+  max-height:75%;
 
-    height:auto;
+  object-fit:contain;
 
-    object-fit:contain;
+  display:block;
 
-    transform-origin:center center;
+  transform-origin:center center;
 
-    transition:none;
+  transition:none;
 
-    will-change:transform;
-
-    user-select:none;
-    -webkit-user-drag:none;
+  will-change:transform;
 }
 
-
-/* ==================================================
-   BLUE LEVEL STATES
-================================================== */
-
-.panel.level-5{
-    border-color:var(--border);
-    box-shadow:none;
-}
-
-.panel.level-4{
-    border-color:
-        color-mix(
-            in srgb,
-            var(--level-blue) 22%,
-            var(--border)
-        );
-}
-
-.panel.level-3{
-    border-color:
-        color-mix(
-            in srgb,
-            var(--level-blue) 40%,
-            var(--border)
-        );
-}
-
-.panel.level-2{
-    border-color:
-        color-mix(
-            in srgb,
-            var(--level-blue) 60%,
-            var(--border)
-        );
-}
-
-.panel.level-1{
-    border-color:
-        color-mix(
-            in srgb,
-            var(--level-blue) 82%,
-            var(--border)
-        );
-}
-
-.panel.level-0{
-
-    border-color:var(--level-blue);
-
-    box-shadow:
-        0 0 8px
-            color-mix(
-                in srgb,
-                var(--level-blue) 60%,
-                transparent
-            ),
-        inset 0 0 18px
-            color-mix(
-                in srgb,
-                var(--level-blue) 14%,
-                transparent
-            );
-}
-
-
-/* ==================================================
-   CENTER PANEL
-================================================== */
+/* =========================
+   MERKEZ PANEL
+========================= */
 
 .centerPanel{
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
+  justify-content:center;
 }
 
-
-/* ==================================================
-   CIRCULAR LEVEL
-================================================== */
+/* =========================
+   YEŞİL DAİRESEL SEVİYE
+========================= */
 
 .level{
+  position:relative;
 
-    position:relative;
+  width:min(420px,34vw);
+  height:min(420px,34vw);
 
-    width:min(68vh,500px);
-    height:min(68vh,500px);
+  max-width:90%;
+  max-height:75%;
 
-    max-width:88%;
-    max-height:88%;
+  aspect-ratio:1 / 1;
 
-    aspect-ratio:1/1;
+  border-radius:50%;
 
-    border-radius:50%;
+  background:
+    radial-gradient(
+      circle at center,
+      #18251f 0%,
+      #101914 58%,
+      #0b100d 100%
+    );
 
-    overflow:hidden;
+  border:3px solid rgba(37,232,122,.28);
 
-    background:#07130d;
+  box-shadow:
+    inset 0 0 30px rgba(0,0,0,.75),
+    0 0 20px rgba(37,232,122,.05);
 
-    border:5px solid #183b28;
-
-    box-shadow:
-        inset 0 0 35px rgba(0,255,100,.12),
-        0 0 25px rgba(0,255,100,.05);
+  overflow:hidden;
 }
-
-
-/* ==================================================
-   GREEN LIQUID
-================================================== */
 
 .liquid{
+  position:absolute;
 
-    position:absolute;
+  inset:0;
 
-    inset:0;
-
-    border-radius:50%;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 50%,
-            rgba(40,255,110,.25) 0%,
-            rgba(20,180,70,.17) 35%,
-            rgba(0,70,25,.38) 70%,
-            rgba(0,25,10,.7) 100%
-        );
-
-    overflow:hidden;
+  border-radius:50%;
 }
 
-.liquid::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:-20%;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            ellipse at 50% 42%,
-            rgba(35,255,110,.18),
-            transparent 58%
-        );
-
-    animation:
-        liquidPulse 4s ease-in-out infinite;
-}
-
-@keyframes liquidPulse{
-
-    0%,100%{
-        transform:scale(1);
-        opacity:.7;
-    }
-
-    50%{
-        transform:scale(1.04);
-        opacity:1;
-    }
-}
-
-
-/* ==================================================
-   AXIS
-================================================== */
+/* =========================
+   EKSENLER
+========================= */
 
 .axis{
+  position:absolute;
 
-    position:absolute;
+  background:rgba(37,232,122,.22);
 
-    background:rgba(80,255,140,.18);
-
-    pointer-events:none;
+  pointer-events:none;
 }
 
 .axis.horizontal{
+  left:7%;
+  right:7%;
+  top:50%;
 
-    left:8%;
-    right:8%;
+  height:1px;
 
-    top:50%;
-
-    height:1px;
-
-    transform:translateY(-50%);
+  transform:translateY(-50%);
 }
 
 .axis.vertical{
+  top:7%;
+  bottom:7%;
+  left:50%;
 
-    top:8%;
-    bottom:8%;
+  width:1px;
 
-    left:50%;
-
-    width:1px;
-
-    transform:translateX(-50%);
+  transform:translateX(-50%);
 }
 
-
-/* ==================================================
-   DEGREE TICKS
-================================================== */
+/* =========================
+   DERECE İŞARETLERİ
+========================= */
 
 .tick{
+  position:absolute;
 
-    position:absolute;
+  background:rgba(37,232,122,.28);
 
-    background:rgba(90,255,145,.42);
-
-    pointer-events:none;
+  border-radius:2px;
 }
 
 .tick.horizontal{
-
-    width:2px;
-    height:10px;
-
-    top:50%;
-
-    transform:translateY(-50%);
+  width:1px;
+  height:9px;
+  top:50%;
 }
 
 .tick.vertical{
-
-    width:10px;
-    height:2px;
-
-    left:50%;
-
-    transform:translateX(-50%);
+  width:9px;
+  height:1px;
+  left:50%;
 }
 
-.tick.x1{ left:25%; }
-.tick.x2{ left:37.5%; }
-.tick.x3{ left:62.5%; }
-.tick.x4{ left:75%; }
+.x1{
+  left:38%;
+  transform:translate(-50%,-50%);
+}
 
-.tick.y1{ top:25%; }
-.tick.y2{ top:37.5%; }
-.tick.y3{ top:62.5%; }
-.tick.y4{ top:75%; }
+.x2{
+  left:44%;
+  transform:translate(-50%,-50%);
+}
 
+.x3{
+  left:56%;
+  transform:translate(-50%,-50%);
+}
 
-/* ==================================================
-   LEVEL LABELS
-================================================== */
+.x4{
+  left:62%;
+  transform:translate(-50%,-50%);
+}
+
+.y1{
+  top:38%;
+  transform:translate(-50%,-50%);
+}
+
+.y2{
+  top:44%;
+  transform:translate(-50%,-50%);
+}
+
+.y3{
+  top:56%;
+  transform:translate(-50%,-50%);
+}
+
+.y4{
+  top:62%;
+  transform:translate(-50%,-50%);
+}
+
+/* =========================
+   DAİRE İÇİ DERECELER
+========================= */
 
 .levelLabel{
+  position:absolute;
 
-    position:absolute;
+  color:rgba(190,230,207,.48);
 
-    color:rgba(130,255,165,.65);
+  font-size:11px;
+  font-weight:600;
 
-    font-size:12px;
-
-    font-weight:600;
-
-    pointer-events:none;
-
-    text-shadow:
-        0 0 6px rgba(30,255,100,.2);
+  pointer-events:none;
 }
 
 .labelTop{
-
-    top:9%;
-    left:50%;
-
-    transform:translateX(-50%);
+  top:10%;
+  left:50%;
+  transform:translateX(-50%);
 }
 
 .labelBottom{
-
-    bottom:9%;
-    left:50%;
-
-    transform:translateX(-50%);
+  bottom:10%;
+  left:50%;
+  transform:translateX(-50%);
 }
 
 .labelLeft{
-
-    left:9%;
-    top:50%;
-
-    transform:translateY(-50%);
+  left:9%;
+  top:50%;
+  transform:translateY(-50%);
 }
 
 .labelRight{
-
-    right:9%;
-    top:50%;
-
-    transform:translateY(-50%);
+  right:9%;
+  top:50%;
+  transform:translateY(-50%);
 }
 
-
-/* ==================================================
-   CENTER DOT
-================================================== */
+/* =========================
+   MERKEZ NOKTASI
+========================= */
 
 .center-dot{
+  position:absolute;
 
-    position:absolute;
+  left:50%;
+  top:50%;
 
-    width:8px;
-    height:8px;
+  width:7px;
+  height:7px;
 
-    left:50%;
-    top:50%;
+  transform:translate(-50%,-50%);
 
-    transform:translate(-50%,-50%);
+  border-radius:50%;
 
-    border-radius:50%;
+  background:#d5ffe4;
 
-    background:#35ff80;
+  box-shadow:
+    0 0 8px rgba(37,232,122,.7);
 
-    box-shadow:
-        0 0 8px #35ff80,
-        0 0 16px rgba(53,255,128,.6);
-
-    z-index:10;
+  z-index:5;
 }
 
-
-/* ==================================================
-   BUBBLE
-================================================== */
+/* =========================
+   YEŞİL BALON
+========================= */
 
 .bubble{
+  position:absolute;
 
-    position:absolute;
+  left:50%;
+  top:50%;
 
-    left:50%;
-    top:50%;
+  width:42px;
+  height:42px;
 
-    width:76px;
-    height:76px;
+  transform:
+    translate(-50%,-50%);
 
-    transform:
-        translate(-50%,-50%);
+  border-radius:50%;
 
-    border-radius:50%;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #d8ffe7 0%,
+      #6aff9d 18%,
+      #25e87a 45%,
+      #12a84e 75%,
+      #087036 100%
+    );
 
-    background:
+  border:2px solid rgba(220,255,232,.75);
 
-        radial-gradient(
-            circle at 35% 30%,
-            rgba(190,255,210,.95) 0%,
-            rgba(50,255,125,.85) 25%,
-            rgba(15,220,80,.55) 55%,
-            rgba(0,100,35,.35) 100%
-        );
+  box-shadow:
+    0 0 15px rgba(37,232,122,.55),
+    inset 0 0 9px rgba(255,255,255,.28);
 
-    border:
-        2px solid
-        rgba(150,255,180,.8);
+  z-index:4;
 
-    box-shadow:
-
-        0 0 12px
-            rgba(40,255,110,.7),
-
-        0 0 30px
-            rgba(30,255,90,.35),
-
-        inset 0 0 15px
-            rgba(180,255,200,.2);
-
-    z-index:9;
-
-    will-change:transform;
+  will-change:transform;
 }
 
-
-/* ==================================================
-   START SCREEN
-================================================== */
-
-.startScreen{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:1000;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    background:#050607;
-}
-
-.startButton{
-
-    appearance:none;
-
-    border:2px solid var(--level-blue);
-
-    background:
-        rgba(0,168,255,.08);
-
-    color:white;
-
-    padding:18px 32px;
-
-    border-radius:18px;
-
-    font-size:18px;
-
-    font-weight:700;
-
-    letter-spacing:1px;
-
-    box-shadow:
-        0 0 20px
-        rgba(0,168,255,.15);
-
-    cursor:pointer;
-}
-
-.startButton:active{
-    transform:scale(.97);
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
+/* =========================
+   MOBİL
+========================= */
 
 @media (max-width:700px){
 
-    body{
-        align-items:stretch;
-    }
+  .brand{
+    top:5px;
 
-    .brand{
+    font-size:17px;
+    letter-spacing:3.5px;
+  }
 
-        top:6px;
+  /* GPS kutusu */
 
-        font-size:17px;
+  .gpsInfo{
+    top:29px;
 
-        letter-spacing:5px;
-    }
+    width:min(88vw,430px);
 
-    .gpsInfo{
+    padding:7px 12px;
 
-        top:31px;
+    border-radius:11px;
+  }
 
-        gap:16px;
-    }
+  .gpsItem{
+    min-width:110px;
+  }
 
-    .gpsLabel{
+  .gpsLabel{
+    font-size:11px;
+    letter-spacing:1.3px;
+  }
 
-        font-size:10px;
+  .gpsValue{
+    font-size:25px;
+  }
 
-        letter-spacing:1.7px;
-    }
+  /* Dashboard */
 
-    .gpsValue{
+  .dashboard{
+    height:100%;
 
-        font-size:16px;
+    display:grid;
 
-        font-weight:700;
-    }
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:
+      minmax(0,1fr)
+      minmax(150px,.43fr);
 
-    .dashboard{
+    gap:10px;
 
-        width:100%;
-        height:100dvh;
+    padding:
+      105px
+      10px
+      10px;
+  }
 
-        padding:
-            max(49px, env(safe-area-inset-top))
-            8px
-            max(8px, env(safe-area-inset-bottom))
-            8px;
+  /* Merkez */
 
-        gap:8px;
+  .centerPanel{
+    grid-column:1 / 3;
+    grid-row:1;
 
-        grid-template-columns:1fr 1fr;
+    border-width:3px;
 
-        grid-template-rows:
-            minmax(285px,1.30fr)
-            minmax(0,1fr);
-    }
+    border-radius:18px;
 
-    .centerPanel{
+    min-height:0;
 
-        grid-column:1 / 3;
-        grid-row:1;
-    }
+    justify-content:center;
+  }
 
-    .pitchPanel{
+  /* Yeşil daireyi küçült */
 
-        grid-column:1;
-        grid-row:2;
-    }
+  .level{
+    width:min(58vw,290px);
+    height:min(58vw,290px);
 
-    .rollPanel{
+    max-width:64%;
+    max-height:70%;
+  }
 
-        grid-column:2;
-        grid-row:2;
-    }
+  .bubble{
+    width:34px;
+    height:34px;
+  }
 
-    .panel{
+  .levelLabel{
+    font-size:9px;
+  }
 
-        border-width:3px;
+  /* Alt paneller */
 
-        border-radius:18px;
-    }
+  .pitchPanel{
+    grid-column:1;
+    grid-row:2;
+  }
 
-    .panelTitle{
+  .rollPanel{
+    grid-column:2;
+    grid-row:2;
+  }
 
-        top:13px;
+  .panel{
+    width:100%;
+    height:100%;
 
-        font-size:12px;
+    min-height:0;
 
-        letter-spacing:1.5px;
-    }
+    border-width:3px;
 
-    .value{
+    border-radius:16px;
+  }
 
-        top:42px;
+  .panelTitle{
+    margin-top:9px;
 
-        font-size:39px;
-    }
+    font-size:10px;
 
-    .vehicleWrap{
+    letter-spacing:1px;
 
-        left:5%;
-        right:5%;
+    white-space:nowrap;
+  }
 
-        top:45%;
-        bottom:5%;
-    }
+  .value{
+    margin-top:5px;
 
-    .vehicle{
+    font-size:32px;
+  }
 
-        width:90%;
-    }
+  .vehicleWrap{
+    padding:3px 8px 8px;
+  }
 
-    /*
-     * Mobilde yeşil teraziyi biraz küçülttük.
-     */
-
-    .level{
-
-        width:min(68vw,350px);
-        height:min(68vw,350px);
-
-        max-width:74%;
-        max-height:76%;
-
-        border-width:4px;
-    }
-
-    .bubble{
-
-        width:58px;
-        height:58px;
-    }
-
-    .levelLabel{
-
-        font-size:10px;
-    }
+  .vehicle{
+    width:95%;
+    max-height:80%;
+  }
 }
 
+/* =========================
+   KISA TELEFONLAR
+========================= */
 
-/* ==================================================
-   SHORT MOBILE
-================================================== */
+@media (max-width:700px) and (max-height:700px){
 
-@media (max-height:700px) and (max-width:700px){
+  .dashboard{
+    padding-top:100px;
+  }
 
-    .dashboard{
+  .level{
+    width:min(54vw,270px);
+    height:min(54vw,270px);
 
-        grid-template-rows:
-            minmax(225px,1.15fr)
-            minmax(0,1fr);
-    }
+    max-width:60%;
+    max-height:67%;
+  }
 
-    .level{
+  .gpsInfo{
+    top:27px;
+  }
 
-        width:min(62vw,310px);
-        height:min(62vw,310px);
+  .gpsValue{
+    font-size:23px;
+  }
 
-        max-width:70%;
-        max-height:75%;
-    }
+  .panelTitle{
+    font-size:9px;
+  }
 
-    .bubble{
+  .value{
+    font-size:29px;
+  }
+}
 
-        width:52px;
-        height:52px;
-    }
+/* =========================
+   SENSOR BAŞLANGIÇ EKRANI
+========================= */
 
-    .value{
+#startScreen{
+  position:fixed;
 
-        font-size:34px;
-    }
+  inset:0;
 
-    .panelTitle{
+  z-index:999;
 
-        top:10px;
-    }
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#070b0f;
+}
+
+.startBox{
+  width:min(90vw,400px);
+
+  text-align:center;
+}
+
+.startTitle{
+  font-size:28px;
+
+  font-weight:700;
+
+  letter-spacing:4px;
+
+  margin-bottom:12px;
+}
+
+.startText{
+  color:#7d8992;
+
+  font-size:14px;
+
+  line-height:1.5;
+
+  margin-bottom:28px;
+}
+
+#startButton{
+  border:1px solid rgba(0,168,255,.6);
+
+  background:rgba(0,168,255,.12);
+
+  color:#fff;
+
+  border-radius:14px;
+
+  padding:15px 28px;
+
+  font-size:15px;
+
+  font-weight:700;
+
+  letter-spacing:1px;
+}
+
+#startButton:active{
+  transform:scale(.97);
+}
+
+/* =========================
+   MAVİ DENGE ÇERÇEVESİ
+========================= */
+
+.level-blue-0{
+  border-color:var(--panel-border);
+  box-shadow:none;
 }
 
 </style>
 </head>
 
-
 <body>
 
+<!-- =========================
+     BAŞLANGIÇ
+========================= -->
 
-<!-- ==================================================
-     CAMPROVER
-================================================== -->
+<div id="startScreen">
 
-<div class="brand">
-    CAMPROVER
+  <div class="startBox">
+
+    <div class="startTitle">
+      CAMPROVER
+    </div>
+
+    <div class="startText">
+      Telefonu araç tutucusuna yerleştirin ve ölçümü başlatın.
+    </div>
+
+    <button id="startButton">
+      ÖLÇÜMÜ BAŞLAT
+    </button>
+
+  </div>
+
 </div>
 
 
-<!-- ==================================================
-     GPS INFORMATION
-================================================== -->
+<!-- =========================
+     ÜST BİLGİ
+========================= -->
+
+<div class="brand">
+  CAMPROVER
+</div>
+
+
+<!-- =========================
+     GPS
+========================= -->
 
 <div class="gpsInfo">
 
-    <div class="gpsItem">
+  <div class="gpsItem">
 
-        <span class="gpsLabel">
-            RAKIM
-        </span>
+    <span class="gpsLabel">
+      RAKIM
+    </span>
 
-        <span
-            class="gpsValue"
-            id="altitudeValue">
-            -- m
-        </span>
+    <span
+      class="gpsValue"
+      id="altitudeValue">
+      -- m
+    </span>
 
-    </div>
+  </div>
 
 
-    <div class="gpsItem">
+  <div class="gpsItem">
 
-        <span class="gpsLabel">
-            HIZ
-        </span>
+    <span class="gpsLabel">
+      HIZ
+    </span>
 
-        <span
-            class="gpsValue"
-            id="speedValue">
-            -- km/h
-        </span>
+    <span
+      class="gpsValue"
+      id="speedValue">
+      -- km/h
+    </span>
 
-    </div>
+  </div>
 
 </div>
 
 
-<!-- ==================================================
+<!-- =========================
      DASHBOARD
-================================================== -->
+========================= -->
 
 <div class="dashboard">
 
 
-    <!-- ==============================================
-         ÖN - ARKA DENGE
-    =============================================== -->
+  <!-- =====================
+       PITCH
+  ====================== -->
 
-    <section
-        class="panel pitchPanel"
-        id="pitchPanel">
+  <section
+    class="panel pitchPanel"
+    id="pitchPanel">
 
-        <div class="panelTitle">
-            ÖN - ARKA DENGE
+    <div class="panelTitle">
+      ÖN - ARKA DENGE
+    </div>
+
+    <div
+      class="value"
+      id="pitchValue">
+      +0<span class="unit">°</span>
+    </div>
+
+    <div class="vehicleWrap">
+
+      <img
+        id="pitchImage"
+        class="vehicle"
+        alt="Discovery pitch">
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================
+       MERKEZ
+  ====================== -->
+
+  <section
+    class="panel centerPanel"
+    id="centerPanel">
+
+    <div class="level">
+
+      <div class="liquid">
+
+        <div class="axis horizontal"></div>
+        <div class="axis vertical"></div>
+
+        <div class="tick horizontal x1"></div>
+        <div class="tick horizontal x2"></div>
+        <div class="tick horizontal x3"></div>
+        <div class="tick horizontal x4"></div>
+
+        <div class="tick vertical y1"></div>
+        <div class="tick vertical y2"></div>
+        <div class="tick vertical y3"></div>
+        <div class="tick vertical y4"></div>
+
+        <div class="levelLabel labelTop">
+          +10°
         </div>
+
+        <div class="levelLabel labelBottom">
+          -10°
+        </div>
+
+        <div class="levelLabel labelLeft">
+          -10°
+        </div>
+
+        <div class="levelLabel labelRight">
+          +10°
+        </div>
+
+        <div class="center-dot"></div>
 
         <div
-            class="value"
-            id="pitchValue">
-
-            +0<span class="unit">°</span>
-
+          class="bubble"
+          id="bubble">
         </div>
 
-        <div class="vehicleWrap">
+      </div>
 
-            <img
-                id="pitchImage"
-                class="vehicle"
-                alt="Discovery pitch">
+    </div>
 
-        </div>
-
-    </section>
+  </section>
 
 
-    <!-- ==============================================
-         CENTER LEVEL
-    =============================================== -->
+  <!-- =====================
+       ROLL
+  ====================== -->
 
-    <section
-        class="panel centerPanel"
-        id="centerPanel">
+  <section
+    class="panel rollPanel"
+    id="rollPanel">
 
-        <div class="level">
+    <div class="panelTitle">
+      SAĞ - SOL DENGE
+    </div>
 
-            <div class="liquid">
+    <div
+      class="value"
+      id="rollValue">
+      +0<span class="unit">°</span>
+    </div>
 
-                <div class="axis horizontal"></div>
+    <div class="vehicleWrap">
 
-                <div class="axis vertical"></div>
+      <img
+        id="rollImage"
+        class="vehicle"
+        alt="Discovery roll">
 
+    </div>
 
-                <div class="tick horizontal x1"></div>
-                <div class="tick horizontal x2"></div>
-                <div class="tick horizontal x3"></div>
-                <div class="tick horizontal x4"></div>
-
-
-                <div class="tick vertical y1"></div>
-                <div class="tick vertical y2"></div>
-                <div class="tick vertical y3"></div>
-                <div class="tick vertical y4"></div>
-
-
-                <div class="levelLabel labelTop">
-                    +10°
-                </div>
-
-                <div class="levelLabel labelBottom">
-                    -10°
-                </div>
-
-                <div class="levelLabel labelLeft">
-                    -10°
-                </div>
-
-                <div class="levelLabel labelRight">
-                    +10°
-                </div>
-
-
-                <div class="center-dot"></div>
-
-
-                <div
-                    class="bubble"
-                    id="bubble">
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ==============================================
-         SAĞ - SOL DENGE
-    =============================================== -->
-
-    <section
-        class="panel rollPanel"
-        id="rollPanel">
-
-        <div class="panelTitle">
-            SAĞ - SOL DENGE
-        </div>
-
-        <div
-            class="value"
-            id="rollValue">
-
-            +0<span class="unit">°</span>
-
-        </div>
-
-        <div class="vehicleWrap">
-
-            <img
-                id="rollImage"
-                class="vehicle"
-                alt="Discovery roll">
-
-        </div>
-
-    </section>
+  </section>
 
 </div>
 
@@ -1122,960 +959,755 @@ body{
 
 (async function(){
 
+  /* =========================================
+     CACHE TEMİZLE
+  ========================================= */
 
-    /* ==================================================
-       CACHE TEMİZLEME
-    ================================================== */
+  try{
+
+    if("serviceWorker" in navigator){
+
+      const registrations =
+        await navigator.serviceWorker.getRegistrations();
+
+      for(const registration of registrations){
+
+        await registration.unregister();
+
+      }
+
+    }
+
+  }catch(e){
+
+    console.log("Service Worker temizleme:",e);
+
+  }
+
+
+  try{
+
+    if("caches" in window){
+
+      const keys =
+        await caches.keys();
+
+      for(const key of keys){
+
+        await caches.delete(key);
+
+      }
+
+    }
+
+  }catch(e){
+
+    console.log("Cache temizleme:",e);
+
+  }
+
+
+  /* =========================================
+     GÖRSELLER
+  ========================================= */
+
+  const IMAGE_VERSION =
+    "20261008-18";
+
+  const pitchImage =
+    document.getElementById("pitchImage");
+
+  const rollImage =
+    document.getElementById("rollImage");
+
+  pitchImage.src =
+    "pitch_discovery.png?v=" +
+    IMAGE_VERSION;
+
+  rollImage.src =
+    "roll_discovery.png?v=" +
+    IMAGE_VERSION;
+
+
+  /* =========================================
+     DOM
+  ========================================= */
+
+  const pitchValue =
+    document.getElementById("pitchValue");
+
+  const rollValue =
+    document.getElementById("rollValue");
+
+  const pitchPanel =
+    document.getElementById("pitchPanel");
+
+  const rollPanel =
+    document.getElementById("rollPanel");
+
+  const bubble =
+    document.getElementById("bubble");
+
+  const altitudeValue =
+    document.getElementById("altitudeValue");
+
+  const speedValue =
+    document.getElementById("speedValue");
+
+  const startScreen =
+    document.getElementById("startScreen");
+
+  const startButton =
+    document.getElementById("startButton");
+
+
+  /* =========================================
+     FİLTRELER
+  ========================================= */
+
+  const SENSOR_ALPHA = 0.08;
+
+  const BUBBLE_ALPHA = 0.08;
+
+  const VEHICLE_ALPHA = 0.20;
+
+  const DEAD_BAND = 0.15;
+
+  const MAX_ANGLE = 10;
+
+  const ALTITUDE_ALPHA = 0.08;
+
+  const SPEED_ALPHA = 0.12;
+
+
+  /* =========================================
+     SENSOR DEĞİŞKENLERİ
+  ========================================= */
+
+  let filteredAx = 0;
+  let filteredAy = 0;
+  let filteredAz = 0;
+
+  let sensorInitialized = false;
+
+  let pitchFiltered = 0;
+  let rollFiltered = 0;
+
+  let bubblePitch = 0;
+  let bubbleRoll = 0;
+
+  let vehiclePitch = 0;
+  let vehicleRoll = 0;
+
+
+  /* =========================================
+     GPS DEĞİŞKENLERİ
+  ========================================= */
+
+  let altitudeFiltered = null;
+
+  let speedFiltered = 0;
+
+  let gpsStarted = false;
+
+
+  /* =========================================
+     YARDIMCI
+  ========================================= */
+
+  function clamp(value,min,max){
+
+    return Math.max(
+      min,
+      Math.min(max,value)
+    );
+
+  }
+
+
+  function stabilize(value){
+
+    if(
+      Math.abs(value) <
+      DEAD_BAND
+    ){
+
+      return 0;
+
+    }
+
+    return value;
+
+  }
+
+
+  function formatAngle(value){
+
+    let rounded =
+      Math.round(value);
+
+    rounded =
+      clamp(
+        rounded,
+        -MAX_ANGLE,
+        MAX_ANGLE
+      );
+
+    if(
+      rounded === 0
+    ){
+
+      return "+0";
+
+    }
+
+    return rounded > 0
+      ? "+" + rounded
+      : String(rounded);
+
+  }
+
+
+  /* =========================================
+     MAVİ ÇERÇEVE
+  ========================================= */
+
+  function updateBorder(
+    panel,
+    value
+  ){
+
+    const abs =
+      Math.abs(value);
+
+    let strength = 0;
+
+    if(abs <= 5){
+
+      strength =
+        (5 - abs) / 5;
+
+    }
+
+    if(strength <= 0){
+
+      panel.style.borderColor =
+        "var(--panel-border)";
+
+      panel.style.boxShadow =
+        "none";
+
+      return;
+
+    }
+
+
+    const alpha =
+      0.18 +
+      strength * 0.82;
+
+
+    panel.style.borderColor =
+      `rgba(0,168,255,${alpha})`;
+
+
+    panel.style.boxShadow =
+      `0 0 ${8 + strength * 20}px rgba(0,168,255,${strength * .28})`;
+
+  }
+
+
+  /* =========================================
+     SEVİYE GÜNCELLE
+  ========================================= */
+
+  function updateLevel(){
+
+    pitchFiltered =
+      clamp(
+        stabilize(pitchFiltered),
+        -MAX_ANGLE,
+        MAX_ANGLE
+      );
+
+    rollFiltered =
+      clamp(
+        stabilize(rollFiltered),
+        -MAX_ANGLE,
+        MAX_ANGLE
+      );
+
+
+    /* DEĞERLER */
+
+    pitchValue.innerHTML =
+      formatAngle(pitchFiltered) +
+      '<span class="unit">°</span>';
+
+    rollValue.innerHTML =
+      formatAngle(rollFiltered) +
+      '<span class="unit">°</span>';
+
+
+    /* MAVİ ÇERÇEVE */
+
+    updateBorder(
+      pitchPanel,
+      pitchFiltered
+    );
+
+    updateBorder(
+      rollPanel,
+      rollFiltered
+    );
+
+
+    /* =====================================
+       MERKEZ BALON
+    ===================================== */
+
+    bubblePitch +=
+      (
+        pitchFiltered -
+        bubblePitch
+      ) * BUBBLE_ALPHA;
+
+    bubbleRoll +=
+      (
+        rollFiltered -
+        bubbleRoll
+      ) * BUBBLE_ALPHA;
+
+
+    const level =
+      bubble.parentElement;
+
+    const maxX =
+      level.clientWidth * 0.38;
+
+    const maxY =
+      level.clientHeight * 0.38;
+
+
+    const x =
+      (bubbleRoll / MAX_ANGLE) *
+      maxX;
+
+    const y =
+      (bubblePitch / MAX_ANGLE) *
+      maxY;
+
+
+    bubble.style.transform =
+      `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+
+
+    /* =====================================
+       ARAÇ GÖRSELLERİ
+    ===================================== */
+
+    vehiclePitch +=
+      (
+        pitchFiltered -
+        vehiclePitch
+      ) * VEHICLE_ALPHA;
+
+    vehicleRoll +=
+      (
+        rollFiltered -
+        vehicleRoll
+      ) * VEHICLE_ALPHA;
+
+
+    vehiclePitch =
+      clamp(
+        vehiclePitch,
+        -MAX_ANGLE,
+        MAX_ANGLE
+      );
+
+    vehicleRoll =
+      clamp(
+        vehicleRoll,
+        -MAX_ANGLE,
+        MAX_ANGLE
+      );
+
+
+    pitchImage.style.transform =
+      `rotate(${vehiclePitch}deg)`;
+
+
+    rollImage.style.transform =
+      `rotate(${vehicleRoll}deg)`;
+
+  }
+
+
+  /* =========================================
+     TELEFON HAREKETİ
+  ========================================= */
+
+  function handleMotion(event){
+
+    const acceleration =
+      event.accelerationIncludingGravity;
+
+    if(!acceleration){
+
+      return;
+
+    }
+
+
+    let ax =
+      acceleration.x || 0;
+
+    let ay =
+      acceleration.y || 0;
+
+    let az =
+      acceleration.z || 0;
+
+
+    /* İlk sensör değerini referans olarak
+       kullanmıyoruz.
+       Sadece filtre başlangıcı. */
+
+    if(!sensorInitialized){
+
+      filteredAx = ax;
+      filteredAy = ay;
+      filteredAz = az;
+
+      sensorInitialized = true;
+
+    }else{
+
+      filteredAx +=
+        (
+          ax -
+          filteredAx
+        ) * SENSOR_ALPHA;
+
+      filteredAy +=
+        (
+          ay -
+          filteredAy
+        ) * SENSOR_ALPHA;
+
+      filteredAz +=
+        (
+          az -
+          filteredAz
+        ) * SENSOR_ALPHA;
+
+    }
+
+
+    /* =====================================
+       PITCH
+    ===================================== */
+
+    const newPitch =
+      Math.atan2(
+        filteredAz,
+        Math.sqrt(
+          filteredAx *
+          filteredAx +
+          filteredAy *
+          filteredAy
+        )
+      ) *
+      180 /
+      Math.PI;
+
+
+    /* =====================================
+       ROLL
+    ===================================== */
+
+    const newRoll =
+      Math.atan2(
+        filteredAx,
+        Math.sqrt(
+          filteredAy *
+          filteredAy +
+          filteredAz *
+          filteredAz
+        )
+      ) *
+      180 /
+      Math.PI;
+
+
+    /* =====================================
+       YAVAŞ FİLTRE
+    ===================================== */
+
+    pitchFiltered +=
+      (
+        newPitch -
+        pitchFiltered
+      ) * SENSOR_ALPHA;
+
+
+    rollFiltered +=
+      (
+        newRoll -
+        rollFiltered
+      ) * SENSOR_ALPHA;
+
+
+    updateLevel();
+
+  }
+
+
+  /* =========================================
+     GPS
+  ========================================= */
+
+  function startGPS(){
+
+    if(gpsStarted){
+
+      return;
+
+    }
+
+    gpsStarted = true;
+
+
+    if(!("geolocation" in navigator)){
+
+      altitudeValue.textContent =
+        "-- m";
+
+      speedValue.textContent =
+        "-- km/h";
+
+      return;
+
+    }
+
+
+    navigator.geolocation.watchPosition(
+
+      function(position){
+
+        const coords =
+          position.coords;
+
+
+        /* ==============================
+           RAKIM
+        ============================== */
+
+        if(
+          coords.altitude !== null &&
+          Number.isFinite(
+            coords.altitude
+          )
+        ){
+
+          const altitude =
+            coords.altitude;
+
+
+          if(
+            altitudeFiltered === null
+          ){
+
+            altitudeFiltered =
+              altitude;
+
+          }else{
+
+            altitudeFiltered +=
+              (
+                altitude -
+                altitudeFiltered
+              ) *
+              ALTITUDE_ALPHA;
+
+          }
+
+
+          altitudeValue.textContent =
+            Math.round(
+              altitudeFiltered
+            ) +
+            " m";
+
+        }
+
+
+        /* ==============================
+           HIZ
+        ============================== */
+
+        if(
+          coords.speed !== null &&
+          Number.isFinite(
+            coords.speed
+          )
+        ){
+
+          let speedKmh =
+            coords.speed * 3.6;
+
+
+          if(speedKmh < 1){
+
+            speedKmh = 0;
+
+          }
+
+
+          speedFiltered +=
+            (
+              speedKmh -
+              speedFiltered
+            ) *
+            SPEED_ALPHA;
+
+
+          if(
+            speedFiltered < 1
+          ){
+
+            speedFiltered = 0;
+
+          }
+
+
+          speedValue.textContent =
+            Math.round(
+              speedFiltered
+            ) +
+            " km/h";
+
+        }
+
+      },
+
+      function(error){
+
+        console.log(
+          "GPS hatası:",
+          error
+        );
+
+      },
+
+      {
+        enableHighAccuracy:true,
+
+        maximumAge:1000,
+
+        timeout:10000
+
+      }
+
+    );
+
+  }
+
+
+  /* =========================================
+     SENSOR BAŞLAT
+  ========================================= */
+
+  async function startSensor(){
 
     try{
 
-        if(
-            "serviceWorker" in navigator
-        ){
+      /*
+       * iOS DeviceMotion izni
+       */
 
-            const registrations =
-                await navigator
-                    .serviceWorker
-                    .getRegistrations();
+      if(
+        typeof DeviceMotionEvent !==
+        "undefined" &&
+        typeof DeviceMotionEvent.requestPermission ===
+        "function"
+      ){
 
-            for(
-                const registration
-                of registrations
-            ){
-
-                await registration.unregister();
-
-            }
-
-        }
+        const permission =
+          await DeviceMotionEvent.requestPermission();
 
 
-        if(
-            "caches" in window
-        ){
+        if(permission !== "granted"){
 
-            const cacheNames =
-                await caches.keys();
+          alert(
+            "Hareket sensörü izni verilmedi."
+          );
 
-            for(
-                const cacheName
-                of cacheNames
-            ){
-
-                await caches.delete(
-                    cacheName
-                );
-
-            }
+          return;
 
         }
 
-    }
-    catch(error){
-
-        console.log(
-            "Cache temizleme:",
-            error
-        );
-
-    }
+      }
 
 
-    /* ==================================================
-       IMAGE VERSION
-    ================================================== */
+      /*
+       * DeviceMotion
+       */
 
-    const IMAGE_VERSION =
-        "20261008-17";
-
-
-    const pitchImage =
-        document.getElementById(
-            "pitchImage"
-        );
-
-    const rollImage =
-        document.getElementById(
-            "rollImage"
-        );
+      window.addEventListener(
+        "devicemotion",
+        handleMotion,
+        true
+      );
 
 
-    pitchImage.src =
-        "pitch_discovery.png?v=" +
-        IMAGE_VERSION;
+      /*
+       * GPS
+       */
 
-    rollImage.src =
-        "roll_discovery.png?v=" +
-        IMAGE_VERSION;
+      startGPS();
 
 
-    /* ==================================================
-       SENSOR FILTER
-    ================================================== */
+      /*
+       * Başlangıç ekranını kapat
+       */
 
-    const SENSOR_ALPHA =
-        0.08;
-
-    const BUBBLE_ALPHA =
-        0.08;
-
-    const VEHICLE_ALPHA =
-        0.20;
-
-    const DEAD_BAND =
-        0.15;
-
-    const MAX_ANGLE =
-        10;
+      startScreen.style.display =
+        "none";
 
 
-    /* ==================================================
-       GPS FILTER
-    ================================================== */
+    }catch(error){
 
-    const ALTITUDE_ALPHA =
-        0.08;
+      console.error(
+        "Sensör başlatma hatası:",
+        error
+      );
 
-    const SPEED_ALPHA =
-        0.12;
-
-
-    /* ==================================================
-       ELEMENTLER
-    ================================================== */
-
-    const pitchPanel =
-        document.getElementById(
-            "pitchPanel"
-        );
-
-    const rollPanel =
-        document.getElementById(
-            "rollPanel"
-        );
-
-    const pitchValue =
-        document.getElementById(
-            "pitchValue"
-        );
-
-    const rollValue =
-        document.getElementById(
-            "rollValue"
-        );
-
-    const bubble =
-        document.getElementById(
-            "bubble"
-        );
-
-    const altitudeValue =
-        document.getElementById(
-            "altitudeValue"
-        );
-
-    const speedValue =
-        document.getElementById(
-            "speedValue"
-        );
-
-
-    /* ==================================================
-       SENSOR VARIABLES
-    ================================================== */
-
-    let filteredAx = 0;
-    let filteredAy = 0;
-    let filteredAz = 0;
-
-    let sensorInitialized =
-        false;
-
-    let pitchRaw = 0;
-    let rollRaw = 0;
-
-    let bubblePitch = 0;
-    let bubbleRoll = 0;
-
-    let visualPitch = 0;
-    let visualRoll = 0;
-
-
-    /* ==================================================
-       GPS VARIABLES
-    ================================================== */
-
-    let altitudeFiltered =
-        null;
-
-    let speedFiltered =
-        null;
-
-
-    /* ==================================================
-       STABILIZE
-    ================================================== */
-
-    function stabilize(
-        value,
-        previous
-    ){
-
-        if(
-            Math.abs(
-                value -
-                previous
-            ) < DEAD_BAND
-        ){
-
-            return previous;
-
-        }
-
-        return value;
+      alert(
+        "Sensör başlatılamadı."
+      );
 
     }
 
+  }
 
-    /* ==================================================
-       CLAMP
-    ================================================== */
 
-    function clampAngle(
-        value
-    ){
+  /* =========================================
+     BAŞLAT BUTONU
+  ========================================= */
 
-        return Math.max(
-            -MAX_ANGLE,
-            Math.min(
-                MAX_ANGLE,
-                value
-            )
-        );
+  startButton.addEventListener(
+    "click",
+    startSensor
+  );
 
-    }
 
+  /* =========================================
+     BAŞLANGIÇ
+  ========================================= */
 
-    /* ==================================================
-       DEGREE FORMAT
-    ================================================== */
-
-    function formatDegree(
-        value
-    ){
-
-        const rounded =
-            Math.round(
-                value
-            );
-
-
-        if(
-            rounded > 0
-        ){
-
-            return "+" +
-                rounded;
-
-        }
-
-
-        return String(
-            rounded
-        );
-
-    }
-
-
-    /* ==================================================
-       CARD LEVEL
-    ================================================== */
-
-    function updateCardLevel(
-        panel,
-        value
-    ){
-
-        panel.classList.remove(
-            "level-0",
-            "level-1",
-            "level-2",
-            "level-3",
-            "level-4",
-            "level-5"
-        );
-
-
-        const abs =
-            Math.abs(
-                value
-            );
-
-
-        if(
-            abs <= 0.5
-        ){
-
-            panel.classList.add(
-                "level-0"
-            );
-
-        }
-        else if(
-            abs <= 1
-        ){
-
-            panel.classList.add(
-                "level-1"
-            );
-
-        }
-        else if(
-            abs <= 2
-        ){
-
-            panel.classList.add(
-                "level-2"
-            );
-
-        }
-        else if(
-            abs <= 3
-        ){
-
-            panel.classList.add(
-                "level-3"
-            );
-
-        }
-        else if(
-            abs <= 5
-        ){
-
-            panel.classList.add(
-                "level-4"
-            );
-
-        }
-        else{
-
-            panel.classList.add(
-                "level-5"
-            );
-
-        }
-
-    }
-
-
-    /* ==================================================
-       LEVEL UPDATE
-    ================================================== */
-
-    function updateLevel(){
-
-
-        const displayPitch =
-            clampAngle(
-                pitchRaw
-            );
-
-
-        const displayRoll =
-            clampAngle(
-                rollRaw
-            );
-
-
-        pitchValue.innerHTML =
-            formatDegree(
-                displayPitch
-            ) +
-            '<span class="unit">°</span>';
-
-
-        rollValue.innerHTML =
-            formatDegree(
-                displayRoll
-            ) +
-            '<span class="unit">°</span>';
-
-
-        updateCardLevel(
-            pitchPanel,
-            displayPitch
-        );
-
-
-        updateCardLevel(
-            rollPanel,
-            displayRoll
-        );
-
-
-        /* ==================================================
-           BUBBLE
-        ================================================== */
-
-        bubblePitch +=
-            (
-                displayPitch -
-                bubblePitch
-            ) *
-            BUBBLE_ALPHA;
-
-
-        bubbleRoll +=
-            (
-                displayRoll -
-                bubbleRoll
-            ) *
-            BUBBLE_ALPHA;
-
-
-        const maxMove =
-            112;
-
-
-        const moveX =
-            (
-                bubbleRoll /
-                MAX_ANGLE
-            ) *
-            maxMove;
-
-
-        const moveY =
-            (
-                bubblePitch /
-                MAX_ANGLE
-            ) *
-            maxMove;
-
-
-        bubble.style.transform =
-            "translate(" +
-            "calc(-50% + " +
-            moveX +
-            "px), " +
-            "calc(-50% + " +
-            moveY +
-            "px)" +
-            ")";
-
-
-        /* ==================================================
-           VEHICLE
-        ================================================== */
-
-        visualPitch +=
-            (
-                displayPitch -
-                visualPitch
-            ) *
-            VEHICLE_ALPHA;
-
-
-        visualRoll +=
-            (
-                displayRoll -
-                visualRoll
-            ) *
-            VEHICLE_ALPHA;
-
-
-        pitchImage.style.transform =
-            "rotate(" +
-            clampAngle(
-                visualPitch
-            ) +
-            "deg)";
-
-
-        rollImage.style.transform =
-            "rotate(" +
-            clampAngle(
-                visualRoll
-            ) +
-            "deg)";
-
-
-        requestAnimationFrame(
-            updateLevel
-        );
-
-    }
-
-
-    /* ==================================================
-       DEVICE MOTION
-    ================================================== */
-
-    function handleMotion(
-        event
-    ){
-
-        const acceleration =
-            event.accelerationIncludingGravity;
-
-
-        if(
-            !acceleration
-        ){
-
-            return;
-
-        }
-
-
-        let ax =
-            Number(
-                acceleration.x
-            ) || 0;
-
-
-        let ay =
-            Number(
-                acceleration.y
-            ) || 0;
-
-
-        let az =
-            Number(
-                acceleration.z
-            ) || 0;
-
-
-        if(
-            !sensorInitialized
-        ){
-
-            filteredAx =
-                ax;
-
-            filteredAy =
-                ay;
-
-            filteredAz =
-                az;
-
-            sensorInitialized =
-                true;
-
-        }
-        else{
-
-            filteredAx +=
-                (
-                    ax -
-                    filteredAx
-                ) *
-                SENSOR_ALPHA;
-
-
-            filteredAy +=
-                (
-                    ay -
-                    filteredAy
-                ) *
-                SENSOR_ALPHA;
-
-
-            filteredAz +=
-                (
-                    az -
-                    filteredAz
-                ) *
-                SENSOR_ALPHA;
-
-        }
-
-
-        /* ==================================================
-           PITCH
-        ================================================== */
-
-        const newPitch =
-            Math.atan2(
-                filteredAz,
-                Math.sqrt(
-                    filteredAx *
-                    filteredAx +
-                    filteredAy *
-                    filteredAy
-                )
-            ) *
-            180 /
-            Math.PI;
-
-
-        /* ==================================================
-           ROLL
-        ================================================== */
-
-        const newRoll =
-            Math.atan2(
-                filteredAx,
-                Math.sqrt(
-                    filteredAy *
-                    filteredAy +
-                    filteredAz *
-                    filteredAz
-                )
-            ) *
-            180 /
-            Math.PI;
-
-
-        pitchRaw =
-            stabilize(
-                newPitch,
-                pitchRaw
-            );
-
-
-        rollRaw =
-            stabilize(
-                newRoll,
-                rollRaw
-            );
-
-    }
-
-
-    /* ==================================================
-       GPS ALTITUDE + SPEED
-    ================================================== */
-
-    function startGPS(){
-
-        if(
-            !("geolocation" in navigator)
-        ){
-
-            altitudeValue.textContent =
-                "-- m";
-
-            speedValue.textContent =
-                "-- km/h";
-
-            return;
-
-        }
-
-
-        navigator.geolocation.watchPosition(
-
-            function(position){
-
-                /* ==========================================
-                   ALTITUDE
-                ========================================== */
-
-                const altitude =
-                    position.coords.altitude;
-
-
-                if(
-                    altitude !== null &&
-                    Number.isFinite(
-                        altitude
-                    )
-                ){
-
-                    if(
-                        altitudeFiltered === null
-                    ){
-
-                        altitudeFiltered =
-                            altitude;
-
-                    }
-                    else{
-
-                        altitudeFiltered +=
-                            (
-                                altitude -
-                                altitudeFiltered
-                            ) *
-                            ALTITUDE_ALPHA;
-
-                    }
-
-
-                    altitudeValue.textContent =
-                        Math.round(
-                            altitudeFiltered
-                        ) +
-                        " m";
-
-                }
-
-
-                /* ==========================================
-                   SPEED
-                ========================================== */
-
-                const speed =
-                    position.coords.speed;
-
-
-                if(
-                    speed !== null &&
-                    Number.isFinite(
-                        speed
-                    )
-                ){
-
-                    /*
-                     * GPS speed:
-                     *
-                     * m/s × 3.6 = km/h
-                     */
-
-                    let speedKmh =
-                        speed * 3.6;
-
-
-                    /*
-                     * GPS'in araç durmuşken
-                     * oluşturduğu küçük hızları
-                     * sıfır kabul et.
-                     */
-
-                    if(
-                        speedKmh < 1
-                    ){
-
-                        speedKmh = 0;
-
-                    }
-
-
-                    if(
-                        speedFiltered === null
-                    ){
-
-                        speedFiltered =
-                            speedKmh;
-
-                    }
-                    else{
-
-                        speedFiltered +=
-                            (
-                                speedKmh -
-                                speedFiltered
-                            ) *
-                            SPEED_ALPHA;
-
-                    }
-
-
-                    /*
-                     * 1 km/h altını tekrar sıfırla.
-                     */
-
-                    if(
-                        speedFiltered < 1
-                    ){
-
-                        speedFiltered = 0;
-
-                    }
-
-
-                    speedValue.textContent =
-                        Math.round(
-                            speedFiltered
-                        ) +
-                        " km/h";
-
-                }
-                else{
-
-                    speedValue.textContent =
-                        "-- km/h";
-
-                }
-
-            },
-
-
-            function(error){
-
-                console.log(
-                    "GPS:",
-                    error
-                );
-
-                altitudeValue.textContent =
-                    "-- m";
-
-                speedValue.textContent =
-                    "-- km/h";
-
-            },
-
-
-            {
-
-                enableHighAccuracy:true,
-
-                maximumAge:1000,
-
-                timeout:10000
-
-            }
-
-        );
-
-    }
-
-
-    /* ==================================================
-       START SENSOR
-    ================================================== */
-
-    async function startSensor(){
-
-        try{
-
-
-            /* ==============================================
-               MOTION PERMISSION
-            =============================================== */
-
-            if(
-                typeof DeviceMotionEvent !==
-                "undefined" &&
-
-                typeof DeviceMotionEvent
-                    .requestPermission ===
-                "function"
-            ){
-
-                const permission =
-                    await DeviceMotionEvent
-                        .requestPermission();
-
-
-                if(
-                    permission !==
-                    "granted"
-                ){
-
-                    alert(
-                        "Hareket sensörü izni verilmedi."
-                    );
-
-                    return;
-
-                }
-
-            }
-
-
-            /* ==============================================
-               MOTION
-            ============================================== */
-
-            window.addEventListener(
-                "devicemotion",
-                handleMotion,
-                {
-                    passive:true
-                }
-            );
-
-
-            /* ==============================================
-               GPS
-            ============================================== */
-
-            startGPS();
-
-
-            /* ==============================================
-               START SCREEN
-            ============================================== */
-
-            const startScreen =
-                document.querySelector(
-                    ".startScreen"
-                );
-
-
-            if(
-                startScreen
-            ){
-
-                startScreen.remove();
-
-            }
-
-        }
-        catch(error){
-
-            console.error(
-                error
-            );
-
-
-            alert(
-                "Sensörler başlatılamadı."
-            );
-
-        }
-
-    }
-
-
-    /* ==================================================
-       START SCREEN
-    ================================================== */
-
-    const startScreen =
-        document.createElement(
-            "div"
-        );
-
-
-    startScreen.className =
-        "startScreen";
-
-
-    startScreen.innerHTML = `
-        <button
-            class="startButton"
-            id="startButton">
-            ÖLÇÜMÜ BAŞLAT
-        </button>
-    `;
-
-
-    document.body.appendChild(
-        startScreen
-    );
-
-
-    document
-        .getElementById(
-            "startButton"
-        )
-        .addEventListener(
-            "click",
-            startSensor
-        );
-
-
-    /* ==================================================
-       LEVEL LOOP
-    ================================================== */
-
-    requestAnimationFrame(
-        updateLevel
-    );
+  updateLevel();
 
 
 })();
