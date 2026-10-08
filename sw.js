@@ -1,108 +1,129 @@
-const CACHE_NAME = "camprover-level-v4";
-
-const ASSETS = [
-
-  "./",
-
-  "./index.html",
-
-  "./manifest.json",
-
-  "./sw.js",
-
-  "./pitch_discovery.png",
-
-  "./roll_discovery.png"
-
-];
+const CACHE_NAME = "camprover-level-no-cache-v5";
 
 
-self.addEventListener(
-  "install",
-  event => {
+/*
+====================================================
+ CAMPROVER LEVEL SERVICE WORKER
+====================================================
 
-    event.waitUntil(
+Eski sürümlerde index.html ve görseller cache'leniyordu.
+Bu nedenle iPhone eski tasarımı göstermeye devam ediyordu.
 
-      caches
-        .open(CACHE_NAME)
+Bu sürüm:
+- index.html'i CACHE'lemez
+- PNG görselleri CACHE'lemez
+- CSS/JS içeren sayfayı CACHE'lemez
+- Eski cache'leri otomatik siler
+- Yeni sürüm geldiğinde hemen aktif olur
+====================================================
+*/
 
-        .then(
-          cache =>
-            cache.addAll(ASSETS)
-        )
 
-        .then(
-          () =>
-            self.skipWaiting()
-        )
+self.addEventListener("install", event => {
 
-    );
+  event.waitUntil(
 
+    self.skipWaiting()
+
+  );
+
+});
+
+
+self.addEventListener("activate", event => {
+
+  event.waitUntil(
+
+    caches.keys()
+
+      .then(keys => {
+
+        return Promise.all(
+
+          keys.map(key => {
+
+            return caches.delete(key);
+
+          })
+
+        );
+
+      })
+
+      .then(() => {
+
+        return self.clients.claim();
+
+      })
+
+  );
+
+});
+
+
+self.addEventListener("fetch", event => {
+
+  const request = event.request;
+
+  /*
+  Sadece GET isteklerini ele al
+  */
+
+  if(request.method !== "GET"){
+    return;
   }
-);
 
 
-self.addEventListener(
-  "activate",
-  event => {
+  /*
+  HTML ve görseller için:
+  HER ZAMAN internetten güncel dosyayı al.
+  */
 
-    event.waitUntil(
-
-      caches
-        .keys()
-
-        .then(
-          keys =>
-
-            Promise.all(
-
-              keys
-
-                .filter(
-                  key =>
-                    key !== CACHE_NAME
-                )
-
-                .map(
-                  key =>
-                    caches.delete(key)
-                )
-
-            )
-        )
-
-        .then(
-          () =>
-            self.clients.claim()
-        )
-
-    );
-
-  }
-);
+  const url = new URL(request.url);
 
 
-self.addEventListener(
-  "fetch",
-  event => {
+  const isAppFile =
+    url.pathname.endsWith("/") ||
+    url.pathname.endsWith(".html") ||
+    url.pathname.endsWith(".png") ||
+    url.pathname.endsWith(".jpg") ||
+    url.pathname.endsWith(".jpeg") ||
+    url.pathname.endsWith(".webp") ||
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".js") ||
+    url.pathname.endsWith(".json");
+
+
+  if(isAppFile){
 
     event.respondWith(
 
-      caches
-        .match(event.request)
+      fetch(
+        new Request(request, {
+          cache: "no-store"
+        })
+      )
 
-        .then(
-          cached => {
+      .then(response => {
 
-            return (
-              cached ||
-              fetch(event.request)
-            );
+        return response;
 
-          }
-        )
+      })
+
+      .catch(() => {
+
+        /*
+        İnternet yoksa son çare olarak cache'e bak.
+        */
+
+        return caches.match(request);
+
+      })
 
     );
 
+    return;
+
   }
-);
+
+});
