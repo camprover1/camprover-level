@@ -1,21 +1,40 @@
 <!doctype html>
 <html lang="tr">
+
 <head>
+
 <meta charset="utf-8">
 
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"
+>
 
-<meta name="theme-color" content="#05070a">
+<meta
+  name="theme-color"
+  content="#05070a"
+>
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta
+  name="apple-mobile-web-app-capable"
+  content="yes"
+>
+
+<meta
+  name="apple-mobile-web-app-status-bar-style"
+  content="black-translucent"
+>
 
 <title>Camprover Level</title>
 
 <link rel="manifest" href="manifest.json">
 
+
 <style>
+
+/* =====================================================
+   GENEL
+===================================================== */
 
 *{
   box-sizing:border-box;
@@ -23,166 +42,268 @@
 
 html,
 body{
+
   margin:0;
+
   width:100%;
   height:100%;
+
   overflow:hidden;
+
   background:#05070a;
+
   color:#fff;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 body{
+
   padding:
     env(safe-area-inset-top)
     env(safe-area-inset-right)
     env(safe-area-inset-bottom)
     env(safe-area-inset-left);
+
 }
 
 .app{
+
   height:100%;
+
   display:flex;
+
   flex-direction:column;
+
   padding:9px 16px 7px;
+
 }
 
-/* ---------------- HEADER ---------------- */
+
+/* =====================================================
+   HEADER
+===================================================== */
 
 header{
+
   height:34px;
+
   display:flex;
+
   align-items:center;
+
 }
 
 .title,
 .sub{
+
   font-size:19px;
+
   letter-spacing:2px;
+
 }
 
 .title{
+
   font-weight:800;
+
 }
 
 .sub{
+
   font-weight:300;
+
 }
 
 .spacer{
+
   flex:1;
+
 }
 
 .vehicle{
+
   font-size:11px;
+
   color:#858e99;
+
   font-weight:800;
+
   letter-spacing:1px;
+
 }
 
 .caption{
+
   text-align:center;
+
   color:#56606b;
+
   font-size:9px;
+
   letter-spacing:1px;
+
   margin:0 0 7px;
+
 }
 
-/* ---------------- ANA GRID ---------------- */
+
+/* =====================================================
+   ANA GRID
+===================================================== */
 
 .grid{
+
   flex:1;
+
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+
   gap:10px;
+
   min-height:0;
+
 }
 
-/* ---------------- KARTLAR ---------------- */
+
+/* =====================================================
+   PITCH / ROLL KARTLARI
+===================================================== */
 
 .card{
+
   position:relative;
+
   background:#0d1217;
+
   border:2px solid #27313a;
+
   border-radius:20px;
+
   overflow:hidden;
 
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   justify-content:flex-start;
 
   min-width:0;
+
 }
 
 .pitch-ok{
+
   border:5px solid #31ed69;
-  box-shadow:0 0 20px #31ed6930;
+
+  box-shadow:
+    0 0 20px #31ed6930;
+
 }
 
 .roll-ok{
+
   border:5px solid #ff3030;
-  box-shadow:0 0 20px #ff303030;
+
+  box-shadow:
+    0 0 20px #ff303030;
+
 }
 
 .label{
+
   z-index:3;
+
   margin-top:10px;
 
   font-size:11px;
+
   color:#a7afb7;
+
   letter-spacing:3px;
+
   font-weight:800;
+
 }
 
 .value{
+
   z-index:3;
 
-  font-size:clamp(46px,7vw,74px);
+  font-size:
+    clamp(46px,7vw,74px);
+
   font-weight:900;
 
   line-height:.9;
+
   margin:3px 0 4px;
 
   color:#fff;
 
-  text-shadow:0 2px 8px #000;
+  text-shadow:
+    0 2px 8px #000;
+
 }
 
-/* ---------------- ARAÇ FOTOĞRAFLARI ---------------- */
+
+/* =====================================================
+   ARAÇ GÖRSELLERİ
+===================================================== */
 
 .photoWrap{
+
   position:absolute;
 
   left:4%;
   right:4%;
+
   top:31%;
   bottom:4%;
 
   overflow:hidden;
+
   border-radius:14px;
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
 }
 
 .photo{
+
   width:100%;
   height:100%;
 
   object-fit:contain;
+
   object-position:center;
 
-  filter:saturate(1.05) contrast(1.04);
+  filter:
+    saturate(1.05)
+    contrast(1.04);
 
   transition:none;
 
   will-change:transform;
+
 }
 
 .photoShade{
+
   position:absolute;
+
   inset:0;
 
   background:
@@ -195,27 +316,38 @@ header{
     );
 
   pointer-events:none;
+
 }
 
-/* ---------------- MERKEZ SU TERAZİSİ ---------------- */
+
+/* =====================================================
+   MERKEZ SU TERAZİSİ
+===================================================== */
 
 .center{
+
   position:relative;
 
   background:#0a0e13;
+
   border-radius:20px;
 
   overflow:hidden;
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
 }
 
 .level{
+
   position:relative;
 
   width:min(30vw,225px);
+
   aspect-ratio:1;
 
   border-radius:50%;
@@ -233,93 +365,146 @@ header{
   box-shadow:
     inset 0 0 28px #000,
     0 0 18px #35d93a30;
+
 }
 
 .level:before{
+
   content:"";
 
   position:absolute;
+
   inset:12%;
 
-  border:2px solid #ffffffaa;
+  border:
+    2px solid #ffffffaa;
+
   border-radius:50%;
+
 }
 
 .level:after{
+
   content:"";
 
   position:absolute;
+
   inset:28%;
 
-  border:2px solid #ffffff55;
+  border:
+    2px solid #ffffff55;
+
   border-radius:50%;
+
 }
 
-/* ---------------- TERAZİ ÇİZGİLERİ ---------------- */
+
+/* =====================================================
+   MERKEZ ÇİZGİLERİ
+===================================================== */
 
 .lineH,
 .lineV{
+
   position:absolute;
+
   background:#101610aa;
+
   z-index:1;
+
 }
 
 .lineH{
+
   left:6%;
   right:6%;
+
   top:50%;
+
   height:2px;
+
 }
 
 .lineV{
+
   top:6%;
   bottom:6%;
+
   left:50%;
+
   width:2px;
+
 }
 
-/* ---------------- TERAZİ DERECELERİ ---------------- */
+
+/* =====================================================
+   DERECELER
+===================================================== */
 
 .tick{
+
   position:absolute;
 
   font-size:10px;
+
   font-weight:800;
 
   color:#eaffdf;
 
   z-index:2;
 
-  text-shadow:0 1px 3px #000;
+  text-shadow:
+    0 1px 3px #000;
+
 }
 
 .tTop{
+
   top:3%;
   left:50%;
-  transform:translateX(-50%);
+
+  transform:
+    translateX(-50%);
+
 }
 
 .tBottom{
+
   bottom:3%;
   left:50%;
-  transform:translateX(-50%);
+
+  transform:
+    translateX(-50%);
+
 }
 
 .tLeft{
+
   left:2%;
   top:50%;
-  transform:translateY(-50%);
+
+  transform:
+    translateY(-50%);
+
 }
 
 .tRight{
+
   right:2%;
   top:50%;
-  transform:translateY(-50%);
+
+  transform:
+    translateY(-50%);
+
 }
 
-/* ---------------- BALONCUK ---------------- */
+
+/* =====================================================
+   BALONCUK
+===================================================== */
 
 .bubble{
+
   position:absolute;
 
   z-index:3;
@@ -338,7 +523,8 @@ header{
       #158300 100%
     );
 
-  border:2px solid #0b3900;
+  border:
+    2px solid #0b3900;
 
   box-shadow:
     0 0 16px #9cff5588;
@@ -346,37 +532,55 @@ header{
   left:50%;
   top:50%;
 
-  transform:translate(-50%,-50%);
+  transform:
+    translate(-50%,-50%);
 
   transition:none;
 
-  will-change:left,top;
+  will-change:
+    left,
+    top;
+
 }
 
-/* ---------------- MERKEZ ARAÇ ---------------- */
+
+/* =====================================================
+   MERKEZ ARAÇ
+===================================================== */
 
 .centerCar{
+
   position:absolute;
 
   bottom:3%;
+
   left:50%;
 
   width:86px;
 
-  transform:translateX(-50%);
+  transform:
+    translateX(-50%);
 
-  filter:drop-shadow(0 3px 7px #000);
+  filter:
+    drop-shadow(0 3px 7px #000);
+
 }
 
-/* ---------------- BADGE ---------------- */
+
+/* =====================================================
+   BADGE
+===================================================== */
 
 .badge{
+
   position:absolute;
 
   bottom:5px;
+
   left:50%;
 
-  transform:translateX(-50%);
+  transform:
+    translateX(-50%);
 
   z-index:4;
 
@@ -395,30 +599,45 @@ header{
   font-weight:800;
 
   white-space:nowrap;
+
 }
 
-/* ---------------- FOOTER ---------------- */
+
+/* =====================================================
+   FOOTER
+===================================================== */
 
 footer{
+
   height:25px;
 
   display:flex;
+
   align-items:center;
 
   color:#66717b;
 
   font-size:9px;
+
   letter-spacing:.5px;
+
 }
 
 .ok{
+
   color:#42e878;
+
   font-weight:800;
+
 }
 
-/* ---------------- BAŞLANGIÇ EKRANI ---------------- */
+
+/* =====================================================
+   BAŞLANGIÇ EKRANI
+===================================================== */
 
 #start{
+
   position:fixed;
 
   inset:0;
@@ -426,40 +645,55 @@ footer{
   background:#05070aee;
 
   display:flex;
+
   align-items:center;
+
   justify-content:center;
 
   z-index:10;
+
 }
 
 .modal{
+
   width:min(400px,90vw);
 
   background:#10151b;
 
-  border:1px solid #29343e;
+  border:
+    1px solid #29343e;
 
   border-radius:22px;
 
   padding:24px;
 
   text-align:center;
+
 }
 
 .modal h2{
-  margin:0 0 8px;
+
+  margin:
+    0 0 8px;
+
 }
 
 .modal p{
+
   color:#a8b0b9;
+
   line-height:1.4;
+
   font-size:13px;
+
 }
 
 button{
+
   background:#111820;
 
-  border:1px solid #33414d;
+  border:
+    1px solid #33414d;
 
   color:#fff;
 
@@ -468,72 +702,107 @@ button{
   padding:10px 16px;
 
   font-weight:800;
+
 }
 
 .hidden{
+
   display:none!important;
+
 }
 
-/* ---------------- TELEFON ---------------- */
+
+/* =====================================================
+   TELEFON
+===================================================== */
 
 @media(max-width:700px){
 
   .app{
+
     padding:7px 8px 5px;
+
   }
 
   header{
+
     height:30px;
+
   }
 
   .title,
   .sub{
+
     font-size:16px;
+
   }
 
   .grid{
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+      1fr 1fr;
+
     gap:7px;
+
   }
 
   .center{
+
     grid-column:1/3;
+
     grid-row:1;
+
   }
 
   .card{
+
     height:100%;
+
     border-radius:16px;
+
   }
 
   .vehicle{
+
     display:none;
+
   }
 
   .level{
-    width:min(48vw,210px);
+
+    width:
+      min(48vw,210px);
+
   }
 
   footer{
+
     font-size:8px;
+
   }
 
 }
 
 </style>
+
 </head>
+
 
 
 <body>
 
 
-<!-- BAŞLANGIÇ -->
+<!-- ===================================================
+     BAŞLANGIÇ EKRANI
+=================================================== -->
 
 <div id="start">
 
   <div class="modal">
 
-    <h2>CAMPROVER LEVEL</h2>
+    <h2>
+      CAMPROVER LEVEL
+    </h2>
 
     <p>
       Araç içindeki dikey telefon montajı için
@@ -557,7 +826,9 @@ button{
 <div class="app">
 
 
-<!-- HEADER -->
+<!-- ===================================================
+     HEADER
+=================================================== -->
 
 <header>
 
@@ -587,7 +858,9 @@ button{
 <section class="grid">
 
 
-<!-- PITCH -->
+<!-- ===================================================
+     PITCH
+=================================================== -->
 
 <div id="pitchCard" class="card">
 
@@ -616,14 +889,18 @@ button{
 
 
 
-<!-- MERKEZ SU TERAZİSİ -->
+<!-- ===================================================
+     MERKEZ SU TERAZİSİ
+=================================================== -->
 
 <div class="center">
 
   <div class="level">
 
     <div class="lineH"></div>
+
     <div class="lineV"></div>
+
 
     <div class="tick tTop">
       +10°
@@ -640,6 +917,7 @@ button{
     <div class="tick tRight">
       +10°
     </div>
+
 
     <div
       id="bubble"
@@ -670,7 +948,9 @@ button{
 
 
 
-<!-- ROLL -->
+<!-- ===================================================
+     ROLL
+=================================================== -->
 
 <div id="rollCard" class="card">
 
@@ -724,57 +1004,63 @@ button{
 
 <script>
 
+/* =====================================================
+   CAMPROVER LEVEL
+=====================================================
+
+   TELEFON MONTAJI:
+
+   • Telefon dikey / portrait
+   • Ekran yolculara bakıyor
+   • Kamera aracın önüne bakıyor
+   • Telefon üstü tavana bakıyor
+   • Telefon altı zemine bakıyor
+
+===================================================== */
+
+
+/* =====================================================
+   FİLTRE AYARLARI
+===================================================== */
+
 /*
-========================================================
- CAMPROVER LEVEL
-========================================================
 
-TELEFON MONTAJI:
+   SENSOR_ALPHA
 
-- Telefon dikey / portrait
-- Ekran yolculara bakıyor
-- Kamera aracın önüne bakıyor
-- Telefonun üst tarafı tavana bakıyor
-- Telefonun alt tarafı zemine bakıyor
+   Tüm ölçümlerin ana filtresi.
 
-========================================================
- FİLTRE
-========================================================
+   0.35 = hızlı
+   0.25 = orta
+   0.15 = daha sakin
 
-Eski sensör filtresi:
-
-0.055
-
-Bu çok yavaştı.
-
-Yeni sensör filtresi:
-
-0.35
-
-Merkez baloncuk filtresi:
-
-0.75
-
-Bu nedenle baloncuk neredeyse anlık
-tepki verecek.
-
-========================================================
 */
 
+const SENSOR_ALPHA = 0.15;
+
+
+/*
+
+   BUBBLE_ALPHA
+
+   Ortadaki balonun hareket filtresi.
+
+   0.75 = çok hızlı
+   0.55 = hızlı
+   0.35 = daha sakin
+
+*/
+
+const BUBBLE_ALPHA = 0.35;
+
+
+
+/* =====================================================
+   SENSÖR DEĞİŞKENLERİ
+===================================================== */
 
 let ax = 0;
 let ay = 0;
 let az = 0;
-
-
-/* ANA SENSÖR FİLTRESİ */
-
-const SENSOR_ALPHA = 0.10;
-
-
-/* MERKEZ BALONCUK FİLTRESİ */
-
-const BUBBLE_ALPHA = 0.40;
 
 
 let bubblePitch = 0;
@@ -782,7 +1068,9 @@ let bubbleRoll = 0;
 
 
 
-/* HTML ELEMANLARI */
+/* =====================================================
+   HTML ELEMANLARI
+===================================================== */
 
 const pitchElement =
   document.getElementById("pitch");
@@ -807,7 +1095,9 @@ const rollImage =
 
 
 
-/* + / - GÖSTERİMİ */
+/* =====================================================
+   DERECE GÖSTERİMİ
+===================================================== */
 
 function signed(value){
 
@@ -824,21 +1114,18 @@ function signed(value){
 
 
 /* =====================================================
-   SEVİYE HESAPLAMA
-   ===================================================== */
+   PITCH / ROLL HESAPLAMA
+===================================================== */
 
 function updateLevel(){
 
 
   /*
-  DİKEY TELEFON MONTAJI
+  DİKEY TELEFON:
 
   X = sağ / sol
   Y = üst / alt
   Z = ekran yönü
-
-  Pitch = aracın öne / arkaya eğimi
-  Roll  = aracın sağa / sola eğimi
   */
 
 
@@ -874,7 +1161,7 @@ function updateLevel(){
 
 
 
-  /* TAM DERECE */
+  /* TAM DERECEYE YUVARLA */
 
   const pitch =
     Math.round(pitchRaw);
@@ -893,8 +1180,8 @@ function updateLevel(){
 
 
   /* =================================================
-     0 DERECE SINIRLARI
-     ================================================= */
+     SIFIRA YAKINSA RENK
+  ================================================= */
 
   pitchCard.className =
     "card"
@@ -918,10 +1205,17 @@ function updateLevel(){
 
 
   /* =================================================
-     PITCH ARAÇ GÖRSELİ
-     ================================================= */
+     PITCH GÖRSELİ
+
+     HAREKET YÖNÜ DÜZELTİLDİ.
+
+     Araç önü yukarı:
+     görsel yukarı.
+
+  ================================================= */
 
   const pitchMove =
+
     Math.max(
       -20,
       Math.min(
@@ -940,10 +1234,11 @@ function updateLevel(){
 
 
   /* =================================================
-     ROLL ARAÇ GÖRSELİ
-     ================================================= */
+     ROLL GÖRSELİ
+  ================================================= */
 
   const rollMove =
+
     Math.max(
       -20,
       Math.min(
@@ -963,32 +1258,36 @@ function updateLevel(){
 
   /* =================================================
      MERKEZ BALONCUK
-     =================================================
 
-     Burada özellikle yüksek hız kullanıyoruz.
+     Daha sakin hareket.
 
-     0.75 = çok hızlı tepki
-     */
-
+  ================================================= */
 
   bubblePitch +=
-    (pitchRaw - bubblePitch)
+
+    (
+      pitchRaw -
+      bubblePitch
+    )
     * BUBBLE_ALPHA;
 
 
   bubbleRoll +=
-    (rollRaw - bubbleRoll)
+
+    (
+      rollRaw -
+      bubbleRoll
+    )
     * BUBBLE_ALPHA;
 
 
 
-  /*
-  ±10 derece alanı
-
-  10 derece = dairenin yaklaşık %40'ı
-  */
+  /* =================================================
+     BALONCUK ±10 DERECE ALANI
+  ================================================= */
 
   const x =
+
     Math.max(
       -10,
       Math.min(
@@ -999,6 +1298,7 @@ function updateLevel(){
 
 
   const y =
+
     Math.max(
       -10,
       Math.min(
@@ -1010,12 +1310,20 @@ function updateLevel(){
 
 
   bubble.style.left =
-    (50 + x * 4)
+
+    (
+      50 +
+      x * 4
+    )
     + "%";
 
 
   bubble.style.top =
-    (50 - y * 4)
+
+    (
+      50 -
+      y * 4
+    )
     + "%";
 
 }
@@ -1023,8 +1331,8 @@ function updateLevel(){
 
 
 /* =====================================================
-   TELEFON HAREKET SENSÖRÜ
-   ===================================================== */
+   HAREKET SENSÖRÜ
+===================================================== */
 
 function motion(event){
 
@@ -1040,29 +1348,44 @@ function motion(event){
 
 
   /*
-  Hızlı ama biraz yumuşatılmış sensör filtresi
+  ANA FİLTRE
+
+  0.15 = daha sakin ölçüm
   */
 
-
   ax =
-    ax * (1 - SENSOR_ALPHA)
+
+    ax *
+      (1 - SENSOR_ALPHA)
+
     +
-    (a.x || 0)
-    * SENSOR_ALPHA;
+
+    (a.x || 0) *
+      SENSOR_ALPHA;
+
 
 
   ay =
-    ay * (1 - SENSOR_ALPHA)
+
+    ay *
+      (1 - SENSOR_ALPHA)
+
     +
-    (a.y || 0)
-    * SENSOR_ALPHA;
+
+    (a.y || 0) *
+      SENSOR_ALPHA;
+
 
 
   az =
-    az * (1 - SENSOR_ALPHA)
+
+    az *
+      (1 - SENSOR_ALPHA)
+
     +
-    (a.z || 0)
-    * SENSOR_ALPHA;
+
+    (a.z || 0) *
+      SENSOR_ALPHA;
 
 
 
@@ -1074,7 +1397,7 @@ function motion(event){
 
 /* =====================================================
    ÖLÇÜMÜ BAŞLAT
-   ===================================================== */
+===================================================== */
 
 async function startMeasurement(){
 
@@ -1097,18 +1420,23 @@ async function startMeasurement(){
 
     ){
 
-
       const permission =
-        await DeviceMotionEvent.requestPermission();
+
+        await
+        DeviceMotionEvent
+          .requestPermission();
 
 
-      if(permission !== "granted"){
+      if(
+        permission !== "granted"
+      ){
 
         alert(
           "Hareket sensörü izni verilmedi."
         );
 
         return;
+
       }
 
     }
@@ -1116,19 +1444,23 @@ async function startMeasurement(){
 
 
     /*
-    Sensörü başlat
+    SENSÖRÜ BAŞLAT
     */
 
     window.addEventListener(
+
       "devicemotion",
+
       motion,
+
       true
+
     );
 
 
 
     /*
-    Başlangıç ekranını kaldır
+    BAŞLANGIÇ EKRANINI KAPAT
     */
 
     document
@@ -1152,7 +1484,9 @@ async function startMeasurement(){
 
 
 
-/* BAŞLAT BUTONU */
+/* =====================================================
+   BAŞLAT BUTONU
+===================================================== */
 
 document
   .getElementById("begin")
@@ -1163,14 +1497,39 @@ document
 
 
 
-/* SERVICE WORKER */
+/* =====================================================
+   SERVICE WORKER
+
+   ÖNEMLİ:
+
+   updateViaCache: "none"
+
+   Service Worker'ın eski cache'den
+   okunmasını engeller.
+
+===================================================== */
 
 if(
   "serviceWorker" in navigator
 ){
 
   navigator.serviceWorker
-    .register("sw.js")
+
+    .register(
+      "sw.js?v=5",
+      {
+        updateViaCache:"none"
+      }
+    )
+
+    .then(
+      registration => {
+
+        registration.update();
+
+      }
+    )
+
     .catch(
       () => {}
     );
@@ -1178,6 +1537,7 @@ if(
 }
 
 </script>
+
 
 </body>
 </html>
