@@ -45,12 +45,43 @@
 <style>
 
 /* =====================================================
+   CAMPROVER LEVEL
+===================================================== */
+
+
+/* =====================================================
+   MAVİ SEVİYE RENGİ
+=====================================================
+
+   Rengi sadece buradan değiştirebilirsin.
+
+   Örnek:
+
+   #00A8FF = canlı mavi
+   #0A84FF = Apple mavisi
+   #0077CC = koyu mavi
+   #008CFF = elektrik mavisi
+   #00B7D9 = turkuaz mavi
+
+===================================================== */
+
+:root{
+
+  --level-blue:#00A8FF;
+
+}
+
+
+/* =====================================================
    GENEL
 ===================================================== */
 
 *{
+
   box-sizing:border-box;
+
 }
+
 
 html,
 body{
@@ -58,6 +89,7 @@ body{
   margin:0;
 
   width:100%;
+
   height:100%;
 
   overflow:hidden;
@@ -71,7 +103,9 @@ body{
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+
 }
+
 
 body{
 
@@ -82,6 +116,7 @@ body{
     env(safe-area-inset-left);
 
 }
+
 
 .app{
 
@@ -110,6 +145,7 @@ header{
 
 }
 
+
 .title,
 .sub{
 
@@ -119,11 +155,13 @@ header{
 
 }
 
+
 .title{
 
   font-weight:800;
 
 }
+
 
 .sub{
 
@@ -131,11 +169,13 @@ header{
 
 }
 
+
 .spacer{
 
   flex:1;
 
 }
+
 
 .vehicle{
 
@@ -148,6 +188,7 @@ header{
   letter-spacing:1px;
 
 }
+
 
 .caption{
 
@@ -165,7 +206,7 @@ header{
 
 
 /* =====================================================
-   GRID
+   ANA GRID
 ===================================================== */
 
 .grid{
@@ -185,7 +226,7 @@ header{
 
 
 /* =====================================================
-   PITCH / ROLL
+   PITCH / ROLL KARTLARI
 ===================================================== */
 
 .card{
@@ -210,25 +251,16 @@ header{
 
   min-width:0;
 
-}
-
-.pitch-ok{
-
-  border:5px solid #31ed69;
-
-  box-shadow:
-    0 0 20px #31ed6930;
+  transition:
+    border-color .15s ease,
+    box-shadow .15s ease;
 
 }
 
-.roll-ok{
 
-  border:5px solid #ff3030;
-
-  box-shadow:
-    0 0 20px #ff303030;
-
-}
+/* =====================================================
+   YAZILAR
+===================================================== */
 
 .label{
 
@@ -245,6 +277,7 @@ header{
   font-weight:800;
 
 }
+
 
 .value{
 
@@ -268,7 +301,7 @@ header{
 
 
 /* =====================================================
-   ARAÇ GÖRSELLERİ
+   ARAÇ FOTOĞRAFLARI
 ===================================================== */
 
 .photoWrap{
@@ -276,9 +309,11 @@ header{
   position:absolute;
 
   left:4%;
+
   right:4%;
 
   top:31%;
+
   bottom:4%;
 
   overflow:hidden;
@@ -293,9 +328,11 @@ header{
 
 }
 
+
 .photo{
 
   width:100%;
+
   height:100%;
 
   object-fit:contain;
@@ -311,6 +348,7 @@ header{
   will-change:transform;
 
 }
+
 
 .photoShade{
 
@@ -354,6 +392,7 @@ header{
 
 }
 
+
 .level{
 
   position:relative;
@@ -380,6 +419,7 @@ header{
 
 }
 
+
 .level:before{
 
   content:"";
@@ -394,6 +434,7 @@ header{
   border-radius:50%;
 
 }
+
 
 .level:after{
 
@@ -410,6 +451,11 @@ header{
 
 }
 
+
+/* =====================================================
+   MERKEZ ÇİZGİLERİ
+===================================================== */
+
 .lineH,
 .lineV{
 
@@ -421,9 +467,11 @@ header{
 
 }
 
+
 .lineH{
 
   left:6%;
+
   right:6%;
 
   top:50%;
@@ -432,9 +480,11 @@ header{
 
 }
 
+
 .lineV{
 
   top:6%;
+
   bottom:6%;
 
   left:50%;
@@ -442,6 +492,11 @@ header{
   width:2px;
 
 }
+
+
+/* =====================================================
+   DERECELER
+===================================================== */
 
 .tick{
 
@@ -460,19 +515,23 @@ header{
 
 }
 
+
 .tTop{
 
   top:3%;
+
   left:50%;
 
   transform:
     translateX(-50%);
 
 }
+
 
 .tBottom{
 
   bottom:3%;
+
   left:50%;
 
   transform:
@@ -480,9 +539,11 @@ header{
 
 }
 
+
 .tLeft{
 
   left:2%;
+
   top:50%;
 
   transform:
@@ -490,9 +551,11 @@ header{
 
 }
 
+
 .tRight{
 
   right:2%;
+
   top:50%;
 
   transform:
@@ -512,6 +575,7 @@ header{
   z-index:3;
 
   width:28px;
+
   height:28px;
 
   border-radius:50%;
@@ -532,6 +596,7 @@ header{
     0 0 16px #9cff5588;
 
   left:50%;
+
   top:50%;
 
   transform:
@@ -625,6 +690,7 @@ footer{
 
 }
 
+
 .ok{
 
   color:#42e878;
@@ -635,7 +701,7 @@ footer{
 
 
 /* =====================================================
-   BAŞLANGIÇ
+   BAŞLANGIÇ EKRANI
 ===================================================== */
 
 #start{
@@ -656,6 +722,7 @@ footer{
 
 }
 
+
 .modal{
 
   width:min(400px,90vw);
@@ -673,12 +740,14 @@ footer{
 
 }
 
+
 .modal h2{
 
   margin:
     0 0 8px;
 
 }
+
 
 .modal p{
 
@@ -689,6 +758,7 @@ footer{
   font-size:13px;
 
 }
+
 
 button{
 
@@ -706,6 +776,7 @@ button{
   font-weight:800;
 
 }
+
 
 .hidden{
 
@@ -726,11 +797,13 @@ button{
 
   }
 
+
   header{
 
     height:30px;
 
   }
+
 
   .title,
   .sub{
@@ -738,6 +811,7 @@ button{
     font-size:16px;
 
   }
+
 
   .grid{
 
@@ -748,6 +822,7 @@ button{
 
   }
 
+
   .center{
 
     grid-column:1/3;
@@ -755,6 +830,7 @@ button{
     grid-row:1;
 
   }
+
 
   .card{
 
@@ -764,11 +840,13 @@ button{
 
   }
 
+
   .vehicle{
 
     display:none;
 
   }
+
 
   .level{
 
@@ -776,6 +854,7 @@ button{
       min(48vw,210px);
 
   }
+
 
   footer{
 
@@ -787,6 +866,7 @@ button{
 
 </style>
 
+
 </head>
 
 
@@ -794,7 +874,7 @@ button{
 
 
 <!-- =====================================================
-     BAŞLANGIÇ
+     BAŞLANGIÇ EKRANI
 ===================================================== -->
 
 <div id="start">
@@ -826,6 +906,10 @@ button{
 
 <div class="app">
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header>
 
@@ -859,13 +943,19 @@ button{
      PITCH
 ===================================================== -->
 
-<div id="pitchCard" class="card">
+<div
+  id="pitchCard"
+  class="card"
+>
 
   <div class="label">
     PITCH
   </div>
 
-  <div id="pitch" class="value">
+  <div
+    id="pitch"
+    class="value"
+  >
     0°
   </div>
 
@@ -886,7 +976,7 @@ button{
 
 
 <!-- =====================================================
-     MERKEZ
+     MERKEZ SU TERAZİSİ
 ===================================================== -->
 
 <div class="center">
@@ -896,6 +986,7 @@ button{
     <div class="lineH"></div>
 
     <div class="lineV"></div>
+
 
     <div class="tick tTop">
       +10°
@@ -913,10 +1004,11 @@ button{
       +10°
     </div>
 
+
     <div
       id="bubble"
-      class="bubble">
-    </div>
+      class="bubble"
+    ></div>
 
   </div>
 
@@ -940,13 +1032,19 @@ button{
      ROLL
 ===================================================== -->
 
-<div id="rollCard" class="card">
+<div
+  id="rollCard"
+  class="card"
+>
 
   <div class="label">
     ROLL
   </div>
 
-  <div id="roll" class="value">
+  <div
+    id="roll"
+    class="value"
+  >
     0°
   </div>
 
@@ -975,7 +1073,12 @@ button{
     ● SENSÖR AKTİF
   </span>
 
-  <span style="flex:1;text-align:center">
+  <span
+    style="
+      flex:1;
+      text-align:center;
+    "
+  >
     Pitch / Roll tam derece • ±0,5° hassasiyet
   </span>
 
@@ -992,32 +1095,39 @@ button{
 <script>
 
 /* =====================================================
-   CACHE / SERVICE WORKER TEMİZLİĞİ
+   CAMPROVER LEVEL
 ===================================================== */
 
-/*
-   Daha önceki sürümlerde oluşturduğumuz Service Worker
-   ve Cache Storage kayıtlarını temizle.
 
-   Bu kod bir kere çalışacak.
-*/
+/* =====================================================
+   ESKİ CACHE VE SERVICE WORKER TEMİZLEME
+=====================================================
+
+   Daha önceki sürümlerde oluşturulmuş
+   Service Worker ve Cache Storage kayıtlarını
+   kaldırıyoruz.
+
+===================================================== */
 
 (async function clearOldCache(){
 
   try{
 
-    /*
-     Eski Service Worker'ları kaldır.
-    */
+
+    /* -----------------------------------------------
+       SERVICE WORKER'LARI KALDIR
+    ----------------------------------------------- */
 
     if(
       "serviceWorker" in navigator
     ){
 
       const registrations =
+
         await navigator
           .serviceWorker
           .getRegistrations();
+
 
       for(
         const registration
@@ -1031,9 +1141,9 @@ button{
     }
 
 
-    /*
-     Eski Cache Storage kayıtlarını sil.
-    */
+    /* -----------------------------------------------
+       CACHE STORAGE TEMİZLE
+    ----------------------------------------------- */
 
     if(
       "caches" in window
@@ -1042,12 +1152,15 @@ button{
       const keys =
         await caches.keys();
 
+
       for(
         const key
         of keys
       ){
 
-        await caches.delete(key);
+        await caches.delete(
+          key
+        );
 
       }
 
@@ -1067,19 +1180,29 @@ button{
 })();
 
 
+
 /* =====================================================
-   GÖRSELLER
+   GÖRSEL SÜRÜM NUMARASI
+=====================================================
+
+   Görseller her zaman bu numarayla çağrılır.
+
+   Görselleri değiştirirsen bunu artırabilirsin:
+
+   20261008-03
+   20261008-04
+   20261008-05
+
 ===================================================== */
-
-/*
-   Görsellere benzersiz sürüm numarası veriyoruz.
-
-   Böylece iPhone eski PNG'yi kullanamaz.
-*/
 
 const IMAGE_VERSION =
   "20261008-02";
 
+
+
+/* =====================================================
+   GÖRSELLERİ YÜKLE
+===================================================== */
 
 const pitchImage =
   document.getElementById(
@@ -1101,38 +1224,50 @@ const centerCar =
 
 pitchImage.src =
   "pitch_discovery.png?v="
-  + IMAGE_VERSION;
+  +
+  IMAGE_VERSION;
 
 
 rollImage.src =
   "roll_discovery.png?v="
-  + IMAGE_VERSION;
+  +
+  IMAGE_VERSION;
 
 
 centerCar.src =
   "roll_discovery.png?v="
-  + IMAGE_VERSION;
+  +
+  IMAGE_VERSION;
+
 
 
 /* =====================================================
-   SENSÖR AYARLARI
+   FİLTRE AYARLARI
 ===================================================== */
 
 
 /*
-   Tüm ölçümlerin filtresi.
+   TÜM ÖLÇÜMLERİN FİLTRESİ
 
-   Daha sakin değerler.
+   Daha düşük = daha sakin
+   Daha yüksek = daha hızlı
+
+   Şu an:
+   0.15
 */
 
 const SENSOR_ALPHA =
   0.15;
 
 
-/*
-   Ortadaki balonun filtresi.
 
-   Daha sakin hareket.
+/*
+   MERKEZ BALONCUK FİLTRESİ
+
+   Şu an:
+   0.35
+
+   Daha düşük değer = daha yumuşak
 */
 
 const BUBBLE_ALPHA =
@@ -1158,7 +1293,7 @@ let bubbleRoll = 0;
 
 
 /* =====================================================
-   HTML
+   HTML ELEMANLARI
 ===================================================== */
 
 const pitchElement =
@@ -1193,7 +1328,7 @@ const bubble =
 
 
 /* =====================================================
-   DERECE
+   + / - DERECE GÖSTERİMİ
 ===================================================== */
 
 function signed(value){
@@ -1215,22 +1350,171 @@ function signed(value){
 
 
 /* =====================================================
-   PITCH / ROLL
+   MAVİ ÇERÇEVE SİSTEMİ
+=====================================================
+
+   ±5°:
+   Mavi çok hafif başlar.
+
+   ±4°:
+   Daha belirgin.
+
+   ±3°:
+   Güçlü.
+
+   ±2°:
+   Çok güçlü.
+
+   ±1°:
+   Çok parlak.
+
+   0°:
+   Maksimum mavi + maksimum glow.
+
+===================================================== */
+
+function updateBorder(
+  card,
+  angle
+){
+
+  const distance =
+    Math.abs(
+      angle
+    );
+
+
+  /* -----------------------------------------------
+     5 DERECEDEN UZAKSA
+  ----------------------------------------------- */
+
+  if(
+    distance > 5
+  ){
+
+    card.style.borderColor =
+      "#27313a";
+
+    card.style.boxShadow =
+      "none";
+
+    return;
+
+  }
+
+
+  /* -----------------------------------------------
+     GÜÇ
+
+     5° = 0
+
+     0° = 1
+  ----------------------------------------------- */
+
+  const strength =
+
+    1 -
+    (
+      distance /
+      5
+    );
+
+
+  /* -----------------------------------------------
+     MAVİ YOĞUNLUĞU
+
+     5°  = %15
+     0°  = %100
+  ----------------------------------------------- */
+
+  const alpha =
+
+    0.15 +
+    (
+      strength *
+      0.85
+    );
+
+
+  /* -----------------------------------------------
+     PARLAMA
+
+     5°  = 5px
+     0°  = 25px
+  ----------------------------------------------- */
+
+  const glow =
+
+    5 +
+    (
+      strength *
+      20
+    );
+
+
+  /* -----------------------------------------------
+     MAVİ ÇERÇEVE
+  ----------------------------------------------- */
+
+  card.style.borderColor =
+
+    `color-mix(
+      in srgb,
+      var(--level-blue)
+      ${Math.round(
+        alpha * 100
+      )}%,
+      #27313a
+    )`;
+
+
+  /* -----------------------------------------------
+     MAVİ GLOW
+  ----------------------------------------------- */
+
+  card.style.boxShadow =
+
+    `0 0 ${glow}px
+     color-mix(
+       in srgb,
+       var(--level-blue)
+       ${Math.round(
+         alpha * 100
+       )}%,
+       transparent
+     )`;
+
+}
+
+
+
+/* =====================================================
+   PITCH / ROLL HESAPLAMA
 ===================================================== */
 
 function updateLevel(){
 
 
   /*
-   Telefon:
+  TELEFON MONTAJI
 
-   X = sağ / sol
+  X = sağ / sol
 
-   Y = üst / alt
+  Y = üst / alt
 
-   Z = ekran yönü
+  Z = ekran yönü
+
+  Kamera:
+  ARACIN ÖNÜNE BAKIYOR.
+
+  Ekran:
+  YOLCULARA BAKIYOR.
   */
 
+
+  /* -----------------------------------------------
+     PITCH
+  ----------------------------------------------- */
 
   const pitchRaw =
 
@@ -1251,6 +1535,10 @@ function updateLevel(){
 
 
 
+  /* -----------------------------------------------
+     ROLL
+  ----------------------------------------------- */
+
   const rollRaw =
 
     Math.atan2(
@@ -1270,6 +1558,10 @@ function updateLevel(){
 
 
 
+  /* -----------------------------------------------
+     TAM DERECE
+  ----------------------------------------------- */
+
   const pitch =
     Math.round(
       pitchRaw
@@ -1283,65 +1575,43 @@ function updateLevel(){
 
 
 
+  /* -----------------------------------------------
+     EKRANA YAZ
+  ----------------------------------------------- */
+
   pitchElement.textContent =
-    signed(pitch);
+    signed(
+      pitch
+    );
 
 
   rollElement.textContent =
-    signed(roll);
-
-
-
-  /* =================================================
-     PITCH SIFIR
-  ================================================= */
-
-  pitchCard.className =
-    "card"
-    +
-    (
-      Math.abs(
-        pitchRaw
-      )
-      <= 0.5
-
-      ?
-
-      " pitch-ok"
-
-      :
-
-      ""
+    signed(
+      roll
     );
 
 
 
   /* =================================================
-     ROLL SIFIR
+     MAVİ ÇERÇEVELER
   ================================================= */
 
-  rollCard.className =
-    "card"
-    +
-    (
-      Math.abs(
-        rollRaw
-      )
-      <= 0.5
+  updateBorder(
+    pitchCard,
+    pitchRaw
+  );
 
-      ?
 
-      " roll-ok"
-
-      :
-
-      ""
-    );
+  updateBorder(
+    rollCard,
+    rollRaw
+  );
 
 
 
   /* =================================================
-     PITCH GÖRSELİ
+     PITCH ARAÇ GÖRSELİ
+  =================================================
 
      Araç önü yukarı:
      görsel yukarı.
@@ -1351,49 +1621,61 @@ function updateLevel(){
   const pitchMove =
 
     Math.max(
+
       -20,
 
       Math.min(
         20,
         pitchRaw
       )
+
     );
 
 
   pitchImage.style.transform =
 
-    `translateY(${pitchMove * 1.2}px)
-     rotate(${pitchRaw * -0.55}deg)
-     scale(1.04)`;
+    `translateY(
+      ${pitchMove * 1.2}px
+    )
+    rotate(
+      ${pitchRaw * -0.55}deg
+    )
+    scale(1.04)`;
 
 
 
   /* =================================================
-     ROLL GÖRSELİ
+     ROLL ARAÇ GÖRSELİ
   ================================================= */
 
   const rollMove =
 
     Math.max(
+
       -20,
 
       Math.min(
         20,
         rollRaw
       )
+
     );
 
 
   rollImage.style.transform =
 
-    `rotate(${rollRaw * 0.7}deg)
-     translateX(${rollMove * 0.8}px)
-     scale(1.04)`;
+    `rotate(
+      ${rollRaw * 0.7}deg
+    )
+    translateX(
+      ${rollMove * 0.8}px
+    )
+    scale(1.04)`;
 
 
 
   /* =================================================
-     MERKEZ BALON
+     MERKEZ BALONCUK
   ================================================= */
 
   bubblePitch +=
@@ -1417,30 +1699,42 @@ function updateLevel(){
 
 
 
+  /* -----------------------------------------------
+     ±10 DERECE ALANI
+  ----------------------------------------------- */
+
   const x =
 
     Math.max(
+
       -10,
 
       Math.min(
         10,
         bubbleRoll
       )
+
     );
 
 
   const y =
 
     Math.max(
+
       -10,
 
       Math.min(
         10,
         bubblePitch
       )
+
     );
 
 
+
+  /* -----------------------------------------------
+     BALONCUK POZİSYONU
+  ----------------------------------------------- */
 
   bubble.style.left =
 
@@ -1448,7 +1742,8 @@ function updateLevel(){
       50 +
       x * 4
     )
-    + "%";
+    +
+    "%";
 
 
   bubble.style.top =
@@ -1457,21 +1752,24 @@ function updateLevel(){
       50 -
       y * 4
     )
-    + "%";
+    +
+    "%";
 
 }
 
 
 
 /* =====================================================
-   HAREKET SENSÖRÜ
+   TELEFON HAREKET SENSÖRÜ
 ===================================================== */
 
-function motion(event){
-
+function motion(
+  event
+){
 
   const a =
-    event.accelerationIncludingGravity;
+    event
+      .accelerationIncludingGravity;
 
 
   if(!a){
@@ -1481,6 +1779,10 @@ function motion(event){
   }
 
 
+
+  /* -----------------------------------------------
+     X
+  ----------------------------------------------- */
 
   ax =
 
@@ -1500,6 +1802,10 @@ function motion(event){
 
 
 
+  /* -----------------------------------------------
+     Y
+  ----------------------------------------------- */
+
   ay =
 
     ay *
@@ -1517,6 +1823,10 @@ function motion(event){
     SENSOR_ALPHA;
 
 
+
+  /* -----------------------------------------------
+     Z
+  ----------------------------------------------- */
 
   az =
 
@@ -1536,6 +1846,10 @@ function motion(event){
 
 
 
+  /* -----------------------------------------------
+     EKRANI GÜNCELLE
+  ----------------------------------------------- */
+
   updateLevel();
 
 }
@@ -1543,7 +1857,7 @@ function motion(event){
 
 
 /* =====================================================
-   SENSÖRÜ BAŞLAT
+   ÖLÇÜMÜ BAŞLAT
 ===================================================== */
 
 async function startMeasurement(){
@@ -1552,11 +1866,12 @@ async function startMeasurement(){
 
 
     /*
-     iPhone Safari:
+    iPhone Safari sensör izni
 
-     Sensör izni kullanıcı hareketiyle
-     alınmak zorunda.
+    Apple güvenlik nedeniyle
+    kullanıcı etkileşimi istiyor.
     */
+
 
     if(
 
@@ -1571,6 +1886,7 @@ async function startMeasurement(){
       "function"
 
     ){
+
 
       const permission =
 
@@ -1596,9 +1912,9 @@ async function startMeasurement(){
 
 
 
-    /*
-     Sensörü başlat.
-    */
+    /* ---------------------------------------------
+       SENSÖRÜ BAŞLAT
+    --------------------------------------------- */
 
     window.addEventListener(
 
@@ -1612,9 +1928,9 @@ async function startMeasurement(){
 
 
 
-    /*
-     Başlangıç ekranını kapat.
-    */
+    /* ---------------------------------------------
+       BAŞLANGIÇ EKRANINI KAPAT
+    --------------------------------------------- */
 
     document
       .getElementById(
@@ -1631,9 +1947,11 @@ async function startMeasurement(){
   catch(error){
 
     alert(
+
       "Sensör başlatılamadı: "
       +
       error.message
+
     );
 
   }
@@ -1651,10 +1969,12 @@ document
     "begin"
   )
   .addEventListener(
-    "click",
-    startMeasurement
-  );
 
+    "click",
+
+    startMeasurement
+
+  );
 
 </script>
 
