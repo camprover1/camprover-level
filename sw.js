@@ -1,12 +1,12 @@
-const CACHE_NAME = 'camprover-level-v2';
+const CACHE_NAME = 'camprover-level-v3';
 
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './sw.js',
-  './assets/pitch_discovery.jpg',
-  './assets/roll_discovery.jpg'
+  './assets/pitch_discovery.png',
+  './assets/roll_discovery.png'
 ];
 
 self.addEventListener('install', event => {
