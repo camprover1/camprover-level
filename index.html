@@ -1271,7 +1271,7 @@ const SENSOR_ALPHA =
 */
 
 const BUBBLE_ALPHA =
-  0.35;
+  0.15;
 
 
 
@@ -1331,19 +1331,15 @@ const bubble =
    + / - DERECE GÖSTERİMİ
 ===================================================== */
 
-function signed(value){
+function signed(v){
+  const n = Math.round(v);
 
-  return (
+  if(n === 0){
+    return "0°";
+  }
 
-    value >= 0
-      ? "+"
-      : ""
-
-  )
-  +
-  value
-  +
-  "°";
+  return (n > 0 ? "+" : "") + n + "°";
+}
 
 }
 
