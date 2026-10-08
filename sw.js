@@ -5,8 +5,8 @@ const ASSETS = [
   './index.html',
   './manifest.json',
   './sw.js',
-  './assets/pitch_discovery.png',
-  './assets/roll_discovery.png'
+  './pitch_discovery.png',
+  './roll_discovery.png'
 ];
 
 self.addEventListener('install', event => {
