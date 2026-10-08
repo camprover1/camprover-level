@@ -48,7 +48,7 @@
 
   --muted:#7e8993;
 
-  /* MAVİ TONUNU BURADAN DEĞİŞTİREBİLİRSİN */
+  /* MAVİ TONU */
   --level-blue:#00A8FF;
 
   --green:#20e890;
@@ -174,7 +174,7 @@ body{
 
 
 /* ================================================= */
-/* DESKTOP DASHBOARD */
+/* DASHBOARD */
 /* ================================================= */
 
 .dashboard{
@@ -777,7 +777,7 @@ body{
 
 
   /* ================================================= */
-  /* MOBİL DASHBOARD */
+  /* ANA MOBİL DÜZEN */
   /* ================================================= */
 
   .dashboard{
@@ -959,7 +959,7 @@ body{
 
 
   /* ================================================= */
-  /* ARAÇ GÖRSELLERİ ALTTA */
+  /* PITCH + ROLL GÖRSELLERİ TAM MERKEZ */
   /* ================================================= */
 
   .card:first-child .vehicle-area,
@@ -973,7 +973,7 @@ body{
 
     display:flex;
 
-    align-items:flex-end;
+    align-items:center;
 
     justify-content:center;
 
@@ -991,7 +991,7 @@ body{
 
     height:auto;
 
-    margin-bottom:5px;
+    margin:0;
 
   }
 
@@ -1132,12 +1132,24 @@ body{
   }
 
 
+  /* GÖRSELLER TAM MERKEZDE */
+
+  .card:first-child .vehicle-area,
+  .card:last-child .vehicle-area{
+
+    align-items:center;
+
+    justify-content:center;
+
+  }
+
+
   .card:first-child .vehicle-area img,
   .card:last-child .vehicle-area img{
 
     width:96%;
 
-    margin-bottom:4px;
+    margin:0;
 
   }
 
@@ -1256,15 +1268,11 @@ body{
       >
 
 
-        <!-- YEŞİL BALON -->
-
         <div
           id="bubble"
           class="bubble"
         ></div>
 
-
-        <!-- MERKEZ ARAÇ -->
 
         <img
           id="centerCar"
@@ -1273,8 +1281,6 @@ body{
         >
 
 
-        <!-- GRAVITY LEVEL -->
-
         <div class="gravity-label">
           GRAVITY LEVEL
         </div>
@@ -1282,8 +1288,6 @@ body{
 
       </div>
 
-
-      <!-- RESET -->
 
       <button
         id="zeroButton"
@@ -1333,10 +1337,6 @@ body{
   </div>
 
 
-  <!-- ================================================= -->
-  <!-- FOOTER -->
-  <!-- ================================================= -->
-
   <div class="footer">
     CAMPROVER • SENSOR BASED VEHICLE LEVEL
   </div>
@@ -1350,7 +1350,7 @@ body{
 
 
 /* ================================================= */
-/* SERVICE WORKER TEMİZLE */
+/* SERVICE WORKER / CACHE TEMİZLEME */
 /* ================================================= */
 
 (async function(){
@@ -1418,7 +1418,7 @@ body{
 /* ================================================= */
 
 const IMAGE_VERSION =
-  "20261008-08";
+  "20261008-09";
 
 
 
@@ -1505,27 +1505,16 @@ const zeroButton =
 /* FİLTRELER */
 /* ================================================= */
 
-/*
-  Sayısal değerler:
-  Daha sakin.
-*/
-
 const SENSOR_ALPHA =
   0.15;
 
-
-/*
-  Ortadaki yeşil balon:
-  Daha sakin.
-*/
 
 const BUBBLE_ALPHA =
   0.15;
 
 
 /*
-  Araç görselleri:
-  Daha hızlı tepki.
+  Görseller daha hızlı tepki veriyor.
 */
 
 const VEHICLE_ALPHA =
@@ -1534,7 +1523,7 @@ const VEHICLE_ALPHA =
 
 
 /* ================================================= */
-/* SENSOR DEĞİŞKENLERİ */
+/* SENSOR DEĞERLERİ */
 /* ================================================= */
 
 let filteredAx =
@@ -1555,7 +1544,7 @@ let firstSensorReading =
 
 
 /* ================================================= */
-/* BUBBLE DEĞERLERİ */
+/* BALON */
 /* ================================================= */
 
 let bubblePitch =
@@ -1568,7 +1557,7 @@ let bubbleRoll =
 
 
 /* ================================================= */
-/* GÖRSEL DEĞERLER */
+/* GÖRSEL FİLTRE */
 /* ================================================= */
 
 let visualPitch =
@@ -1581,7 +1570,7 @@ let visualRoll =
 
 
 /* ================================================= */
-/* RESET DEĞERLERİ */
+/* RESET */
 /* ================================================= */
 
 let zeroActive =
@@ -1698,7 +1687,7 @@ function updateCardLevel(
 
 
 /* ================================================= */
-/* DERECE FORMAT */
+/* DERECE */
 /* ================================================= */
 
 function formatDegree(
@@ -1728,15 +1717,11 @@ function formatDegree(
 
 
 /* ================================================= */
-/* ANA EKRAN GÜNCELLEME */
+/* LEVEL GÜNCELLEME */
 /* ================================================= */
 
 function updateLevel(){
 
-
-  /* ================================================= */
-  /* GÖSTERİLECEK DEĞERLER */
-/* ================================================= */
 
   let displayPitch =
     pitchRaw;
@@ -1748,7 +1733,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* RESET AKTİF */
+  /* RESET AKTİFSE */
 /* ================================================= */
 
   if(
@@ -1769,7 +1754,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* SAYISAL DEĞERLER */
+  /* SAYISAL DEĞER */
 /* ================================================= */
 
   pitchValue.textContent =
@@ -1786,7 +1771,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* KART ÇERÇEVELERİ */
+  /* KART ÇERÇEVESİ */
 /* ================================================= */
 
   updateCardLevel(
@@ -1803,7 +1788,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* YEŞİL BALON FİLTRESİ */
+  /* BALON FİLTRESİ */
 /* ================================================= */
 
   bubblePitch +=
@@ -1824,7 +1809,7 @@ function updateLevel(){
 
 
   /* ================================================= */
-  /* YEŞİL BALON HAREKETİ */
+  /* BALON HAREKETİ */
 /* ================================================= */
 
   const maxMove =
@@ -1902,14 +1887,6 @@ function updateLevel(){
   /* PITCH GÖRSELİ */
 /* ================================================= */
 
-  /*
-    ÖNEMLİ:
-
-    Pitch artık YUKARI/AŞAĞI KAYMIYOR.
-
-    Araç kendi merkezinde dönüyor.
-  */
-
   const pitchAngle =
     Math.max(
 
@@ -1925,6 +1902,13 @@ function updateLevel(){
 
     );
 
+
+  /*
+    PITCH:
+
+    Yukarı/aşağı hareket yok.
+    Sadece kendi merkezinde dönüyor.
+  */
 
   pitchImage.style.transform =
     `rotate(${pitchAngle}deg)`;
@@ -1959,7 +1943,7 @@ function updateLevel(){
 
 
 /* ================================================= */
-/* SENSOR OKUMA */
+/* SENSOR */
 /* ================================================= */
 
 function handleMotion(
@@ -2121,10 +2105,6 @@ async function startSensor(){
   try{
 
 
-    /* ================================================= */
-    /* iOS İZNİ */
-/* ================================================= */
-
     if(
 
       typeof DeviceMotionEvent !==
@@ -2161,10 +2141,6 @@ async function startSensor(){
 
 
 
-    /* ================================================= */
-    /* SENSOR DİNLE */
-/* ================================================= */
-
     window.addEventListener(
 
       "devicemotion",
@@ -2176,10 +2152,6 @@ async function startSensor(){
     );
 
 
-
-    /* ================================================= */
-    /* BAŞLANGIÇ EKRANINI KALDIR */
-/* ================================================= */
 
     const startScreen =
       document.getElementById(
@@ -2253,7 +2225,6 @@ text-align:center;
 `;
 
 
-
 startScreen.innerHTML = `
 
 <div style="
@@ -2323,11 +2294,9 @@ box-shadow:
 `;
 
 
-
 document.body.appendChild(
   startScreen
 );
-
 
 
 document
@@ -2353,7 +2322,7 @@ zeroButton.addEventListener(
 
 
     /* ================================================= */
-    /* İLK BASIŞ: MEVCUT KONUMU SIFIRLA */
+    /* İLK BASIŞ */
 /* ================================================= */
 
     if(
@@ -2412,7 +2381,7 @@ zeroButton.addEventListener(
 
 
     /* ================================================= */
-    /* İKİNCİ BASIŞ: YERÇEKİMİ REFERANSI */
+    /* İKİNCİ BASIŞ */
 /* ================================================= */
 
     else{
