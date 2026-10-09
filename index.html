@@ -1561,6 +1561,64 @@ height:240px;
   z-index:650;
 }
 .currentLocationButton .locationIcon{display:block;width:20px;height:20px;}
+
+/* Rota kaydı: dört kompakt kontrol, konum butonuyla aynı 38x38 ölçü. */
+.routeToolbar{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  min-width:0;
+}
+.routeTimer{
+  min-width:56px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 5px;
+  box-sizing:border-box;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:8px;
+  background:rgba(0,0,0,.34);
+  color:#fff;
+  font:700 13px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums;
+}
+.routeControlButton{
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:8px;
+  background:rgba(5,15,22,.95);
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.28);
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.routeControlButton svg{width:19px;height:19px;display:block;}
+.routeControlButton:active{transform:scale(.94);}
+.routeControlButton:disabled{opacity:.38;cursor:not-allowed;transform:none;}
+.routeControlButton.is-active{border-color:#35e6a1;color:#35e6a1;background:rgba(10,55,42,.96);}
+.routeControlButton.is-paused{border-color:#ffbf47;color:#ffbf47;}
+.routeControlButton.is-stop{border-color:#ff5964;color:#ff8b92;}
+.routeControlButton.is-reset-holding{border-color:#ff5964;background:#641d25;color:#fff;}
+.routeControlButton:focus-visible{outline:2px solid #35e6a1;outline-offset:2px;}
+.routeControlButton .buttonText{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.routeStatusLine{
+  margin:-5px 0 12px;
+  color:#aeb9c0;
+  font-size:11px;
+  text-align:right;
+  min-height:13px;
+}
 @media(max-width:600px){
   .directionSection{
     width:calc(100% - 20px);
@@ -1570,6 +1628,8 @@ height:240px;
     border-radius:18px;
   }
   .directionHeader{align-items:flex-start;flex-direction:column;}
+  .directionHeader .routeToolbar{align-self:flex-end;width:100%;}
+  .routeStatusLine{margin-top:0;}
   .compassMapFrame{width:min(86vw,360px);}
   .currentLocationButton{right:8px;bottom:8px;font-size:11px;padding:8px 10px;}
 }
@@ -1683,7 +1743,7 @@ id="chartNoData">
 
 RAKIM VERİSİ BEKLENİYOR
 
-</div></div></section><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div></div><button id="currentLocationButton" class="currentLocationButton" type="button" aria-label="Mevcut konumu göster" title="Mevcut konumu göster"><svg class="locationIcon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></section><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+</div></div></section><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="routeToolbar" role="group" aria-label="Rota kaydı kontrolleri"><div class="routeTimer" id="routeTimer" role="timer" aria-label="Geçen süre">00:00</div><button class="routeControlButton" id="routeStartButton" type="button" aria-label="Rotayı başlat" title="Başlat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8v14.4L19 12 7 4.8Z" fill="currentColor"/></svg><span class="buttonText">Başlat</span></button><button class="routeControlButton" id="routePauseButton" type="button" aria-label="Rotayı duraklat" title="Duraklat / devam et" aria-pressed="false" disabled><svg id="routePauseIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM15 5h4v14h-4z" fill="currentColor"/></svg><span class="buttonText">Duraklat / devam et</span></button><button class="routeControlButton" id="routeStopButton" type="button" aria-label="Rotayı durdur" title="Durdur" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5" fill="currentColor"/></svg><span class="buttonText">Durdur</span></button><button class="routeControlButton" id="routeResetButton" type="button" aria-label="Sıfırlamak için 3 saniye basılı tut" title="3 saniye basılı tut: rotayı ve süreyi sıfırla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 11a7.5 7.5 0 1 1 2.1 5.2M4.5 4.8V11h6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="buttonText">3 saniye basılı tutarak sıfırla</span></button></div></div><div class="routeStatusLine" id="routeStatusLine" aria-live="polite">Başlat'a basınca rota kaydı başlar</div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div></div><button id="currentLocationButton" class="currentLocationButton" type="button" aria-label="Mevcut konumu göster" title="Mevcut konumu göster"><svg class="locationIcon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></section><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 
 (async function(){
 
@@ -1930,9 +1990,34 @@ HARİTA / PUSULA
 
 let satelliteMap = null;
 let mapMarker = null;
+let mapTrackLine = null;
+let mapTrackPoints = [];
+let lastTrackPoint = null;
+
+/* Rota kaydı ve kronometre durumları */
+let routeRecording = false;
+let routePaused = false;
+let routeStopped = false;
+let routeElapsedBeforeRun = 0;
+let routeRunStartedAt = 0;
+let routeTimerInterval = null;
+let resetHoldTimeout = null;
+let resetHoldTriggered = false;
+
+const routeTimerElement = document.getElementById("routeTimer");
+const routeStatusLine = document.getElementById("routeStatusLine");
+const routeStartButton = document.getElementById("routeStartButton");
+const routePauseButton = document.getElementById("routePauseButton");
+const routeStopButton = document.getElementById("routeStopButton");
+const routeResetButton = document.getElementById("routeResetButton");
+const routePauseIcon = document.getElementById("routePauseIcon");
+
 let currentHeading = null;
 let mapHasCentered = false;
 let lastKnownCoords = null;
+
+/* GPS titreşimini iz çizgisine taşımamak için minimum hareket mesafesi. */
+const MAP_TRACK_MIN_DISTANCE = 3;
 
 const gpsStatus = document.getElementById("gpsStatus");
 const mapMessage = document.getElementById("mapMessage");
@@ -2014,6 +2099,14 @@ L.tileLayer(
 {maxZoom:19}
 ).addTo(satelliteMap);
 
+mapTrackLine = L.polyline([], {
+color:"#35e6a1",
+weight:4,
+opacity:0.95,
+lineCap:"round",
+lineJoin:"round"
+}).addTo(satelliteMap);
+
 mapMarker = L.circleMarker([39,35], {
 radius:4,
 color:"#ffffff",
@@ -2035,6 +2128,31 @@ if(!satelliteMap) return;
 
 const latlng = [coords.latitude, coords.longitude];
 lastKnownCoords = {latitude:coords.latitude, longitude:coords.longitude};
+
+/* Konum geçmişini yalnızca kayıt aktifken çiz. Küçük GPS oynamaları filtrelenir. */
+const accuracyForTrack = Number.isFinite(coords.accuracy) ? coords.accuracy : 999;
+if(routeRecording && !routePaused && !routeStopped && accuracyForTrack <= 35){
+  let shouldAddTrackPoint = !lastTrackPoint;
+  if(lastTrackPoint){
+    const movedMeters = satelliteMap.distance(lastTrackPoint, latlng);
+    if(movedMeters >= MAP_TRACK_MIN_DISTANCE){
+      shouldAddTrackPoint = true;
+    }
+  }
+
+  if(shouldAddTrackPoint){
+    mapTrackPoints.push(latlng);
+    lastTrackPoint = L.latLng(latlng[0], latlng[1]);
+
+    /* Bellek ve çizim performansı için son 3000 noktayı tut. */
+    if(mapTrackPoints.length > 3000){
+      mapTrackPoints = mapTrackPoints.slice(-3000);
+    }
+    if(mapTrackLine){
+      mapTrackLine.setLatLngs(mapTrackPoints);
+    }
+  }
+}
 
 if(!mapHasCentered){
 satelliteMap.setView(latlng, 17, {animate:false});
@@ -2061,6 +2179,164 @@ mapMessage.textContent = "UYDU GÖRÜNTÜSÜ";
 /* =======================================================
 RAKIM GEÇMİŞİ
 ======================================================== */
+
+function formatRouteTime(milliseconds){
+  const totalSeconds = Math.floor(Math.max(0, milliseconds) / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+}
+
+function getRouteElapsed(){
+  if(routeRecording && !routePaused && !routeStopped){
+    return routeElapsedBeforeRun + (Date.now() - routeRunStartedAt);
+  }
+  return routeElapsedBeforeRun;
+}
+
+function updateRouteTimer(){
+  if(routeTimerElement){
+    routeTimerElement.textContent = formatRouteTime(getRouteElapsed());
+  }
+}
+
+function updateRouteControls(){
+  routeStartButton.classList.toggle("is-active", routeRecording && !routePaused && !routeStopped);
+  routeStartButton.setAttribute("aria-pressed", String(routeRecording && !routePaused && !routeStopped));
+  routeStartButton.disabled = routeRecording || routeStopped;
+
+  routePauseButton.disabled = !routeRecording || routeStopped;
+  routePauseButton.classList.toggle("is-paused", routePaused);
+  routePauseButton.setAttribute("aria-pressed", String(routePaused));
+  routePauseButton.setAttribute("aria-label", routePaused ? "Rotaya devam et" : "Rotayı duraklat");
+  routePauseIcon.innerHTML = routePaused
+    ? '<path d="M8 5v14l11-7L8 5Z" fill="currentColor"/>'
+    : '<path d="M7 5h4v14H7zM15 5h4v14h-4z" fill="currentColor"/>';
+
+  routeStopButton.disabled = !routeRecording || routeStopped;
+  routeStopButton.classList.toggle("is-stop", routeStopped);
+
+  if(routeStatusLine){
+    if(routeStopped) routeStatusLine.textContent = "Kayıt durdu · Rotayı silmek için sıfırlama düğmesini 3 saniye basılı tut";
+    else if(routePaused) routeStatusLine.textContent = "Kayıt duraklatıldı · Devam etmek için duraklat düğmesine bas";
+    else if(routeRecording) routeStatusLine.textContent = "ROTA KAYDEDİLİYOR";
+    else routeStatusLine.textContent = "Başlat'a basınca rota kaydı başlar";
+  }
+}
+
+routeStartButton.addEventListener("click", function(){
+  if(routeRecording || routeStopped) return;
+  routeRecording = true;
+  routePaused = false;
+  routeRunStartedAt = Date.now();
+  routeTimerInterval = window.setInterval(updateRouteTimer, 250);
+  updateRouteControls();
+  updateRouteTimer();
+});
+
+routePauseButton.addEventListener("click", function(){
+  if(!routeRecording || routeStopped) return;
+
+  if(routePaused){
+    routePaused = false;
+    routeRunStartedAt = Date.now();
+  }else{
+    routeElapsedBeforeRun = getRouteElapsed();
+    routePaused = true;
+  }
+
+  updateRouteControls();
+  updateRouteTimer();
+});
+
+routeStopButton.addEventListener("click", function(){
+  if(!routeRecording || routeStopped) return;
+
+  routeElapsedBeforeRun = getRouteElapsed();
+  routeRecording = false;
+  routePaused = false;
+  routeStopped = true;
+
+  if(routeTimerInterval !== null){
+    window.clearInterval(routeTimerInterval);
+    routeTimerInterval = null;
+  }
+
+  updateRouteControls();
+  updateRouteTimer();
+});
+
+function cancelResetHold(){
+  if(resetHoldTimeout !== null){
+    window.clearTimeout(resetHoldTimeout);
+    resetHoldTimeout = null;
+  }
+  if(!resetHoldTriggered){
+    routeResetButton.classList.remove("is-reset-holding");
+  }
+}
+
+function beginResetHold(event){
+  if(event && event.type === "contextmenu") event.preventDefault();
+  if(resetHoldTimeout !== null) window.clearTimeout(resetHoldTimeout);
+  resetHoldTriggered = false;
+  routeResetButton.classList.add("is-reset-holding");
+  routeStatusLine.textContent = "Sıfırlamak için 3 saniye basılı tut…";
+
+  resetHoldTimeout = window.setTimeout(function(){
+    resetHoldTriggered = true;
+    routeRecording = false;
+    routePaused = false;
+    routeStopped = false;
+    routeElapsedBeforeRun = 0;
+    routeRunStartedAt = 0;
+
+    if(routeTimerInterval !== null){
+      window.clearInterval(routeTimerInterval);
+      routeTimerInterval = null;
+    }
+
+    mapTrackPoints = [];
+    lastTrackPoint = null;
+    if(mapTrackLine) mapTrackLine.setLatLngs([]);
+
+    routeResetButton.classList.remove("is-reset-holding");
+    updateRouteTimer();
+    updateRouteControls();
+    routeStatusLine.textContent = "Rota ve süre sıfırlandı";
+    window.setTimeout(function(){
+      if(!routeRecording && !routePaused && !routeStopped){
+        routeStatusLine.textContent = "Başlat'a basınca rota kaydı başlar";
+      }
+    }, 1800);
+  }, 3000);
+}
+
+function endResetHold(){
+  if(resetHoldTimeout !== null){
+    window.clearTimeout(resetHoldTimeout);
+    resetHoldTimeout = null;
+  }
+  if(!resetHoldTriggered){
+    routeResetButton.classList.remove("is-reset-holding");
+    routeStatusLine.textContent = routeStopped
+      ? "Kayıt durdu · Rotayı silmek için sıfırlama düğmesini 3 saniye basılı tut"
+      : routePaused
+        ? "Kayıt duraklatıldı · Devam etmek için duraklat düğmesine bas"
+        : routeRecording
+          ? "ROTA KAYDEDİLİYOR"
+          : "Başlat'a basınca rota kaydı başlar";
+  }
+}
+
+routeResetButton.addEventListener("pointerdown", beginResetHold);
+routeResetButton.addEventListener("pointerup", endResetHold);
+routeResetButton.addEventListener("pointerleave", endResetHold);
+routeResetButton.addEventListener("pointercancel", endResetHold);
+routeResetButton.addEventListener("contextmenu", function(event){ event.preventDefault(); });
+
+updateRouteControls();
+updateRouteTimer();
 
 currentLocationButton.addEventListener("click", function(){
 /* Buton yalnızca tıklama anında çalışır; basılı/aktif kalmaz. */
