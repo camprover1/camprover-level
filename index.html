@@ -1477,7 +1477,7 @@ height:240px;
   border:1px solid rgba(255,255,255,.32);
   transform:rotate(0deg);
 }
-.compassCardinal{
+.compassRing .compassCardinal{
   position:absolute;
   color:#fff;
   font-size:12px;
@@ -1545,7 +1545,7 @@ height:240px;
 .currentLocationButton:active{transform:scale(.94);}
 .currentLocationButton:focus,
 .currentLocationButton:focus-visible{outline:none;box-shadow:0 2px 8px rgba(0,0,0,.35);}
-.compassMapRotator{transform-origin:center center;transition:transform .12s linear;}
+.compassMapRotator{transform-origin:center center;transition:transform .35s ease-out;}
 
 /* Konum düğmesi harita dairesinin değil, büyük harita kutusunun sağ altındadır. */
 .directionSection{position:relative;padding-bottom:64px;}
@@ -1937,14 +1937,26 @@ function normalizeHeading(value){
 return ((value % 360) + 360) % 360;
 }
 
-function updateHeadingDisplay(){
-/* Telefonun pusula yönüne göre uydu haritasını döndür.
-   Yön etiketleri ve pusula halkası sabit kalır. */
-if(compassMapRotator && currentHeading !== null){
-  compassMapRotator.style.transform = "rotate(" + (-currentHeading) + "deg)";
+let smoothedHeading = null;
+const HEADING_SMOOTHING = 0.12; // Düşük değer = daha sakin dönüş
+const HEADING_DEADBAND = 2.0;   // 2 dereceden küçük oynamaları yok say
+
+function smoothAngle(current, target){
+  if(current === null || !Number.isFinite(current)) return target;
+  let difference = ((target - current + 540) % 360) - 180;
+  if(Math.abs(difference) < HEADING_DEADBAND) return current;
+  return (current + difference * HEADING_SMOOTHING + 360) % 360;
 }
-if(compassRing){
-  compassRing.style.transform = "rotate(0deg)";
+
+function updateHeadingDisplay(){
+/* Pusula yönünü yumuşatılmış açıyla uygula.
+   Harita ve yön harfleri birlikte döner. */
+if(compassMapRotator && smoothedHeading !== null){
+  compassMapRotator.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
+}
+if(compassRing && smoothedHeading !== null){
+  /* Harflerin de haritayla birlikte dönmesini sağla. */
+  compassRing.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
 }
 }
 
@@ -1962,6 +1974,7 @@ heading = 360 - event.alpha;
 if(heading === null || !Number.isFinite(heading)) return;
 
 currentHeading = normalizeHeading(heading);
+  smoothedHeading = smoothAngle(smoothedHeading, currentHeading);
 updateHeadingDisplay();
 }
 
