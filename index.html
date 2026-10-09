@@ -92,11 +92,11 @@ position:absolute;
 
 top:7px;
 
-left:50%;
+left:14px;
 
-transform:translateX(-50%);
+transform:none;
 
-font-size:19px;
+font-size:23px;
 
 font-weight:700;
 
@@ -1876,9 +1876,9 @@ height:240px;
 @media(max-width:480px){.voicePanel{padding:16px}.voiceForm{flex-direction:column}.voiceJoinButton{width:100%}.voiceControls{flex-direction:column}.voicePttButton{min-height:72px}.voiceHeading{font-size:16px}}
 
 
-/* iPhone tarzı küçük ekran-açık tut anahtarı; başlığın sağında */
+/* iPhone tarzı küçük ekran-açık tut anahtarı; üst başlığın sağında */
 #screenWakeLockButton{
-  position:fixed;top:5px;right:12px;z-index:1200;
+  position:fixed;top:5px;right:14px;z-index:1200;
   display:flex;align-items:center;justify-content:flex-start;
   width:44px;height:26px;min-width:44px;min-height:26px;padding:2px;
   border:1px solid rgba(255,255,255,.18);border-radius:999px;
@@ -1887,13 +1887,20 @@ height:240px;
   box-shadow:0 1px 5px rgba(0,0,0,.28);
 }
 #screenWakeLockButton .wakeDot{display:block;width:20px;height:20px;border-radius:50%;background:#fff;flex:0 0 auto;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .18s ease;}
-#screenWakeLockLabel{display:none!important;}
+#screenWakeLockLabel{display:none;color:#fff;font-size:10px;font-weight:500;line-height:1;white-space:nowrap;margin-right:7px;}
 #screenWakeLockButton.is-active{background:#34c759;border-color:#34c759;}
 #screenWakeLockButton.is-active .wakeDot{transform:translateX(18px);background:#fff;}
+#screenWakeLockButton.is-active #screenWakeLockLabel{display:inline;position:fixed;right:52px;top:13px;}
 #screenWakeLockButton:focus-visible{outline:2px solid #fff;outline-offset:3px;}
 /* Başlangıç/ÖLÇÜMÜ BAŞLAT ekranında gizli; ölçüm ekranında üst başlığın sağında. */
 body:has(#startScreen:not([style*="display: none"])) #screenWakeLockButton{display:none!important;}
-@media(max-width:480px){#screenWakeLockButton{top:5px;right:10px;width:40px;height:24px;min-width:40px;min-height:24px;}#screenWakeLockButton .wakeDot{width:18px;height:18px;}#screenWakeLockButton.is-active .wakeDot{transform:translateX(16px);}}
+@media(max-width:480px){
+  .brand{left:10px;top:6px;transform:none;font-size:21px;letter-spacing:3px;}
+  #screenWakeLockButton{top:5px;right:10px;width:40px;height:24px;min-width:40px;min-height:24px;}
+  #screenWakeLockButton .wakeDot{width:18px;height:18px;}
+  #screenWakeLockButton.is-active .wakeDot{transform:translateX(16px);}
+  #screenWakeLockButton.is-active #screenWakeLockLabel{right:48px;top:12px;font-size:9px;}
+}
 
 </style>
 <!-- Cloudflare Web Analytics -->
@@ -4012,7 +4019,7 @@ drawAltitudeHistory();
 
 </script>
 <button id="screenWakeLockButton" type="button" aria-pressed="false" title="Ekran uykuya geçmesin">
-  <span class="wakeDot" aria-hidden="true"></span><span id="screenWakeLockLabel">Ekranı açık tut</span>
+  <span id="screenWakeLockLabel">Hep Açık Ekran</span><span class="wakeDot" aria-hidden="true"></span>
 </button>
 <script>
 /* Ekran kilidini önleme: yalnızca kullanıcı düğmeye bastığında etkinleşir. */
@@ -4029,7 +4036,7 @@ drawAltitudeHistory();
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
     button.setAttribute('aria-label', active ? 'Ekranı açık tutma etkin' : 'Ekranı açık tutma kapalı');
-    label.textContent = text || (active ? 'EKRAN AÇIK' : 'EKRANI AÇIK TUT');
+    label.textContent = 'Hep Açık Ekran';
   }
 
   async function enableWakeLock() {
