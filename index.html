@@ -1465,7 +1465,7 @@ height:240px;
   border-radius:50%;
   overflow:hidden;
 }
-.compassMapRotator{transform:rotate(0deg);}
+.compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:transform .35s ease-out;}
 #satelliteMap{background:#172128;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
@@ -1476,6 +1476,8 @@ height:240px;
   border-radius:50%;
   border:1px solid rgba(255,255,255,.32);
   transform:rotate(0deg);
+  transform-origin:50% 50%;
+  transition:transform .35s ease-out;
 }
 .compassRing .compassCardinal{
   position:absolute;
@@ -1548,10 +1550,12 @@ height:240px;
 .compassMapRotator{transform-origin:center center;transition:transform .35s ease-out;}
 
 /* Konum düğmesi harita dairesinin değil, büyük harita kutusunun sağ altındadır. */
-.directionSection{position:relative;padding-bottom:64px;}
+.directionSection{position:relative;padding-bottom:68px;min-height:0;}
 .directionSection .currentLocationButton{
+  position:absolute;
   right:14px;
   bottom:14px;
+  z-index:650;
 }
 .currentLocationButton .locationIcon{display:block;width:20px;height:20px;}
 @media(max-width:600px){
@@ -1676,7 +1680,7 @@ id="chartNoData">
 
 RAKIM VERİSİ BEKLENİYOR
 
-</div></div></section><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div><button id="currentLocationButton" class="currentLocationButton" type="button" aria-label="Mevcut konumu göster" title="Mevcut konumu göster"><svg class="locationIcon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div></section><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+</div></div></section><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div></div><button id="currentLocationButton" class="currentLocationButton" type="button" aria-label="Mevcut konumu göster" title="Mevcut konumu göster"><svg class="locationIcon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></section><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 
 (async function(){
 
