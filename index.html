@@ -1465,7 +1465,7 @@ height:240px;
   border-radius:50%;
   overflow:hidden;
 }
-.compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:transform .35s ease-out;}
+.compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:none;will-change:transform;}
 #satelliteMap{background:#172128;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
@@ -1477,13 +1477,14 @@ height:240px;
   border:1px solid rgba(255,255,255,.32);
   transform:rotate(0deg);
   transform-origin:50% 50%;
-  transition:transform .35s ease-out;
+  transition:none;
+  will-change:transform;
 }
 .compassRing .compassCardinal{
   position:absolute;
   color:#fff;
-  font-size:12px;
-  font-weight:800;
+  font-size:16px;
+  font-weight:900;
   text-shadow:0 1px 4px #000,0 0 5px #000;
   transform:translate(-50%,-50%) rotate(0deg);
   transform-origin:center center;
@@ -1549,7 +1550,7 @@ height:240px;
 .currentLocationButton:active{transform:scale(.94);}
 .currentLocationButton:focus,
 .currentLocationButton:focus-visible{outline:none;box-shadow:0 2px 8px rgba(0,0,0,.35);}
-.compassMapRotator{transform-origin:center center;transition:transform .35s ease-out;}
+.compassMapRotator{transform-origin:center center;transition:none;}
 
 /* Konum düğmesi harita dairesinin değil, büyük harita kutusunun sağ altındadır. */
 .directionSection{position:relative;padding-bottom:68px;min-height:0;}
@@ -1944,8 +1945,8 @@ return ((value % 360) + 360) % 360;
 }
 
 let smoothedHeading = null;
-const HEADING_SMOOTHING = 0.12; // Düşük değer = daha sakin dönüş
-const HEADING_DEADBAND = 2.0;   // 2 dereceden küçük oynamaları yok say
+const HEADING_SMOOTHING = 0.045; // Sensör gürültüsünü daha güçlü süz
+const HEADING_DEADBAND = 2.5;   // 2.5 dereceden küçük oynamaları yok say
 
 function smoothAngle(current, target){
   if(current === null || !Number.isFinite(current)) return target;
@@ -1961,6 +1962,7 @@ if(compassMapRotator && smoothedHeading !== null){
   compassMapRotator.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
 }
 if(compassRing && smoothedHeading !== null){
+  /* CSS geçişi kullanılmaz; kesintisiz JS filtresi titreşimi azaltır. */
   /* Halka yöne göre döner; her harf kendi içinde ters yönde döndürülerek yatay okunur. */
   const mapAngle = -smoothedHeading;
   compassRing.style.transform = "rotate(" + mapAngle + "deg)";
