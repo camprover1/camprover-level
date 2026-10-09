@@ -383,6 +383,41 @@ justify-content:center;
 }
 
 
+
+/* Terazi referans sıfırlama düğmesi: konum düğmesiyle aynı ölçüde. */
+.levelZeroButton{
+  position:absolute;
+  z-index:20;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  min-width:38px;
+  min-height:38px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.32);
+  border-radius:8px;
+  background:rgba(5,15,22,.95);
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.35);
+  transition:border-color .12s,box-shadow .12s;
+}
+.levelZeroButton.is-active{
+  border:2px solid #168cff;
+  box-shadow:0 0 0 2px rgba(22,140,255,.22),0 0 10px rgba(22,140,255,.45);
+}
+.levelZeroButton:focus,.levelZeroButton:focus-visible{outline:none;}
+.levelZeroButton:active{filter:brightness(1.2);}
+@media(max-width:700px){.levelZeroButton{right:9px;}}
+
 /* =========================================================
 YEŞİL DAİRESEL SEVİYE
 ========================================================= */
@@ -1784,7 +1819,7 @@ id="centerPanel"><div class="level"><div class="liquid"><div class="axis horizon
 +10°
 </div><div class="center-dot"></div><div
 class="bubble"
-id="bubble"></div></div></div></section><section
+id="bubble"></div></div></div><button id="levelZeroButton" class="levelZeroButton" type="button" aria-pressed="false" aria-label="Mevcut açıyı sıfır kabul et" title="Mevcut açıyı sıfır kabul et">0°</button></section><section
 class="panel rollPanel"
 id="rollPanel"><div class="panelTitle">
 SAĞ - SOL DENGE
@@ -1989,6 +2024,32 @@ const bubble =
 document.getElementById(
 "bubble"
 );
+
+const levelZeroButton = document.getElementById("levelZeroButton");
+let levelZeroEnabled = false;
+let levelZeroPitch = 0;
+let levelZeroRoll = 0;
+
+levelZeroButton.addEventListener("click", function(){
+  if(!levelZeroEnabled){
+    levelZeroPitch = pitchFiltered;
+    levelZeroRoll = rollFiltered;
+    levelZeroEnabled = true;
+    levelZeroButton.classList.add("is-active");
+    levelZeroButton.setAttribute("aria-pressed","true");
+    levelZeroButton.setAttribute("aria-label","Sıfırlamayı kapat ve normal ölçüme dön");
+    levelZeroButton.title = "Sıfırlama açık — kapatmak için tekrar bas";
+  }else{
+    levelZeroEnabled = false;
+    levelZeroPitch = 0;
+    levelZeroRoll = 0;
+    levelZeroButton.classList.remove("is-active");
+    levelZeroButton.setAttribute("aria-pressed","false");
+    levelZeroButton.setAttribute("aria-label","Mevcut açıyı sıfır kabul et");
+    levelZeroButton.title = "Mevcut açıyı sıfır kabul et";
+  }
+  updateLevel();
+});
 
 
 const altitudeValue =
@@ -2637,19 +2698,22 @@ rollFiltered
 MAX_ANGLE
 );
 
+/* Sıfırlama açıkken, düğmeye basıldığı andaki açılar yeni referans olur. */
+const displayPitch = clamp(pitchFiltered - (levelZeroEnabled ? levelZeroPitch : 0), -MAX_ANGLE, MAX_ANGLE);
+const displayRoll = clamp(rollFiltered - (levelZeroEnabled ? levelZeroRoll : 0), -MAX_ANGLE, MAX_ANGLE);
 
 /* DERECE */
 
 pitchValue.innerHTML =
 formatAngle(
-pitchFiltered
+displayPitch
 ) +
 '<span class="unit">°</span>';
 
 
 rollValue.innerHTML =
 formatAngle(
-rollFiltered
+displayRoll
 ) +
 '<span class="unit">°</span>';
 
@@ -2658,13 +2722,13 @@ rollFiltered
 
 updateBorder(
 pitchPanel,
-pitchFiltered
+displayPitch
 );
 
 
 updateBorder(
 rollPanel,
-rollFiltered
+displayRoll
 );
 
 
@@ -2674,7 +2738,7 @@ BALON
 
 bubblePitch +=
 (
-pitchFiltered -
+displayPitch -
 bubblePitch
 ) *
 BUBBLE_ALPHA;
@@ -2682,7 +2746,7 @@ BUBBLE_ALPHA;
 
 bubbleRoll +=
 (
-rollFiltered -
+displayRoll -
 bubbleRoll
 ) *
 BUBBLE_ALPHA;
@@ -2728,7 +2792,7 @@ ARAÇ GÖRSELLERİ
 
 vehiclePitch +=
 (
-pitchFiltered -
+displayPitch -
 vehiclePitch
 ) *
 VEHICLE_ALPHA;
@@ -2736,7 +2800,7 @@ VEHICLE_ALPHA;
 
 vehicleRoll +=
 (
-rollFiltered -
+displayRoll -
 vehicleRoll
 ) *
 VEHICLE_ALPHA;
