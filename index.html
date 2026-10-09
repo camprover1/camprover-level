@@ -1865,6 +1865,7 @@ height:240px;
 .voiceStatus{margin-top:12px;min-height:20px;color:#b9c6cd;font-size:13px;line-height:1.5}
 .voiceStatus[data-state="good"]{color:#35e27a}.voiceStatus[data-state="bad"]{color:#ff8b8b}
 .voicePeople{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.035);color:#c5d0d5;font-size:12px;line-height:1.7}
+.voicePeopleList{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}.voicePeopleList li{display:block;padding:5px 8px;border-radius:7px;background:rgba(255,255,255,.045);overflow-wrap:anywhere}
 .voiceControls{display:flex;gap:10px;align-items:stretch;margin-top:14px}
 .voicePttButton{flex:1;min-height:66px;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border:1px solid rgba(53,226,122,.65);border-radius:13px;background:#123023;color:#b7f9ce;font:800 15px inherit;letter-spacing:.3px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer}
 .voicePttButton svg{width:23px;height:23px;flex:0 0 auto}
@@ -1875,21 +1876,24 @@ height:240px;
 @media(max-width:480px){.voicePanel{padding:16px}.voiceForm{flex-direction:column}.voiceJoinButton{width:100%}.voiceControls{flex-direction:column}.voicePttButton{min-height:72px}.voiceHeading{font-size:16px}}
 
 
-/* EKRANI AÇIK TUT DÜĞMESİ */
+/* iPhone tarzı küçük ekran-açık tut anahtarı; başlığın sağında */
 #screenWakeLockButton{
-  position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:1200;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  min-height:44px;padding:11px 14px;border:1px solid rgba(53,226,122,.7);
-  border-radius:999px;background:rgba(7,20,27,.96);color:#d7fbe4;
-  font:700 12px/1.2 system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-  box-shadow:0 5px 18px rgba(0,0,0,.4);cursor:pointer;touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
+  position:fixed;top:5px;right:12px;z-index:1200;
+  display:flex;align-items:center;justify-content:flex-start;
+  width:44px;height:26px;min-width:44px;min-height:26px;padding:2px;
+  border:1px solid rgba(255,255,255,.18);border-radius:999px;
+  background:#46515a;cursor:pointer;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;transition:background .18s ease;
+  box-shadow:0 1px 5px rgba(0,0,0,.28);
 }
-#screenWakeLockButton .wakeDot{width:8px;height:8px;border-radius:50%;background:#8b969d;flex:0 0 auto;}
-#screenWakeLockButton.is-active{background:#35e27a;color:#06110a;border-color:#35e27a;}
-#screenWakeLockButton.is-active .wakeDot{background:#075b2a;box-shadow:0 0 0 3px rgba(5,91,42,.15);}
+#screenWakeLockButton .wakeDot{display:block;width:20px;height:20px;border-radius:50%;background:#fff;flex:0 0 auto;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .18s ease;}
+#screenWakeLockLabel{display:none!important;}
+#screenWakeLockButton.is-active{background:#34c759;border-color:#34c759;}
+#screenWakeLockButton.is-active .wakeDot{transform:translateX(18px);background:#fff;}
 #screenWakeLockButton:focus-visible{outline:2px solid #fff;outline-offset:3px;}
-@media(max-width:480px){#screenWakeLockButton{right:10px;bottom:calc(10px + env(safe-area-inset-bottom));font-size:11px;padding:10px 12px;}}
+/* Başlangıç/ÖLÇÜMÜ BAŞLAT ekranında gizli; ölçüm ekranında üst başlığın sağında. */
+body:has(#startScreen:not([style*="display: none"])) #screenWakeLockButton{display:none!important;}
+@media(max-width:480px){#screenWakeLockButton{top:5px;right:10px;width:40px;height:24px;min-width:40px;min-height:24px;}#screenWakeLockButton .wakeDot{width:18px;height:18px;}#screenWakeLockButton.is-active .wakeDot{transform:translateX(16px);}}
 
 </style>
 <!-- Cloudflare Web Analytics -->
@@ -2063,7 +2067,24 @@ RAKIM VERİSİ BEKLENİYOR
     const names = [];
     if (room.localParticipant) names.push((room.localParticipant.name || nicknameInput.value.trim()) + " (sen)");
     room.remoteParticipants.forEach(participant => names.push(participant.name || "Misafir"));
-    people.textContent = names.length ? "Kanaldaki kişiler: " + names.join(" · ") : "Kanala bağlı kullanıcı yok.";
+    people.replaceChildren();
+    const heading = document.createElement("div");
+    heading.textContent = "Kanaldaki kişiler (" + names.length + ")";
+    people.appendChild(heading);
+    if (!names.length) {
+      const empty = document.createElement("div");
+      empty.textContent = "Kanala bağlı kullanıcı yok.";
+      people.appendChild(empty);
+      return;
+    }
+    const list = document.createElement("ul");
+    list.className = "voicePeopleList";
+    names.forEach(name => {
+      const item = document.createElement("li");
+      item.textContent = name;
+      list.appendChild(item);
+    });
+    people.appendChild(list);
   }
 
   async function stopTalking() {
@@ -3991,7 +4012,7 @@ drawAltitudeHistory();
 
 </script>
 <button id="screenWakeLockButton" type="button" aria-pressed="false" title="Ekran uykuya geçmesin">
-  <span class="wakeDot" aria-hidden="true"></span><span id="screenWakeLockLabel">EKRANI AÇIK TUT</span>
+  <span class="wakeDot" aria-hidden="true"></span><span id="screenWakeLockLabel">Ekranı açık tut</span>
 </button>
 <script>
 /* Ekran kilidini önleme: yalnızca kullanıcı düğmeye bastığında etkinleşir. */
@@ -4007,6 +4028,7 @@ drawAltitudeHistory();
   function updateButton(active, text) {
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
+    button.setAttribute('aria-label', active ? 'Ekranı açık tutma etkin' : 'Ekranı açık tutma kapalı');
     label.textContent = text || (active ? 'EKRAN AÇIK' : 'EKRANI AÇIK TUT');
   }
 
