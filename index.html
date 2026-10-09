@@ -1846,6 +1846,34 @@ height:240px;
 .shareLocationButton:active{transform:scale(.94);}
 .shareLocationButton svg{display:block;width:20px;height:20px;}
 .shareLocationButton:focus-visible{outline:2px solid #35e27a;outline-offset:2px;}
+
+/* =======================================================
+   CAMPROVER ORTAK SES / BAS-KONUŞ PANELİ
+======================================================== */
+.voicePanel{width:min(100% - 28px,900px);margin:26px auto 30px;padding:20px;box-sizing:border-box;border:1px solid rgba(53,226,122,.25);border-radius:18px;background:linear-gradient(145deg,rgba(10,24,31,.97),rgba(5,12,18,.97));box-shadow:0 12px 32px rgba(0,0,0,.24);color:#eef5f7}
+.voiceHeader{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.voiceIcon{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:13px;background:rgba(53,226,122,.12);color:#35e27a}
+.voiceIcon svg{width:23px;height:23px}
+.voiceHeading{font-size:18px;font-weight:800;letter-spacing:.5px}
+.voiceSubheading{margin-top:4px;color:#9eacb5;font-size:12px;line-height:1.5}
+.voiceForm{display:flex;gap:9px;margin-top:16px}
+.voiceNickname{min-width:0;flex:1;padding:12px 13px;border:1px solid #30434d;border-radius:10px;background:#0a151c;color:#fff;font:inherit;outline:none}
+.voiceNickname:focus{border-color:#35e27a}
+.voiceJoinButton,.voiceLeaveButton{padding:12px 16px;border:0;border-radius:10px;font:700 13px inherit;cursor:pointer;white-space:nowrap}
+.voiceJoinButton{background:#35e27a;color:#06110a}
+.voiceLeaveButton{background:#27343c;color:#fff}
+.voiceStatus{margin-top:12px;min-height:20px;color:#b9c6cd;font-size:13px;line-height:1.5}
+.voiceStatus[data-state="good"]{color:#35e27a}.voiceStatus[data-state="bad"]{color:#ff8b8b}
+.voicePeople{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.035);color:#c5d0d5;font-size:12px;line-height:1.7}
+.voiceControls{display:flex;gap:10px;align-items:stretch;margin-top:14px}
+.voicePttButton{flex:1;min-height:66px;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border:1px solid rgba(53,226,122,.65);border-radius:13px;background:#123023;color:#b7f9ce;font:800 15px inherit;letter-spacing:.3px;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer}
+.voicePttButton svg{width:23px;height:23px;flex:0 0 auto}
+.voicePttButton:disabled{opacity:.42;cursor:not-allowed}
+.voicePttButton.is-talking{background:#35e27a;color:#06110a;box-shadow:0 0 0 4px rgba(53,226,122,.12)}
+.voiceLeaveButton[hidden],.voiceControls[hidden]{display:none!important}
+.voiceFootnote{margin-top:10px;color:#7f9099;font-size:11px;line-height:1.55}
+@media(max-width:480px){.voicePanel{padding:16px}.voiceForm{flex-direction:column}.voiceJoinButton{width:100%}.voiceControls{flex-direction:column}.voicePttButton{min-height:72px}.voiceHeading{font-size:16px}}
+
 </style>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3ca594a42f884456a7b819f5944a04bf"}'></script>
@@ -1963,7 +1991,218 @@ id="chartNoData">
 
 RAKIM VERİSİ BEKLENİYOR
 
-</div></div></section><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+</div></div></section>
+<section class="voicePanel" id="voicePanel" aria-labelledby="voiceHeading">
+  <div class="voiceHeader">
+    <div class="voiceIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="13" rx="4"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></div>
+    <div><div class="voiceHeading" id="voiceHeading">CAMPROVER ORTAK KANAL</div><div class="voiceSubheading">Takma adını yaz, ortak kanala katıl ve konuşmak için düğmeye basılı tut.</div></div>
+  </div>
+  <form class="voiceForm" id="voiceJoinForm">
+    <input class="voiceNickname" id="voiceNickname" name="nickname" type="text" maxlength="24" autocomplete="nickname" placeholder="Takma adın" aria-label="Takma adın" required>
+    <button class="voiceJoinButton" id="voiceJoinButton" type="submit">KANALA KATIL</button>
+    <button class="voiceLeaveButton" id="voiceLeaveButton" type="button" hidden>AYRIL</button>
+  </form>
+  <div class="voiceStatus" id="voiceStatus" data-state="info" role="status" aria-live="polite">Ses kanalına katılmadın.</div>
+  <div class="voicePeople" id="voicePeople">Kanaldaki kişiler: henüz bağlı değilsin.</div>
+  <div class="voiceControls" id="voiceControls" hidden>
+    <button class="voicePttButton" id="voicePttButton" type="button" disabled aria-label="Konuşmak için basılı tut">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="8" height="13" rx="4"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>
+      <span id="voicePttLabel">KONUŞMAK İÇİN BASILI TUT</span>
+    </button>
+  </div>
+  <div class="voiceFootnote">Mikrofon yalnızca bas-konuş düğmesini basılı tuttuğunda açılır. Sesli konuşma, sayfa açık ve internet bağlantısı etkin olduğunda çalışır. İlk kullanımda tarayıcı mikrofon izni isteyebilir.</div>
+  <div id="voiceAudioContainer" hidden></div>
+</section>
+<script type="module">
+(() => {
+  const TOKEN_ENDPOINT = "https://camprover-level-voice.n-ertan.workers.dev/token";
+  const SDK_URL = "https://cdn.jsdelivr.net/npm/livekit-client@2.15.6/dist/livekit-client.esm.mjs";
+  const form = document.getElementById("voiceJoinForm");
+  const nicknameInput = document.getElementById("voiceNickname");
+  const joinButton = document.getElementById("voiceJoinButton");
+  const leaveButton = document.getElementById("voiceLeaveButton");
+  const status = document.getElementById("voiceStatus");
+  const people = document.getElementById("voicePeople");
+  const controls = document.getElementById("voiceControls");
+  const pttButton = document.getElementById("voicePttButton");
+  const pttLabel = document.getElementById("voicePttLabel");
+  const audioContainer = document.getElementById("voiceAudioContainer");
+  let room = null;
+  let livekit = null;
+  let connecting = false;
+  let talking = false;
+  let audioUnlocked = false;
+
+  function setStatus(message, state = "info") {
+    status.textContent = message;
+    status.dataset.state = state;
+  }
+
+  function updatePeople() {
+    if (!room) {
+      people.textContent = "Kanaldaki kişiler: henüz bağlı değilsin.";
+      return;
+    }
+    const names = [];
+    if (room.localParticipant) names.push((room.localParticipant.name || nicknameInput.value.trim()) + " (sen)");
+    room.remoteParticipants.forEach(participant => names.push(participant.name || "Misafir"));
+    people.textContent = names.length ? "Kanaldaki kişiler: " + names.join(" · ") : "Kanala bağlı kullanıcı yok.";
+  }
+
+  async function stopTalking() {
+    if (!room || !talking) return;
+    talking = false;
+    pttButton.classList.remove("is-talking");
+    pttLabel.textContent = "KONUŞMAK İÇİN BASILI TUT";
+    try {
+      await room.localParticipant.setMicrophoneEnabled(false);
+    } catch (error) {
+      setStatus("Mikrofon kapatılırken hata oluştu. Gerekirse kanaldan ayrıl.", "bad");
+    }
+  }
+
+  async function startTalking() {
+    if (!room || talking || pttButton.disabled) return;
+    talking = true;
+    pttButton.classList.add("is-talking");
+    pttLabel.textContent = "KONUŞUYORSUN — BIRAKINCA KAPANIR";
+    setStatus("Mikrofon açık. Konuşmayı bitirince düğmeyi bırak.", "good");
+    try {
+      await room.localParticipant.setMicrophoneEnabled(true);
+    } catch (error) {
+      talking = false;
+      pttButton.classList.remove("is-talking");
+      pttLabel.textContent = "KONUŞMAK İÇİN BASILI TUT";
+      setStatus("Mikrofon açılamadı. Tarayıcı mikrofon iznini kontrol et.", "bad");
+    }
+  }
+
+  function attachAudio(track) {
+    const element = track.attach();
+    element.autoplay = true;
+    element.playsInline = true;
+    element.setAttribute("aria-label", "Ortak kanaldan gelen ses");
+    audioContainer.appendChild(element);
+    const playResult = element.play();
+    if (playResult && typeof playResult.catch === "function") {
+      playResult.catch(() => {
+        audioUnlocked = false;
+        setStatus("Ses tarayıcı tarafından durduruldu. Sesi etkinleştirmek için bir kez ekrana dokun.", "bad");
+      });
+    }
+  }
+
+  function detachTrack(track) {
+    track.detach().forEach(element => element.remove());
+  }
+
+  async function leaveChannel() {
+    await stopTalking();
+    pttButton.disabled = true;
+    controls.hidden = true;
+    leaveButton.hidden = true;
+    joinButton.hidden = false;
+    joinButton.disabled = false;
+    nicknameInput.disabled = false;
+    if (room) {
+      try { await room.disconnect(); } catch (_) {}
+      room = null;
+    }
+    audioContainer.replaceChildren();
+    updatePeople();
+    setStatus("Kanaldan ayrıldın.", "info");
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (connecting || room) return;
+    const nickname = nicknameInput.value.trim().slice(0, 24);
+    if (!nickname) {
+      setStatus("Lütfen bir takma ad yaz.", "bad");
+      nicknameInput.focus();
+      return;
+    }
+    connecting = true;
+    joinButton.disabled = true;
+    setStatus("Ses kanalı bağlantısı kuruluyor…", "info");
+    try {
+      if (!livekit) livekit = await import(SDK_URL);
+      const response = await fetch(TOKEN_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || ("Token isteği başarısız: " + response.status));
+      if (!result.serverUrl || !result.token) throw new Error("Sunucudan geçerli bağlantı bilgisi alınamadı.");
+      room = new livekit.Room({ adaptiveStream: true, dynacast: true });
+      room.on(livekit.RoomEvent.TrackSubscribed, (track) => {
+        if (track.kind === livekit.Track.Kind.Audio) attachAudio(track);
+      });
+      room.on(livekit.RoomEvent.TrackUnsubscribed, track => detachTrack(track));
+      room.on(livekit.RoomEvent.ParticipantConnected, updatePeople);
+      room.on(livekit.RoomEvent.ParticipantDisconnected, updatePeople);
+      room.on(livekit.RoomEvent.Disconnected, () => {
+        talking = false;
+        pttButton.classList.remove("is-talking");
+        pttLabel.textContent = "KONUŞMAK İÇİN BASILI TUT";
+        pttButton.disabled = true;
+        controls.hidden = true;
+        leaveButton.hidden = true;
+        joinButton.hidden = false;
+        joinButton.disabled = false;
+        nicknameInput.disabled = false;
+        audioContainer.replaceChildren();
+        room = null;
+        updatePeople();
+        setStatus("Ses kanalı bağlantısı kesildi.", "bad");
+      });
+      await room.connect(result.serverUrl, result.token);
+      await room.localParticipant.setMicrophoneEnabled(false);
+      nicknameInput.disabled = true;
+      joinButton.hidden = true;
+      leaveButton.hidden = false;
+      controls.hidden = false;
+      pttButton.disabled = false;
+      audioUnlocked = true;
+      updatePeople();
+      setStatus("Kanala katıldın. Konuşmak için yeşil düğmeyi basılı tut.", "good");
+    } catch (error) {
+      console.error("Camprover ses bağlantısı:", error);
+      if (room) {
+        try { await room.disconnect(); } catch (_) {}
+        room = null;
+      }
+      const message = error && error.message ? error.message : "Bilinmeyen bağlantı hatası";
+      setStatus("Bağlantı kurulamadı: " + message, "bad");
+      joinButton.disabled = false;
+    } finally {
+      connecting = false;
+    }
+  });
+
+  pttButton.addEventListener("pointerdown", event => {
+    if (event.button !== undefined && event.button !== 0) return;
+    event.preventDefault();
+    try { pttButton.setPointerCapture(event.pointerId); } catch (_) {}
+    startTalking();
+  });
+  ["pointerup", "pointercancel", "lostpointercapture", "contextmenu"].forEach(name => {
+    pttButton.addEventListener(name, event => {
+      if (name === "contextmenu") event.preventDefault();
+      stopTalking();
+    });
+  });
+  window.addEventListener("blur", stopTalking);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopTalking();
+  });
+  leaveButton.addEventListener("click", leaveChannel);
+  document.addEventListener("pointerdown", () => { audioUnlocked = true; }, { once: true, passive: true });
+})();
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 
 (async function(){
 
