@@ -809,36 +809,37 @@ font-size:25px;
 }
 
 
-/* Dashboard */
+/* Dashboard: üst kutu ve alt göstergeleri sıkı biçimde grupla. */
 
 .dashboard{
 
-/* Ana ekranı biraz kısalt: alt denge kartları daha yukarı gelir. */
-height:calc(100vh - 24px);
-
-min-height:576px;
+/* İçeriği ekran yüksekliğine yaymak yerine doğal yüksekliğinde tut. */
+height:auto;
+min-height:0;
 
 display:grid;
 
 grid-template-columns:
 1fr 1fr;
 
+/* İlk satır sabit: terazinin kutusunun ebatı değişmez. */
 grid-template-rows:
-minmax(0,1fr)
-minmax(150px,.43fr);
+300px
+155px;
 
-gap:10px;
+/* Terazi kutusu ile alt göstergeler arasında küçük boşluk. */
+gap:6px;
 
-/* Üstteki boşluğu azalt; bütün paneller yukarı taşınsın. */
+/* Tüm ana alanı yukarı taşı. */
 padding:
-75px
+62px
 10px
-10px;
+0;
 
 }
 
 
-/* Merkez: biraz yükseltilmiş kutu; yeşil terazi içeride ortalı kalır. */
+/* Merkez kutunun boyutları korunur; yalnızca konumu yukarı alınır. */
 
 .centerPanel{
 
@@ -855,7 +856,8 @@ min-height:300px;
 max-height:300px;
 min-width:0;
 
-align-self:center;
+align-self:start;
+justify-self:stretch;
 justify-content:center;
 align-items:center;
 
