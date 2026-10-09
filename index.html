@@ -837,7 +837,7 @@ padding:
 }
 
 
-/* Merkez */
+/* Merkez: dış dikdörtgeni ekran görüntüsündeki kırmızı sınır kadar kısalt */
 
 .centerPanel{
 
@@ -849,10 +849,14 @@ border-width:3px;
 
 border-radius:18px;
 
-height:70%;
-min-height:0;
+height:220px;
+min-height:220px;
+max-height:220px;
+min-width:0;
+
 align-self:center;
 justify-content:center;
+align-items:center;
 
 }
 
@@ -865,10 +869,10 @@ height:min(58vw,290px);
 
 max-width:90%;
 
-max-height:88%;
+max-height:none;
 
 aspect-ratio:1 / 1;
-flex-shrink:1;
+flex-shrink:0;
 
 }
 
@@ -991,7 +995,9 @@ height:min(54vw,270px);
 
 max-width:90%;
 
-max-height:88%;
+max-height:none;
+
+flex-shrink:0;
 
 aspect-ratio:1 / 1;
 
