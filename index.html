@@ -1772,6 +1772,12 @@ height:240px;
   .dashboard{padding-top:105px;}
 }
 
+/* Üst başlık ve GPS bilgileri yalnızca ölçüm ekranında görünür. */
+.brand,
+.gpsInfo{
+  visibility:hidden;
+}
+
 </style></head><body><div id="startScreen"><div class="startBox"><div class="startTitle">
 CAMPROVER
 </div><div class="startText">
@@ -3569,6 +3575,12 @@ startGPS();
 
 startScreen.style.display =
 "none";
+
+/* Ölçüm başlatılınca sabit üst başlığı ve GPS değerlerini göster. */
+const topBrand = document.querySelector(".brand");
+const topGpsInfo = document.querySelector(".gpsInfo");
+if (topBrand) topBrand.style.visibility = "visible";
+if (topGpsInfo) topGpsInfo.style.visibility = "visible";
 
 
 }catch(error){
