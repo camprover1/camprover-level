@@ -1,556 +1,3108 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>Camprover Level</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<style>
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+><meta
+http-equiv="Cache-Control"
+content="no-cache,no-store,must-revalidate"
+><meta
+http-equiv="Pragma"
+content="no-cache"
+><meta
+http-equiv="Expires"
+content="0"
+><title>Camprover Level</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><style>
+
+/* =========================================================
+RENKLER
+========================================================= */
+
 :root{
-  --bg:#070b0f;
-  --panel:#0d1319;
-  --panel-border:#202b33;
-  --text:#f4f7f9;
-  --muted:#7d8992;
-  --level-blue:#00A8FF;
-  --green:#25e87a;
+
+--bg:#070b0f;
+
+--panel:#0d1319;
+
+--panel-border:#202b33;
+
+--text:#f4f7f9;
+
+--muted:#7d8992;
+
+/* MAVİ TONU */
+--level-blue:#00A8FF;
+
+--green:#25e87a;
+
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;min-height:100%;margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden;overflow-y:auto}
-body{position:relative}
-.brand{position:absolute;top:7px;left:50%;transform:translateX(-50%);font-size:19px;font-weight:700;letter-spacing:4px;color:#f1f5f7;z-index:20;white-space:nowrap}
-.gpsInfo{position:absolute;top:38px;left:50%;transform:translateX(-50%);width:min(420px,72vw);display:flex;justify-content:space-around;align-items:center;padding:8px 18px;border:2px solid rgba(0,168,255,.35);border-radius:12px;background:rgba(8,12,16,.88);box-shadow:0 0 14px rgba(0,168,255,.08);z-index:20}
-.gpsItem{display:flex;flex-direction:column;align-items:center;min-width:120px}
-.gpsLabel{font-size:12px;font-weight:600;letter-spacing:1.5px;color:#8e9aa3}
-.gpsValue{font-size:26px;font-weight:700;line-height:1.1;letter-spacing:.5px;color:#f5f8fa;white-space:nowrap}
-.dashboard{width:100%;height:100vh;min-height:600px;display:grid;grid-template-columns:1fr 1.05fr 1fr;gap:18px;align-items:center;padding:85px 25px 25px}
-.panel{position:relative;height:calc(100vh - 110px);min-height:430px;background:linear-gradient(145deg,rgba(17,24,31,.96),rgba(8,12,16,.96));border:4px solid var(--panel-border);border-radius:22px;display:flex;flex-direction:column;align-items:center;overflow:hidden;transition:border-color .25s ease,box-shadow .25s ease}
-.panelTitle{margin-top:24px;font-size:14px;font-weight:700;letter-spacing:2px;color:#9aa5ad;text-align:center}
-.value{margin-top:8px;font-size:58px;line-height:1;font-weight:700;letter-spacing:-2px;color:#f5f7f8}
-.unit{font-size:.45em;margin-left:3px;vertical-align:top;position:relative;top:5px}
-.vehicleWrap{width:100%;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:15px 25px 25px}
-.vehicle{width:90%;max-width:480px;max-height:75%;object-fit:contain;display:block;transform-origin:center center;transition:none;will-change:transform}
-.centerPanel{justify-content:center}
-.level{position:relative;width:min(420px,34vw);height:min(420px,34vw);max-width:90%;max-height:75%;aspect-ratio:1/1;border-radius:50%;background:radial-gradient(circle at center,#18251f 0%,#101914 58%,#0b100d 100%);border:3px solid rgba(37,232,122,.28);box-shadow:inset 0 0 30px rgba(0,0,0,.75),0 0 20px rgba(37,232,122,.05);overflow:hidden}
-.liquid{position:absolute;inset:0;border-radius:50%}
-.axis{position:absolute;background:rgba(37,232,122,.22);pointer-events:none}
-.axis.horizontal{left:7%;right:7%;top:50%;height:1px;transform:translateY(-50%)}
-.axis.vertical{top:7%;bottom:7%;left:50%;width:1px;transform:translateX(-50%)}
-.tick{position:absolute;background:rgba(37,232,122,.28);border-radius:2px}
-.tick.horizontal{width:1px;height:9px;top:50%}
-.tick.vertical{width:9px;height:1px;left:50%}
-.x1{left:38%;transform:translate(-50%,-50%)}
-.x2{left:44%;transform:translate(-50%,-50%)}
-.x3{left:56%;transform:translate(-50%,-50%)}
-.x4{left:62%;transform:translate(-50%,-50%)}
-.y1{top:38%;transform:translate(-50%,-50%)}
-.y2{top:44%;transform:translate(-50%,-50%)}
-.y3{top:56%;transform:translate(-50%,-50%)}
-.y4{top:62%;transform:translate(-50%,-50%)}
-.levelLabel{position:absolute;color:rgba(190,230,207,.48);font-size:11px;font-weight:600;pointer-events:none}
-.labelTop{top:10%;left:50%;transform:translateX(-50%)}
-.labelBottom{bottom:10%;left:50%;transform:translateX(-50%)}
-.labelLeft{left:9%;top:50%;transform:translateY(-50%)}
-.labelRight{right:9%;top:50%;transform:translateY(-50%)}
-.center-dot{position:absolute;left:50%;top:50%;width:7px;height:7px;transform:translate(-50%,-50%);border-radius:50%;background:#d5ffe4;box-shadow:0 0 8px rgba(37,232,122,.7);z-index:5}
-.bubble{position:absolute;left:50%;top:50%;width:42px;height:42px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#d8ffe7 0%,#6aff9d 18%,#25e87a 45%,#12a84e 75%,#087036 100%);border:2px solid rgba(220,255,232,.75);box-shadow:0 0 15px rgba(37,232,122,.55),inset 0 0 9px rgba(255,255,255,.28);z-index:4;will-change:transform}
-@media(max-width:700px){
-  .brand{top:5px;font-size:17px;letter-spacing:3.5px}
-  .gpsInfo{top:29px;width:min(88vw,430px);padding:7px 12px;border-radius:11px}
-  .gpsItem{min-width:110px}
-  .gpsLabel{font-size:11px;letter-spacing:1.3px}
-  .gpsValue{font-size:25px}
-  .dashboard{height:calc(100vh - 24px);min-height:576px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) minmax(150px,.43fr);gap:10px;padding:105px 10px 10px}
-  .centerPanel{grid-column:1/3;grid-row:1;border-width:3px;border-radius:18px;min-height:0;justify-content:center}
-  .level{width:min(58vw,290px);height:min(58vw,290px);max-width:64%;max-height:70%}
-  .bubble{width:34px;height:34px}
-  .levelLabel{font-size:9px}
-  .pitchPanel{grid-column:1;grid-row:2}
-  .rollPanel{grid-column:2;grid-row:2}
-  .panel{width:100%;height:100%;min-height:0;border-width:3px;border-radius:16px}
-  .panelTitle{margin-top:9px;font-size:10px;letter-spacing:1px;white-space:nowrap}
-  .value{margin-top:5px;font-size:32px}
-  .vehicleWrap{padding:3px 8px 8px}
-  .vehicle{width:95%;max-height:80%}
+
+
+/* =========================================================
+GENEL
+========================================================= */
+
+*{
+
+box-sizing:border-box;
+
+-webkit-tap-highlight-color:transparent;
+
 }
-@media(max-width:700px) and (max-height:700px){
-  .dashboard{padding-top:100px}
-  .level{width:min(54vw,270px);height:min(54vw,270px);max-width:60%;max-height:67%}
-  .gpsInfo{top:27px}
-  .gpsValue{font-size:23px}
-  .panelTitle{font-size:9px}
-  .value{font-size:29px}
+
+
+html,
+body{
+
+width:100%;
+
+min-height:100%;
+
+margin:0;
+
+background:var(--bg);
+
+color:var(--text);
+
+font-family:
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+sans-serif;
+
+overflow-x:hidden;
+
+overflow-y:auto;
+
 }
-#startScreen{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:#070b0f}
-.startBox{width:min(90vw,400px);text-align:center}
-.startTitle{font-size:28px;font-weight:700;letter-spacing:4px;margin-bottom:12px}
-.startText{color:#7d8992;font-size:14px;line-height:1.5;margin-bottom:28px}
-#startButton{border:1px solid rgba(0,168,255,.6);background:rgba(0,168,255,.12);color:#fff;border-radius:14px;padding:15px 28px;font-size:15px;font-weight:700;letter-spacing:1px}
-#startButton:active{transform:scale(.97)}
-.altitudeHistory{width:calc(100% - 50px);margin:0 auto 40px;padding:22px;background:linear-gradient(145deg,rgba(17,24,31,.96),rgba(8,12,16,.96));border:4px solid var(--panel-border);border-radius:22px;min-height:400px}
-.historyHeader{display:flex;justify-content:space-between;align-items:center;gap:20px}
-.historyTitle{font-size:15px;font-weight:700;letter-spacing:2px;color:#9aa5ad}
-.historyButtons{display:flex;gap:6px}
-.historyButtons button{border:1px solid #26343d;background:#10171d;color:#89959e;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600}
-.historyButtons button.active{color:#fff;border-color:var(--level-blue);background:rgba(0,168,255,.12)}
-.historyStats{display:flex;gap:35px;margin-top:18px}
-.historyStats div{display:flex;flex-direction:column;gap:3px}
-.historyStats span{font-size:9px;letter-spacing:1.5px;color:#68747c}
-.historyStats strong{font-size:16px;color:#e9f0f4}
-.altitudeChart{position:relative;width:100%;height:280px;margin-top:15px;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
-.altitudeChart svg{width:100%;height:100%;display:block}
-.altitudePath{fill:none;stroke:#00A8FF;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
-.altitudeFill{fill:url(#altitudeGradient);stroke:none}
-.chartNoData{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#59656d;font-size:12px;letter-spacing:1px}
-@media(max-width:700px){
-  .altitudeHistory{width:calc(100% - 20px);margin:10px auto 30px;padding:14px;border-width:3px;border-radius:16px;min-height:340px}
-  .historyHeader{flex-direction:column;align-items:flex-start;gap:12px}
-  .historyButtons{width:100%;justify-content:space-between}
-  .historyButtons button{flex:1;padding:8px 4px;font-size:10px}
-  .historyStats{gap:22px;margin-top:14px}
-  .historyStats strong{font-size:14px}
-  .altitudeChart{height:240px}
+
+
+body{
+
+position:relative;
+
 }
-.directionSection{width:calc(100% - 50px);margin:0 auto 40px;padding:16px;background:linear-gradient(145deg,rgba(17,24,31,.96),rgba(8,12,16,.96));border:4px solid var(--panel-border);border-radius:22px}
-.directionHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-.directionTitle{color:#9aa5ad;font-size:13px;font-weight:700;letter-spacing:2px}
-.gpsStatus{flex-shrink:0;padding:6px 9px;border:1px solid rgba(255,255,255,.22);border-radius:8px;color:rgba(255,255,255,.8);background:rgba(0,0,0,.38);font-size:11px;letter-spacing:.6px;font-variant-numeric:tabular-nums}
-.compassMapFrame{position:relative;width:100%;height:min(62vh,520px);min-height:260px;overflow:hidden;border-radius:13px;background:#111920;border:1px solid rgba(255,255,255,.13);isolation:isolate}
-.compassMapRotator{position:absolute;inset:-35%;transform:rotate(0deg);transform-origin:center center;will-change:transform}
-#satelliteMap{position:absolute;inset:0;width:100%;height:100%;background:#18221c}
-.compassRing{position:absolute;inset:12px;border:1px solid rgba(255,255,255,.48);border-radius:50%;pointer-events:none;z-index:500;box-shadow:0 0 0 1px rgba(0,0,0,.18),inset 0 0 18px rgba(0,0,0,.08)}
-.compassCardinal{position:absolute;color:rgba(255,255,255,.78);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:clamp(12px,2.2vw,17px);font-weight:500;letter-spacing:2px;text-shadow:0 1px 4px rgba(0,0,0,.95);transform:translate(-50%,-50%)}
-.compassN{top:5%;left:50%}
-.compassE{top:50%;right:2%;transform:translate(0,-50%)}
-.compassS{bottom:2%;left:50%;transform:translate(-50%,0)}
-.compassW{top:50%;left:2%;transform:translate(0,-50%)}
-.compassNE{top:18%;right:15%}
-.compassSE{bottom:15%;right:15%}
-.compassSW{bottom:15%;left:15%}
-.compassNW{top:18%;left:15%}
-.compassTick{position:absolute;left:50%;top:0;width:1px;height:9px;background:rgba(255,255,255,.52);transform-origin:50% calc(var(--ring-radius,50%)*1)}
-.compassCenterArrow{position:absolute;z-index:510;left:50%;top:50%;width:0;height:0;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 3px rgba(0,0,0,.9));pointer-events:none}
-.compassCenterArrow::before{content:"";display:block;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:30px solid #ff3038}
-.compassCenterArrow::after{content:"";position:absolute;left:-4px;top:25px;width:8px;height:13px;background:#e9edf0;clip-path:polygon(0 0,100% 0,50% 100%)}
-.mapMessage{position:absolute;z-index:520;left:50%;bottom:12px;transform:translateX(-50%);max-width:90%;padding:7px 10px;border-radius:7px;color:rgba(255,255,255,.82);background:rgba(0,0,0,.62);font-size:11px;text-align:center;white-space:nowrap;pointer-events:none}
-@media(max-width:700px){
-  .directionSection{width:calc(100% - 20px);margin:10px auto 24px;padding:12px;border-width:3px;border-radius:16px}
-  .directionTitle{font-size:11px;letter-spacing:1.5px}
-  .compassMapFrame{height:min(68vh,460px);min-height:250px}
-  .compassRing{inset:10px}
-  .compassCenterArrow::before{border-left-width:7px;border-right-width:7px;border-bottom-width:25px}
-  .compassCenterArrow::after{top:21px;height:11px}
+
+
+/* =========================================================
+CAMPROVER
+========================================================= */
+
+.brand{
+
+position:absolute;
+
+top:7px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+font-size:19px;
+
+font-weight:700;
+
+letter-spacing:4px;
+
+color:#f1f5f7;
+
+z-index:20;
+
+white-space:nowrap;
+
 }
-</style>
-</head>
-<body>
-<div id="startScreen">
-  <div class="startBox">
-    <div class="startTitle">CAMPROVER</div>
-    <div class="startText">Telefonu araç tutucusuna yerleştirin ve ölçümü başlatın.</div>
-    <button id="startButton">ÖLÇÜMÜ BAŞLAT</button>
-  </div>
-</div>
-<div class="brand">CAMPROVER</div>
-<div class="gpsInfo">
-  <div class="gpsItem">
-    <span class="gpsLabel">RAKIM</span>
-    <span class="gpsValue" id="altitudeValue">-- m</span>
-  </div>
-  <div class="gpsItem">
-    <span class="gpsLabel">HIZ</span>
-    <span class="gpsValue" id="speedValue">-- km/h</span>
-  </div>
-</div>
-<div class="dashboard">
-  <section class="panel pitchPanel" id="pitchPanel">
-    <div class="panelTitle">ÖN - ARKA DENGE</div>
-    <div class="value" id="pitchValue">+0<span class="unit">°</span></div>
-    <div class="vehicleWrap">
-      <img id="pitchImage" class="vehicle" alt="Discovery pitch">
-    </div>
-  </section>
-  <section class="panel centerPanel" id="centerPanel">
-    <div class="level">
-      <div class="liquid">
-        <div class="axis horizontal"></div>
-        <div class="axis vertical"></div>
-        <div class="tick horizontal x1"></div>
-        <div class="tick horizontal x2"></div>
-        <div class="tick horizontal x3"></div>
-        <div class="tick horizontal x4"></div>
-        <div class="tick vertical y1"></div>
-        <div class="tick vertical y2"></div>
-        <div class="tick vertical y3"></div>
-        <div class="tick vertical y4"></div>
-        <div class="levelLabel labelTop">+10°</div>
-        <div class="levelLabel labelBottom">-10°</div>
-        <div class="levelLabel labelLeft">-10°</div>
-        <div class="levelLabel labelRight">+10°</div>
-        <div class="center-dot"></div>
-        <div class="bubble" id="bubble"></div>
-      </div>
-    </div>
-  </section>
-  <section class="panel rollPanel" id="rollPanel">
-    <div class="panelTitle">SAĞ - SOL DENGE</div>
-    <div class="value" id="rollValue">+0<span class="unit">°</span></div>
-    <div class="vehicleWrap">
-      <img id="rollImage" class="vehicle" alt="Discovery roll">
-    </div>
-  </section>
-</div>
-<section class="altitudeHistory">
-  <div class="historyHeader">
-    <div class="historyTitle">RAKIM GEÇMİŞİ</div>
-    <div class="historyButtons">
-      <button data-range="100">100 m</button>
-      <button class="active" data-range="500">500 m</button>
-      <button data-range="1000">1 km</button>
-      <button data-range="5000">5 km</button>
-    </div>
-  </div>
-  <div class="historyStats">
-    <div><span>MIN</span><strong id="historyMin">-- m</strong></div>
-    <div><span>MAX</span><strong id="historyMax">-- m</strong></div>
-    <div><span>FARK</span><strong id="historyDiff">-- m</strong></div>
-  </div>
-  <div class="altitudeChart">
-    <svg id="altitudeChartSvg" viewBox="0 0 1000 320" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="altitudeGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#00A8FF" stop-opacity=".25"></stop>
-          <stop offset="100%" stop-color="#00A8FF" stop-opacity="0"></stop>
-        </linearGradient>
-      </defs>
-      <path id="altitudeFill" class="altitudeFill"></path>
-      <path id="altitudePath" class="altitudePath"></path>
-    </svg>
-    <div class="chartNoData" id="chartNoData">RAKIM VERİSİ BEKLENİYOR</div>
-  </div>
-</section>
-<section class="directionSection" aria-label="Uydu haritası ve yön pusulası">
-  <div class="directionHeader">
-    <div class="directionTitle">YÖN / UYDU HARİTASI</div>
-    <div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div>
-  </div>
-  <div class="compassMapFrame" id="compassMapFrame">
-    <div class="compassMapRotator" id="compassMapRotator">
-      <div id="satelliteMap" aria-label="Uydu haritası"></div>
-    </div>
-    <div class="compassRing" aria-hidden="true">
-      <span class="compassCardinal compassN">N</span>
-      <span class="compassCardinal compassNE">NE</span>
-      <span class="compassCardinal compassE">E</span>
-      <span class="compassCardinal compassSE">SE</span>
-      <span class="compassCardinal compassS">S</span>
-      <span class="compassCardinal compassSW">SW</span>
-      <span class="compassCardinal compassW">W</span>
-      <span class="compassCardinal compassNW">NW</span>
-    </div>
-    <div class="compassCenterArrow" aria-hidden="true"></div>
-    <div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div>
-  </div>
-</section>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
+
+
+/* =========================================================
+GPS BİLGİ KUTUSU
+========================================================= */
+
+.gpsInfo{
+
+position:absolute;
+
+top:38px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:min(420px,72vw);
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+padding:8px 18px;
+
+border:2px solid
+rgba(0,168,255,.35);
+
+border-radius:12px;
+
+background:
+rgba(8,12,16,.88);
+
+box-shadow:
+0 0 14px
+rgba(0,168,255,.08);
+
+z-index:20;
+
+}
+
+
+.gpsItem{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+min-width:120px;
+
+}
+
+
+.gpsLabel{
+
+font-size:12px;
+
+font-weight:600;
+
+letter-spacing:1.5px;
+
+color:#8e9aa3;
+
+}
+
+
+.gpsValue{
+
+font-size:26px;
+
+font-weight:700;
+
+line-height:1.1;
+
+letter-spacing:.5px;
+
+color:#f5f8fa;
+
+white-space:nowrap;
+
+}
+
+
+/* =========================================================
+ANA DASHBOARD
+========================================================= */
+
+.dashboard{
+
+width:100%;
+
+height:100vh;
+
+min-height:600px;
+
+display:grid;
+
+grid-template-columns:
+1fr 1.05fr 1fr;
+
+gap:18px;
+
+align-items:center;
+
+padding:
+85px
+25px
+25px;
+
+}
+
+
+/* =========================================================
+PANELLER
+========================================================= */
+
+.panel{
+
+position:relative;
+
+height:
+calc(100vh - 110px);
+
+min-height:430px;
+
+background:
+linear-gradient(
+145deg,
+rgba(17,24,31,.96),
+rgba(8,12,16,.96)
+);
+
+border:4px solid
+var(--panel-border);
+
+border-radius:22px;
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+overflow:hidden;
+
+transition:
+border-color .25s ease,
+box-shadow .25s ease;
+
+}
+
+
+/* =========================================================
+PANEL BAŞLIKLARI
+========================================================= */
+
+.panelTitle{
+
+margin-top:24px;
+
+font-size:14px;
+
+font-weight:700;
+
+letter-spacing:2px;
+
+color:#9aa5ad;
+
+text-align:center;
+
+}
+
+
+/* =========================================================
+DERECE DEĞERİ
+========================================================= */
+
+.value{
+
+margin-top:8px;
+
+font-size:58px;
+
+line-height:1;
+
+font-weight:700;
+
+letter-spacing:-2px;
+
+color:#f5f7f8;
+
+}
+
+
+.unit{
+
+font-size:.45em;
+
+margin-left:3px;
+
+vertical-align:top;
+
+position:relative;
+
+top:5px;
+
+}
+
+
+/* =========================================================
+ARAÇ GÖRSELİ
+========================================================= */
+
+.vehicleWrap{
+
+width:100%;
+
+flex:1;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+min-height:0;
+
+padding:
+15px
+25px
+25px;
+
+}
+
+
+.vehicle{
+
+width:90%;
+
+max-width:480px;
+
+max-height:75%;
+
+object-fit:contain;
+
+display:block;
+
+transform-origin:center center;
+
+transition:none;
+
+will-change:transform;
+
+}
+
+
+/* =========================================================
+MERKEZ PANEL
+========================================================= */
+
+.centerPanel{
+
+justify-content:center;
+
+}
+
+
+/* =========================================================
+YEŞİL DAİRESEL SEVİYE
+========================================================= */
+
+.level{
+
+position:relative;
+
+width:min(420px,34vw);
+
+height:min(420px,34vw);
+
+max-width:90%;
+
+max-height:75%;
+
+aspect-ratio:1 / 1;
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle at center,
+#18251f 0%,
+#101914 58%,
+#0b100d 100%
+);
+
+border:
+3px solid
+rgba(37,232,122,.28);
+
+box-shadow:
+inset 0 0 30px
+rgba(0,0,0,.75),
+
+0 0 20px
+rgba(37,232,122,.05);
+
+overflow:hidden;
+
+}
+
+
+.liquid{
+
+position:absolute;
+
+inset:0;
+
+border-radius:50%;
+
+}
+
+
+/* =========================================================
+EKSENLER
+========================================================= */
+
+.axis{
+
+position:absolute;
+
+background:
+rgba(37,232,122,.22);
+
+pointer-events:none;
+
+}
+
+
+.axis.horizontal{
+
+left:7%;
+
+right:7%;
+
+top:50%;
+
+height:1px;
+
+transform:
+translateY(-50%);
+
+}
+
+
+.axis.vertical{
+
+top:7%;
+
+bottom:7%;
+
+left:50%;
+
+width:1px;
+
+transform:
+translateX(-50%);
+
+}
+
+
+/* =========================================================
+DERECE İŞARETLERİ
+========================================================= */
+
+.tick{
+
+position:absolute;
+
+background:
+rgba(37,232,122,.28);
+
+border-radius:2px;
+
+}
+
+
+.tick.horizontal{
+
+width:1px;
+
+height:9px;
+
+top:50%;
+
+}
+
+
+.tick.vertical{
+
+width:9px;
+
+height:1px;
+
+left:50%;
+
+}
+
+
+.x1{
+
+left:38%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.x2{
+
+left:44%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.x3{
+
+left:56%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.x4{
+
+left:62%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.y1{
+
+top:38%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.y2{
+
+top:44%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.y3{
+
+top:56%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+.y4{
+
+top:62%;
+
+transform:
+translate(-50%,-50%);
+
+}
+
+
+/* =========================================================
+DAİRE İÇİ DERECELER
+========================================================= */
+
+.levelLabel{
+
+position:absolute;
+
+color:
+rgba(190,230,207,.48);
+
+font-size:11px;
+
+font-weight:600;
+
+pointer-events:none;
+
+}
+
+
+.labelTop{
+
+top:10%;
+
+left:50%;
+
+transform:
+translateX(-50%);
+
+}
+
+
+.labelBottom{
+
+bottom:10%;
+
+left:50%;
+
+transform:
+translateX(-50%);
+
+}
+
+
+.labelLeft{
+
+left:9%;
+
+top:50%;
+
+transform:
+translateY(-50%);
+
+}
+
+
+.labelRight{
+
+right:9%;
+
+top:50%;
+
+transform:
+translateY(-50%);
+
+}
+
+
+/* =========================================================
+MERKEZ NOKTASI
+========================================================= */
+
+.center-dot{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+width:7px;
+
+height:7px;
+
+transform:
+translate(-50%,-50%);
+
+border-radius:50%;
+
+background:#d5ffe4;
+
+box-shadow:
+0 0 8px
+rgba(37,232,122,.7);
+
+z-index:5;
+
+}
+
+
+/* =========================================================
+YEŞİL BALON
+========================================================= */
+
+.bubble{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+width:42px;
+
+height:42px;
+
+transform:
+translate(-50%,-50%);
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle at 35% 30%,
+#d8ffe7 0%,
+#6aff9d 18%,
+#25e87a 45%,
+#12a84e 75%,
+#087036 100%
+);
+
+border:
+2px solid
+rgba(220,255,232,.75);
+
+box-shadow:
+0 0 15px
+rgba(37,232,122,.55),
+
+inset 0 0 9px
+rgba(255,255,255,.28);
+
+z-index:4;
+
+will-change:transform;
+
+}
+
+
+/* =========================================================
+MOBİL
+========================================================= */
+
+@media (max-width:700px){
+
+.brand{
+
+top:5px;
+
+font-size:17px;
+
+letter-spacing:3.5px;
+
+}
+
+
+/* GPS */
+
+.gpsInfo{
+
+top:29px;
+
+width:min(88vw,430px);
+
+padding:7px 12px;
+
+border-radius:11px;
+
+}
+
+
+.gpsItem{
+
+min-width:110px;
+
+}
+
+
+.gpsLabel{
+
+font-size:11px;
+
+letter-spacing:1.3px;
+
+}
+
+
+.gpsValue{
+
+font-size:25px;
+
+}
+
+
+/* Dashboard */
+
+.dashboard{
+
+/* Ana ekranı biraz kısalt: alt denge kartları daha yukarı gelir. */
+height:calc(100vh - 24px);
+
+min-height:576px;
+
+display:grid;
+
+grid-template-columns:
+1fr 1fr;
+
+grid-template-rows:
+minmax(0,1fr)
+minmax(150px,.43fr);
+
+gap:10px;
+
+padding:
+105px
+10px
+10px;
+
+}
+
+
+/* Merkez */
+
+.centerPanel{
+
+grid-column:1 / 3;
+
+grid-row:1;
+
+border-width:3px;
+
+border-radius:18px;
+
+min-height:0;
+
+justify-content:center;
+
+}
+
+
+.level{
+
+width:min(58vw,290px);
+
+height:min(58vw,290px);
+
+max-width:64%;
+
+max-height:70%;
+
+}
+
+
+.bubble{
+
+width:34px;
+
+height:34px;
+
+}
+
+
+.levelLabel{
+
+font-size:9px;
+
+}
+
+
+/* Alt paneller */
+
+.pitchPanel{
+
+grid-column:1;
+
+grid-row:2;
+
+}
+
+
+.rollPanel{
+
+grid-column:2;
+
+grid-row:2;
+
+}
+
+
+.panel{
+
+width:100%;
+
+height:100%;
+
+min-height:0;
+
+border-width:3px;
+
+border-radius:16px;
+
+}
+
+
+.panelTitle{
+
+margin-top:9px;
+
+font-size:10px;
+
+letter-spacing:1px;
+
+white-space:nowrap;
+
+}
+
+
+.value{
+
+margin-top:5px;
+
+font-size:32px;
+
+}
+
+
+.vehicleWrap{
+
+padding:
+3px
+8px
+8px;
+
+}
+
+
+.vehicle{
+
+width:95%;
+
+max-height:80%;
+
+}
+
+}
+
+
+/* =========================================================
+KISA TELEFONLAR
+========================================================= */
+
+@media
+(max-width:700px)
+and
+(max-height:700px){
+
+.dashboard{
+
+padding-top:100px;
+
+}
+
+
+.level{
+
+width:min(54vw,270px);
+
+height:min(54vw,270px);
+
+max-width:60%;
+
+max-height:67%;
+
+}
+
+
+.gpsInfo{
+
+top:27px;
+
+}
+
+
+.gpsValue{
+
+font-size:23px;
+
+}
+
+
+.panelTitle{
+
+font-size:9px;
+
+}
+
+
+.value{
+
+font-size:29px;
+
+}
+
+}
+
+
+/* =========================================================
+BAŞLANGIÇ EKRANI
+========================================================= */
+
+#startScreen{
+
+position:fixed;
+
+inset:0;
+
+z-index:999;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#070b0f;
+
+}
+
+
+.startBox{
+
+width:min(90vw,400px);
+
+text-align:center;
+
+}
+
+
+.startTitle{
+
+font-size:28px;
+
+font-weight:700;
+
+letter-spacing:4px;
+
+margin-bottom:12px;
+
+}
+
+
+.startText{
+
+color:#7d8992;
+
+font-size:14px;
+
+line-height:1.5;
+
+margin-bottom:28px;
+
+}
+
+
+#startButton{
+
+border:
+1px solid
+rgba(0,168,255,.6);
+
+background:
+rgba(0,168,255,.12);
+
+color:#fff;
+
+border-radius:14px;
+
+padding:
+15px
+28px;
+
+font-size:15px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+}
+
+
+#startButton:active{
+
+transform:scale(.97);
+
+}
+
+
+/* =========================================================
+RAKIM GEÇMİŞİ
+========================================================= */
+
+.altitudeHistory{
+
+width:calc(100% - 50px);
+
+margin:
+0 auto
+40px;
+
+padding:22px;
+
+background:
+linear-gradient(
+145deg,
+rgba(17,24,31,.96),
+rgba(8,12,16,.96)
+);
+
+border:
+4px solid
+var(--panel-border);
+
+border-radius:22px;
+
+min-height:400px;
+
+}
+
+
+.historyHeader{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:20px;
+
+}
+
+
+.historyTitle{
+
+font-size:15px;
+
+font-weight:700;
+
+letter-spacing:2px;
+
+color:#9aa5ad;
+
+}
+
+
+.historyButtons{
+
+display:flex;
+
+gap:6px;
+
+}
+
+
+.historyButtons button{
+
+border:
+1px solid
+#26343d;
+
+background:#10171d;
+
+color:#89959e;
+
+border-radius:8px;
+
+padding:
+7px
+12px;
+
+font-size:12px;
+
+font-weight:600;
+
+}
+
+
+.historyButtons button.active{
+
+color:#fff;
+
+border-color:
+var(--level-blue);
+
+background:
+rgba(0,168,255,.12);
+
+}
+
+
+.historyStats{
+
+display:flex;
+
+gap:35px;
+
+margin-top:18px;
+
+}
+
+
+.historyStats div{
+
+display:flex;
+
+flex-direction:column;
+
+gap:3px;
+
+}
+
+
+.historyStats span{
+
+font-size:9px;
+
+letter-spacing:1.5px;
+
+color:#68747c;
+
+}
+
+
+.historyStats strong{
+
+font-size:16px;
+
+color:#e9f0f4;
+
+}
+
+
+.altitudeChart{
+
+position:relative;
+
+width:100%;
+
+height:280px;
+
+margin-top:15px;
+
+border-top:
+1px solid
+rgba(255,255,255,.05);
+
+border-bottom:
+1px solid
+rgba(255,255,255,.05);
+
+}
+
+
+.altitudeChart svg{
+
+width:100%;
+
+height:100%;
+
+display:block;
+
+}
+
+
+.altitudePath{
+
+fill:none;
+
+stroke:#00A8FF;
+
+stroke-width:4;
+
+stroke-linecap:round;
+
+stroke-linejoin:round;
+
+}
+
+
+.altitudeFill{
+
+fill:url(#altitudeGradient);
+
+stroke:none;
+
+}
+
+
+.chartNoData{
+
+position:absolute;
+
+inset:0;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+color:#59656d;
+
+font-size:12px;
+
+letter-spacing:1px;
+
+}
+
+
+/* =========================================================
+MOBİL RAKIM GEÇMİŞİ
+========================================================= */
+
+@media (max-width:700px){
+
+.altitudeHistory{
+
+width:calc(100% - 20px);
+
+margin:
+10px auto
+30px;
+
+padding:14px;
+
+border-width:3px;
+
+border-radius:16px;
+
+min-height:340px;
+
+}
+
+
+.historyHeader{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:12px;
+
+}
+
+
+.historyButtons{
+
+width:100%;
+
+justify-content:space-between;
+
+}
+
+
+.historyButtons button{
+
+flex:1;
+
+padding:
+8px
+4px;
+
+font-size:10px;
+
+}
+
+
+.historyStats{
+
+gap:22px;
+
+margin-top:14px;
+
+}
+
+
+.historyStats strong{
+
+font-size:14px;
+
+}
+
+
+.altitudeChart{
+
+height:240px;
+
+}
+
+}
+
+</style></head><body><div id="startScreen"><div class="startBox"><div class="startTitle">
+CAMPROVER
+</div><div class="startText">
+Telefonu araç tutucusuna yerleştirin ve ölçümü başlatın.
+</div><button id="startButton">
+ÖLÇÜMÜ BAŞLAT
+</button></div></div><div class="brand">
+CAMPROVER
+</div><div class="gpsInfo"><div class="gpsItem"><span class="gpsLabel">
+RAKIM
+</span><span
+class="gpsValue"
+id="altitudeValue">
+
+-- m
+
+</span></div><div class="gpsItem"><span class="gpsLabel">
+HIZ
+</span><span
+class="gpsValue"
+id="speedValue">
+
+-- km/h
+
+</span></div></div><div class="dashboard"><section
+class="panel pitchPanel"
+id="pitchPanel"><div class="panelTitle">
+ÖN - ARKA DENGE
+</div><div
+class="value"
+id="pitchValue">
+
++0<span class="unit">°</span></div><div class="vehicleWrap"><img
+id="pitchImage"
+class="vehicle"
+alt="Discovery pitch"></div></section><section
+class="panel centerPanel"
+id="centerPanel"><div class="level"><div class="liquid"><div class="axis horizontal"></div><div class="axis vertical"></div><div class="tick horizontal x1"></div><div class="tick horizontal x2"></div><div class="tick horizontal x3"></div><div class="tick horizontal x4"></div><div class="tick vertical y1"></div><div class="tick vertical y2"></div><div class="tick vertical y3"></div><div class="tick vertical y4"></div><div class="levelLabel labelTop">
++10°
+</div><div class="levelLabel labelBottom">
+-10°
+</div><div class="levelLabel labelLeft">
+-10°
+</div><div class="levelLabel labelRight">
++10°
+</div><div class="center-dot"></div><div
+class="bubble"
+id="bubble"></div></div></div></section><section
+class="panel rollPanel"
+id="rollPanel"><div class="panelTitle">
+SAĞ - SOL DENGE
+</div><div
+class="value"
+id="rollValue">
+
++0<span class="unit">°</span></div><div class="vehicleWrap"><img
+id="rollImage"
+class="vehicle"
+alt="Discovery roll"></div></section></div><section class="altitudeHistory"><div class="historyHeader"><div class="historyTitle">
+RAKIM GEÇMİŞİ
+</div><div class="historyButtons"><button
+data-range="100">
+100 m
+</button><button
+class="active"
+data-range="500">
+500 m
+</button><button
+data-range="1000">
+1 km
+</button><button
+data-range="5000">
+5 km
+</button></div></div><div class="historyStats"><div><span>
+MIN
+</span><strong id="historyMin">
+-- m
+</strong></div><div><span>
+MAX
+</span><strong id="historyMax">
+-- m
+</strong></div><div><span>
+FARK
+</span><strong id="historyDiff">
+-- m
+</strong></div></div><div class="altitudeChart"><svg
+id="altitudeChartSvg"
+viewBox="0 0 1000 320"
+preserveAspectRatio="none"><defs><linearGradient
+id="altitudeGradient"
+x1="0"
+y1="0"
+x2="0"
+y2="1"><stop
+offset="0%"
+stop-color="#00A8FF"
+stop-opacity=".25"></stop><stop
+offset="100%"
+stop-color="#00A8FF"
+stop-opacity="0"></stop></linearGradient></defs><path
+id="altitudeFill"
+class="altitudeFill"></path><path
+id="altitudePath"
+class="altitudePath"></path></svg><div
+class="chartNoData"
+id="chartNoData">
+
+RAKIM VERİSİ BEKLENİYOR
+
+</div></div></section><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div><button class="currentLocationButton" id="currentLocationButton" type="button">Mevcut konumu göster</button></div></section><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+
 (async function(){
-  try{
-    if("serviceWorker" in navigator){
-      const registrations=await navigator.serviceWorker.getRegistrations();
-      for(const registration of registrations){await registration.unregister();}
-    }
-  }catch(error){console.log("Service Worker temizleme:",error)}
-  try{
-    if("caches" in window){
-      const keys=await caches.keys();
-      for(const key of keys){await caches.delete(key);}
-    }
-  }catch(error){console.log("Cache temizleme:",error)}
-  const IMAGE_VERSION="20261009-20";
-  const pitchImage=document.getElementById("pitchImage");
-  const rollImage=document.getElementById("rollImage");
-  pitchImage.src="pitch_discovery.png?v="+IMAGE_VERSION;
-  rollImage.src="roll_discovery.png?v="+IMAGE_VERSION;
-  const pitchValue=document.getElementById("pitchValue");
-  const rollValue=document.getElementById("rollValue");
-  const pitchPanel=document.getElementById("pitchPanel");
-  const rollPanel=document.getElementById("rollPanel");
-  const bubble=document.getElementById("bubble");
-  const altitudeValue=document.getElementById("altitudeValue");
-  const speedValue=document.getElementById("speedValue");
-  const startScreen=document.getElementById("startScreen");
-  const startButton=document.getElementById("startButton");
-  const SENSOR_ALPHA=0.08;
-  const BUBBLE_ALPHA=0.08;
-  const VEHICLE_ALPHA=0.20;
-  const DEAD_BAND=0.15;
-  const MAX_ANGLE=10;
-  const ALTITUDE_ALPHA=0.08;
-  const SPEED_ALPHA=0.35;
-  let filteredAx=0,filteredAy=0,filteredAz=0;
-  let sensorInitialized=false;
-  let pitchFiltered=0,rollFiltered=0;
-  let bubblePitch=0,bubbleRoll=0;
-  let vehiclePitch=0,vehicleRoll=0;
-  let altitudeFiltered=null;
-  let speedFiltered=0;
-  let gpsStarted=false;
-  let satelliteMap=null;
-  let mapMarker=null;
-  let currentHeading=null;
-  let mapHasCentered=false;
-  const gpsStatus=document.getElementById("gpsStatus");
-  const mapMessage=document.getElementById("mapMessage");
-  const compassMapRotator=document.getElementById("compassMapRotator");
-  const compassRing=document.querySelector(".compassRing");
-  function normalizeHeading(value){return ((value%360)+360)%360}
-  function updateHeadingDisplay(){
-    if(currentHeading===null)return;
-    const rotation=-currentHeading;
-    compassMapRotator.style.transform=`rotate(${rotation}deg)`;
-    if(compassRing){compassRing.style.transform=`rotate(${rotation}deg)`}
-  }
-  function handleOrientation(event){
-    let heading=null;
-    if(Number.isFinite(event.webkitCompassHeading)){
-      heading=event.webkitCompassHeading;
-    }else if(Number.isFinite(event.alpha)){
-      heading=360-event.alpha;
-    }
-    if(heading===null||!Number.isFinite(heading))return;
-    currentHeading=normalizeHeading(heading);
-    updateHeadingDisplay();
-  }
-  function initSatelliteMap(){
-    if(satelliteMap||typeof L==="undefined")return;
-    satelliteMap=L.map("satelliteMap",{
-      zoomControl:false,attributionControl:false,dragging:false,
-      scrollWheelZoom:false,doubleClickZoom:false,boxZoom:false,
-      keyboard:false,tap:false,zoomAnimation:false,fadeAnimation:false,
-      markerZoomAnimation:false
-    }).setView([39,35],5);
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19}).addTo(satelliteMap);
-    mapMarker=L.circleMarker([39,35],{radius:4,color:"#ffffff",weight:2,fillColor:"#ff3038",fillOpacity:1}).addTo(satelliteMap);
-    mapMessage.textContent="GPS konumu bekleniyor";
-  }
-  function updateSatelliteMap(coords){
-    if(!coords||!Number.isFinite(coords.latitude)||!Number.isFinite(coords.longitude))return;
-    initSatelliteMap();
-    if(!satelliteMap)return;
-    const latlng=[coords.latitude,coords.longitude];
-    if(!mapHasCentered){
-      satelliteMap.setView(latlng,17,{animate:false});
-      mapHasCentered=true;
-    }else{
-      satelliteMap.panTo(latlng,{animate:false});
-    }
-    if(mapMarker)mapMarker.setLatLng(latlng);
-    const accuracy=Number.isFinite(coords.accuracy)?Math.round(coords.accuracy):null;
-    gpsStatus.textContent=accuracy!==null?`GPS ±${accuracy} m`:"GPS AKTİF";
-    mapMessage.textContent="UYDU GÖRÜNTÜSÜ";
-  }
-  let altitudeHistory=[];
-  let historyRange=500;
-  let lastGPSPosition=null;
-  let totalDistance=0;
-  function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
-  function stabilize(value){if(Math.abs(value)<DEAD_BAND)return 0;return value}
-  function formatAngle(value){
-    let rounded=Math.round(value);
-    rounded=clamp(rounded,-MAX_ANGLE,MAX_ANGLE);
-    if(rounded===0)return "+0";
-    return rounded>0?"+"+rounded:String(rounded);
-  }
-  function updateBorder(panel,value){
-    const abs=Math.abs(value);
-    let strength=0;
-    if(abs<=5)strength=(5-abs)/5;
-    if(strength<=0){
-      panel.style.borderColor="var(--panel-border)";
-      panel.style.boxShadow="none";
-      return;
-    }
-    const alpha=0.18+strength*0.82;
-    panel.style.borderColor=`rgba(0,168,255,${alpha})`;
-    panel.style.boxShadow=`0 0 ${8+strength*20}px rgba(0,168,255,${strength*.28})`;
-  }
-  function updateLevel(){
-    pitchFiltered=clamp(stabilize(pitchFiltered),-MAX_ANGLE,MAX_ANGLE);
-    rollFiltered=clamp(stabilize(rollFiltered),-MAX_ANGLE,MAX_ANGLE);
-    pitchValue.innerHTML=formatAngle(pitchFiltered)+'<span class="unit">°</span>';
-    rollValue.innerHTML=formatAngle(rollFiltered)+'<span class="unit">°</span>';
-    updateBorder(pitchPanel,pitchFiltered);
-    updateBorder(rollPanel,rollFiltered);
-    bubblePitch+=(pitchFiltered-bubblePitch)*BUBBLE_ALPHA;
-    bubbleRoll+=(rollFiltered-bubbleRoll)*BUBBLE_ALPHA;
-    const level=bubble.parentElement;
-    const maxX=level.clientWidth*0.38;
-    const maxY=level.clientHeight*0.38;
-    const x=(bubbleRoll/MAX_ANGLE)*maxX;
-    const y=(bubblePitch/MAX_ANGLE)*maxY;
-    bubble.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-    vehiclePitch+=(pitchFiltered-vehiclePitch)*VEHICLE_ALPHA;
-    vehicleRoll+=(rollFiltered-vehicleRoll)*VEHICLE_ALPHA;
-    vehiclePitch=clamp(vehiclePitch,-MAX_ANGLE,MAX_ANGLE);
-    vehicleRoll=clamp(vehicleRoll,-MAX_ANGLE,MAX_ANGLE);
-    pitchImage.style.transform=`rotate(${vehiclePitch}deg)`;
-    rollImage.style.transform=`rotate(${vehicleRoll}deg)`;
-  }
-  function handleMotion(event){
-    const acceleration=event.accelerationIncludingGravity;
-    if(!acceleration)return;
-    let ax=acceleration.x||0;
-    let ay=acceleration.y||0;
-    let az=acceleration.z||0;
-    if(!sensorInitialized){
-      filteredAx=ax;filteredAy=ay;filteredAz=az;sensorInitialized=true;
-    }else{
-      filteredAx+=(ax-filteredAx)*SENSOR_ALPHA;
-      filteredAy+=(ay-filteredAy)*SENSOR_ALPHA;
-      filteredAz+=(az-filteredAz)*SENSOR_ALPHA;
-    }
-    const newPitch=Math.atan2(filteredAz,Math.sqrt(filteredAx*filteredAx+filteredAy*filteredAy))*180/Math.PI;
-    const newRoll=Math.atan2(filteredAx,Math.sqrt(filteredAy*filteredAy+filteredAz*filteredAz))*180/Math.PI;
-    pitchFiltered+=(newPitch-pitchFiltered)*SENSOR_ALPHA;
-    rollFiltered+=(newRoll-rollFiltered)*SENSOR_ALPHA;
-    updateLevel();
-  }
-  function calculateDistance(lat1,lon1,lat2,lon2){
-    const R=6371000;
-    const dLat=(lat2-lat1)*Math.PI/180;
-    const dLon=(lon2-lon1)*Math.PI/180;
-    const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-  }
-  function drawAltitudeHistory(){
-    const path=document.getElementById("altitudePath");
-    const fill=document.getElementById("altitudeFill");
-    const noData=document.getElementById("chartNoData");
-    const minElement=document.getElementById("historyMin");
-    const maxElement=document.getElementById("historyMax");
-    const diffElement=document.getElementById("historyDiff");
-    if(altitudeHistory.length<2){
-      path.setAttribute("d","");
-      fill.setAttribute("d","");
-      noData.style.display="flex";
-      return;
-    }
-    noData.style.display="none";
-    const values=altitudeHistory.map(point=>point.altitude);
-    const min=Math.min(...values);
-    const max=Math.max(...values);
-    const range=Math.max(10,max-min);
-    minElement.textContent=Math.round(min)+" m";
-    maxElement.textContent=Math.round(max)+" m";
-    const difference=max-min;
-    diffElement.textContent="+"+Math.round(difference)+" m";
-    const width=1000;
-    const height=320;
-    const padding=20;
-    const startDistance=Math.max(0,totalDistance-historyRange);
-    const endDistance=Math.max(historyRange,totalDistance);
-    const distanceRange=Math.max(1,endDistance-startDistance);
-    const points=altitudeHistory.map(point=>{
-      const x=padding+((point.distance-startDistance)/distanceRange)*(width-padding*2);
-      const normalized=(point.altitude-min)/range;
-      const y=height-padding-normalized*(height-padding*2);
-      return{x,y};
-    });
-    let d="";
-    points.forEach((point,index)=>{
-      d+=index===0?`M ${point.x} ${point.y}`:` L ${point.x} ${point.y}`;
-    });
-    path.setAttribute("d",d);
-    const lastPoint=points[points.length-1];
-    const firstPoint=points[0];
-    const fillD=d+` L ${lastPoint.x} ${height}`+` L ${firstPoint.x} ${height} Z`;
-    fill.setAttribute("d",fillD);
-  }
-  function startGPS(){
-    if(gpsStarted)return;
-    gpsStarted=true;
-    if(!("geolocation" in navigator)){
-      altitudeValue.textContent="-- m";
-      speedValue.textContent="-- km/h";
-      return;
-    }
-    navigator.geolocation.watchPosition(
-      function(position){
-        const coords=position.coords;
-        updateSatelliteMap(coords);
-        if(coords.altitude!==null&&Number.isFinite(coords.altitude)){
-          const altitude=coords.altitude;
-          if(altitudeFiltered===null){
-            altitudeFiltered=altitude;
-          }else{
-            altitudeFiltered+=(altitude-altitudeFiltered)*ALTITUDE_ALPHA;
-          }
-          altitudeValue.textContent=Math.round(altitudeFiltered)+" m";
-        }
-        if(coords.speed!==null&&Number.isFinite(coords.speed)){
-          let speedKmh=coords.speed*3.6;
-          if(speedKmh<1)speedKmh=0;
-          speedFiltered+=(speedKmh-speedFiltered)*SPEED_ALPHA;
-          if(speedFiltered<1)speedFiltered=0;
-          speedValue.textContent=Math.round(speedFiltered)+" km/h";
-        }
-        if(altitudeFiltered!==null&&coords.latitude!==null&&coords.longitude!==null){
-          if(lastGPSPosition){
-            const distance=calculateDistance(lastGPSPosition.latitude,lastGPSPosition.longitude,coords.latitude,coords.longitude);
-            if(distance>=3){
-              totalDistance+=distance;
-              altitudeHistory.push({distance:totalDistance,altitude:altitudeFiltered});
-            }
-          }else{
-            altitudeHistory.push({distance:0,altitude:altitudeFiltered});
-          }
-          lastGPSPosition={latitude:coords.latitude,longitude:coords.longitude};
-          const minDistance=Math.max(0,totalDistance-historyRange);
-          altitudeHistory=altitudeHistory.filter(point=>point.distance>=minDistance);
-          drawAltitudeHistory();
-        }
-      },
-      function(error){console.log("GPS hatası:",error)},
-      {enableHighAccuracy:true,maximumAge:1000,timeout:10000}
-    );
-  }
-  document.querySelectorAll(".historyButtons button").forEach(button=>{
-    button.addEventListener("click",function(){
-      document.querySelectorAll(".historyButtons button").forEach(b=>b.classList.remove("active"));
-      this.classList.add("active");
-      historyRange=Number(this.dataset.range);
-      const minDistance=Math.max(0,totalDistance-historyRange);
-      altitudeHistory=altitudeHistory.filter(point=>point.distance>=minDistance);
-      drawAltitudeHistory();
-    });
-  });
-  async function startSensor(){
-    try{
-      if(typeof DeviceMotionEvent!=="undefined"&&typeof DeviceMotionEvent.requestPermission==="function"){
-        const permission=await DeviceMotionEvent.requestPermission();
-        if(permission!=="granted"){
-          alert("Hareket sensörü izni verilmedi.");
-          return;
-        }
-      }
-      window.addEventListener("devicemotion",handleMotion,true);
-      window.addEventListener("deviceorientation",handleOrientation,true);
-      initSatelliteMap();
-      startGPS();
-      startScreen.style.display="none";
-    }catch(error){
-      console.error("Sensör başlatma hatası:",error);
-      alert("Sensör başlatılamadı.");
-    }
-  }
-  startButton.addEventListener("click",startSensor);
-  updateLevel();
-  drawAltitudeHistory();
+
+
+/* =======================================================
+SERVICE WORKER TEMİZLE
+======================================================== */
+
+try{
+
+if(
+"serviceWorker" in navigator
+){
+
+const registrations =
+await navigator
+.serviceWorker
+.getRegistrations();
+
+
+for(
+const registration
+of registrations
+){
+
+await registration.unregister();
+
+}
+
+}
+
+}catch(error){
+
+console.log(
+"Service Worker temizleme:",
+error
+);
+
+}
+
+
+/* =======================================================
+CACHE TEMİZLE
+======================================================== */
+
+try{
+
+if(
+"caches" in window
+){
+
+const keys =
+await caches.keys();
+
+
+for(
+const key
+of keys
+){
+
+await caches.delete(key);
+
+}
+
+}
+
+}catch(error){
+
+console.log(
+"Cache temizleme:",
+error
+);
+
+}
+
+
+/* =======================================================
+GÖRSELLER
+======================================================== */
+
+const IMAGE_VERSION =
+"20261009-20";
+
+
+const pitchImage =
+document.getElementById(
+"pitchImage"
+);
+
+
+const rollImage =
+document.getElementById(
+"rollImage"
+);
+
+
+pitchImage.src =
+"pitch_discovery.png?v=" +
+IMAGE_VERSION;
+
+
+rollImage.src =
+"roll_discovery.png?v=" +
+IMAGE_VERSION;
+
+
+/* =======================================================
+DOM
+======================================================== */
+
+const pitchValue =
+document.getElementById(
+"pitchValue"
+);
+
+
+const rollValue =
+document.getElementById(
+"rollValue"
+);
+
+
+const pitchPanel =
+document.getElementById(
+"pitchPanel"
+);
+
+
+const rollPanel =
+document.getElementById(
+"rollPanel"
+);
+
+
+const bubble =
+document.getElementById(
+"bubble"
+);
+
+
+const altitudeValue =
+document.getElementById(
+"altitudeValue"
+);
+
+
+const speedValue =
+document.getElementById(
+"speedValue"
+);
+
+
+const startScreen =
+document.getElementById(
+"startScreen"
+);
+
+
+const startButton =
+document.getElementById(
+"startButton"
+);
+
+
+/* =======================================================
+FİLTRELER
+======================================================== */
+
+const SENSOR_ALPHA =
+0.08;
+
+
+const BUBBLE_ALPHA =
+0.08;
+
+
+const VEHICLE_ALPHA =
+0.20;
+
+
+const DEAD_BAND =
+0.15;
+
+
+const MAX_ANGLE =
+10;
+
+
+const ALTITUDE_ALPHA =
+0.08;
+
+
+const SPEED_ALPHA =
+0.35;
+
+
+/* =======================================================
+SENSOR
+======================================================== */
+
+let filteredAx = 0;
+
+let filteredAy = 0;
+
+let filteredAz = 0;
+
+let sensorInitialized =
+false;
+
+
+let pitchFiltered = 0;
+
+let rollFiltered = 0;
+
+
+let bubblePitch = 0;
+
+let bubbleRoll = 0;
+
+
+let vehiclePitch = 0;
+
+let vehicleRoll = 0;
+
+
+/* =======================================================
+GPS
+======================================================== */
+
+let altitudeFiltered =
+null;
+
+
+let speedFiltered =
+0;
+
+
+let gpsStarted =
+false;
+
+/* =======================================================
+HARİTA / PUSULA
+======================================================== */
+
+let satelliteMap = null;
+let mapMarker = null;
+let currentHeading = null;
+let mapHasCentered = false;
+let lastKnownCoords = null;
+
+const gpsStatus = document.getElementById("gpsStatus");
+const mapMessage = document.getElementById("mapMessage");
+const compassMapRotator = document.getElementById("compassMapRotator");
+const compassRing = document.querySelector(".compassRing");
+const currentLocationButton = document.getElementById("currentLocationButton");
+
+function normalizeHeading(value){
+return ((value % 360) + 360) % 360;
+}
+
+function updateHeadingDisplay(){
+/* Kuzey her zaman üstte: harita ve pusula halkası döndürülmez. */
+compassMapRotator.style.transform = "rotate(0deg)";
+if(compassRing){ compassRing.style.transform = "rotate(0deg)"; }
+}
+}
+
+function handleOrientation(event){
+let heading = null;
+
+/* iOS Safari'nin sağladığı manyetik pusula açısı */
+if(Number.isFinite(event.webkitCompassHeading)){
+heading = event.webkitCompassHeading;
+}else if(Number.isFinite(event.alpha)){
+/* Standart alpha yedeği; cihaz yönüne göre değişebilir. */
+heading = 360 - event.alpha;
+}
+
+if(heading === null || !Number.isFinite(heading)) return;
+
+currentHeading = normalizeHeading(heading);
+updateHeadingDisplay();
+}
+
+function initSatelliteMap(){
+if(satelliteMap || typeof L === "undefined") return;
+
+satelliteMap = L.map("satelliteMap", {
+zoomControl:false,
+attributionControl:false,
+dragging:false,
+scrollWheelZoom:false,
+doubleClickZoom:false,
+boxZoom:false,
+keyboard:false,
+tap:false,
+zoomAnimation:false,
+fadeAnimation:false,
+markerZoomAnimation:false
+}).setView([39, 35], 5);
+
+/* Esri World Imagery: gerçek uydu/fotoğraf katmanı. */
+L.tileLayer(
+"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+{maxZoom:19}
+).addTo(satelliteMap);
+
+mapMarker = L.circleMarker([39,35], {
+radius:4,
+color:"#ffffff",
+weight:2,
+fillColor:"#ff3038",
+fillOpacity:1
+}).addTo(satelliteMap);
+
+mapMessage.textContent = "GPS konumu bekleniyor";
+}
+
+function updateSatelliteMap(coords){
+if(!coords || !Number.isFinite(coords.latitude) || !Number.isFinite(coords.longitude)){
+return;
+}
+
+initSatelliteMap();
+if(!satelliteMap) return;
+
+const latlng = [coords.latitude, coords.longitude];
+lastKnownCoords = {latitude:coords.latitude, longitude:coords.longitude};
+
+if(!mapHasCentered){
+satelliteMap.setView(latlng, 17, {animate:false});
+mapHasCentered = true;
+}else{
+satelliteMap.panTo(latlng, {animate:false});
+}
+
+if(mapMarker) mapMarker.setLatLng(latlng);
+
+const accuracy = Number.isFinite(coords.accuracy)
+? Math.round(coords.accuracy)
+: null;
+
+/* Tarayıcı GPS uydu adedini sunmaz; bunun yerine GPS doğruluğu gösterilir. */
+gpsStatus.textContent = accuracy !== null
+? `GPS ±${accuracy} m`
+: "GPS AKTİF";
+
+mapMessage.textContent = "UYDU GÖRÜNTÜSÜ";
+}
+
+
+/* =======================================================
+RAKIM GEÇMİŞİ
+======================================================== */
+
+currentLocationButton.addEventListener("click", function(){
+if(!lastKnownCoords){
+mapMessage.textContent = "GPS konumu henüz alınmadı";
+return;
+}
+initSatelliteMap();
+if(satelliteMap){
+satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, {animate:true});
+mapHasCentered = true;
+mapMessage.textContent = "MEVCUT KONUM";
+}
+});
+
+let altitudeHistory = [];
+
+
+/*
+* Varsayılan:
+* Son 500 metre
+*/
+
+let historyRange =
+500;
+
+
+let lastGPSPosition =
+null;
+
+
+let totalDistance =
+0;
+
+
+/* =======================================================
+YARDIMCI
+======================================================== */
+
+function clamp(
+value,
+min,
+max
+){
+
+return Math.max(
+min,
+Math.min(
+max,
+value
+)
+);
+
+}
+
+
+function stabilize(
+value
+){
+
+if(
+Math.abs(value) <
+DEAD_BAND
+){
+
+return 0;
+
+}
+
+
+return value;
+
+}
+
+
+function formatAngle(
+value
+){
+
+let rounded =
+Math.round(value);
+
+
+rounded =
+clamp(
+rounded,
+-MAX_ANGLE,
+MAX_ANGLE
+);
+
+
+if(
+rounded === 0
+){
+
+return "+0";
+
+}
+
+
+return rounded > 0
+? "+" + rounded
+: String(rounded);
+
+}
+
+
+/* =======================================================
+MAVİ ÇERÇEVE
+======================================================== */
+
+function updateBorder(
+panel,
+value
+){
+
+const abs =
+Math.abs(value);
+
+
+let strength = 0;
+
+
+if(
+abs <= 5
+){
+
+strength =
+(5 - abs) / 5;
+
+}
+
+
+if(
+strength <= 0
+){
+
+panel.style.borderColor =
+"var(--panel-border)";
+
+
+panel.style.boxShadow =
+"none";
+
+
+return;
+
+}
+
+
+const alpha =
+0.18 +
+strength * 0.82;
+
+
+panel.style.borderColor =
+`rgba(0,168,255,${alpha})`;
+
+
+panel.style.boxShadow =
+`0 0 ${8 + strength * 20}px rgba(0,168,255,${strength * .28})`;
+
+}
+
+
+/* =======================================================
+SEVİYE GÜNCELLE
+======================================================== */
+
+function updateLevel(){
+
+
+pitchFiltered =
+clamp(
+stabilize(
+pitchFiltered
+),
+-MAX_ANGLE,
+MAX_ANGLE
+);
+
+
+rollFiltered =
+clamp(
+stabilize(
+rollFiltered
+),
+-MAX_ANGLE,
+MAX_ANGLE
+);
+
+
+/* DERECE */
+
+pitchValue.innerHTML =
+formatAngle(
+pitchFiltered
+) +
+'<span class="unit">°</span>';
+
+
+rollValue.innerHTML =
+formatAngle(
+rollFiltered
+) +
+'<span class="unit">°</span>';
+
+
+/* MAVİ ÇERÇEVE */
+
+updateBorder(
+pitchPanel,
+pitchFiltered
+);
+
+
+updateBorder(
+rollPanel,
+rollFiltered
+);
+
+
+/* =====================================================
+BALON
+====================================================== */
+
+bubblePitch +=
+(
+pitchFiltered -
+bubblePitch
+) *
+BUBBLE_ALPHA;
+
+
+bubbleRoll +=
+(
+rollFiltered -
+bubbleRoll
+) *
+BUBBLE_ALPHA;
+
+
+const level =
+bubble.parentElement;
+
+
+const maxX =
+level.clientWidth *
+0.38;
+
+
+const maxY =
+level.clientHeight *
+0.38;
+
+
+const x =
+(
+bubbleRoll /
+MAX_ANGLE
+) *
+maxX;
+
+
+const y =
+(
+bubblePitch /
+MAX_ANGLE
+) *
+maxY;
+
+
+bubble.style.transform =
+`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+
+
+/* =====================================================
+ARAÇ GÖRSELLERİ
+====================================================== */
+
+vehiclePitch +=
+(
+pitchFiltered -
+vehiclePitch
+) *
+VEHICLE_ALPHA;
+
+
+vehicleRoll +=
+(
+rollFiltered -
+vehicleRoll
+) *
+VEHICLE_ALPHA;
+
+
+vehiclePitch =
+clamp(
+vehiclePitch,
+-MAX_ANGLE,
+MAX_ANGLE
+);
+
+
+vehicleRoll =
+clamp(
+vehicleRoll,
+-MAX_ANGLE,
+MAX_ANGLE
+);
+
+
+pitchImage.style.transform =
+`rotate(${vehiclePitch}deg)`;
+
+
+rollImage.style.transform =
+`rotate(${vehicleRoll}deg)`;
+
+}
+
+
+/* =======================================================
+HAREKET SENSÖRÜ
+======================================================== */
+
+function handleMotion(
+event
+){
+
+const acceleration =
+event.accelerationIncludingGravity;
+
+
+if(!acceleration){
+
+return;
+
+}
+
+
+let ax =
+acceleration.x || 0;
+
+
+let ay =
+acceleration.y || 0;
+
+
+let az =
+acceleration.z || 0;
+
+
+/* İlk sensör okuması */
+
+if(
+!sensorInitialized
+){
+
+filteredAx = ax;
+
+filteredAy = ay;
+
+filteredAz = az;
+
+sensorInitialized =
+true;
+
+}else{
+
+filteredAx +=
+(
+ax -
+filteredAx
+) *
+SENSOR_ALPHA;
+
+
+filteredAy +=
+(
+ay -
+filteredAy
+) *
+SENSOR_ALPHA;
+
+
+filteredAz +=
+(
+az -
+filteredAz
+) *
+SENSOR_ALPHA;
+
+}
+
+
+/* =====================================================
+PITCH
+====================================================== */
+
+const newPitch =
+Math.atan2(
+filteredAz,
+Math.sqrt(
+filteredAx *
+filteredAx +
+filteredAy *
+filteredAy
+)
+) *
+180 /
+Math.PI;
+
+
+/* =====================================================
+ROLL
+====================================================== */
+
+const newRoll =
+Math.atan2(
+filteredAx,
+Math.sqrt(
+filteredAy *
+filteredAy +
+filteredAz *
+filteredAz
+)
+) *
+180 /
+Math.PI;
+
+
+/* =====================================================
+FİLTRE
+====================================================== */
+
+pitchFiltered +=
+(
+newPitch -
+pitchFiltered
+) *
+SENSOR_ALPHA;
+
+
+rollFiltered +=
+(
+newRoll -
+rollFiltered
+) *
+SENSOR_ALPHA;
+
+
+updateLevel();
+
+}
+
+
+/* =======================================================
+GPS MESAFE HESABI
+======================================================== */
+
+function calculateDistance(
+lat1,
+lon1,
+lat2,
+lon2
+){
+
+const R =
+6371000;
+
+
+const dLat =
+(
+lat2 -
+lat1
+) *
+Math.PI /
+180;
+
+
+const dLon =
+(
+lon2 -
+lon1
+) *
+Math.PI /
+180;
+
+
+const a =
+Math.sin(
+dLat / 2
+) ** 2 +
+
+Math.cos(
+lat1 *
+Math.PI /
+180
+) *
+
+Math.cos(
+lat2 *
+Math.PI /
+180
+) *
+
+Math.sin(
+dLon / 2
+) ** 2;
+
+
+return R *
+2 *
+Math.atan2(
+Math.sqrt(a),
+Math.sqrt(1 - a)
+);
+
+}
+
+
+/* =======================================================
+RAKIM GRAFİĞİ
+======================================================== */
+
+function drawAltitudeHistory(){
+
+
+const path =
+document.getElementById(
+"altitudePath"
+);
+
+
+const fill =
+document.getElementById(
+"altitudeFill"
+);
+
+
+const noData =
+document.getElementById(
+"chartNoData"
+);
+
+
+const minElement =
+document.getElementById(
+"historyMin"
+);
+
+
+const maxElement =
+document.getElementById(
+"historyMax"
+);
+
+
+const diffElement =
+document.getElementById(
+"historyDiff"
+);
+
+
+if(
+altitudeHistory.length < 2
+){
+
+path.setAttribute(
+"d",
+""
+);
+
+
+fill.setAttribute(
+"d",
+""
+);
+
+
+noData.style.display =
+"flex";
+
+
+return;
+
+}
+
+
+noData.style.display =
+"none";
+
+
+const values =
+altitudeHistory.map(
+point =>
+point.altitude
+);
+
+
+const min =
+Math.min(
+...values
+);
+
+
+const max =
+Math.max(
+...values
+);
+
+
+const range =
+Math.max(
+10,
+max - min
+);
+
+
+minElement.textContent =
+Math.round(min) +
+" m";
+
+
+maxElement.textContent =
+Math.round(max) +
+" m";
+
+
+const difference =
+max - min;
+
+
+diffElement.textContent =
+"+" +
+Math.round(
+difference
+) +
+" m";
+
+
+const width =
+1000;
+
+
+const height =
+320;
+
+
+const padding =
+20;
+
+
+const startDistance =
+Math.max(
+0,
+totalDistance -
+historyRange
+);
+
+
+const endDistance =
+Math.max(
+historyRange,
+totalDistance
+);
+
+
+const distanceRange =
+Math.max(
+1,
+endDistance -
+startDistance
+);
+
+
+const points =
+altitudeHistory.map(
+point => {
+
+
+const x =
+padding +
+
+(
+(
+point.distance -
+startDistance
+) /
+distanceRange
+) *
+
+(
+width -
+padding * 2
+);
+
+
+const normalized =
+(
+point.altitude -
+min
+) /
+range;
+
+
+const y =
+height -
+padding -
+
+normalized *
+(
+height -
+padding * 2
+);
+
+
+return {
+x,
+y
+};
+
+}
+);
+
+
+let d = "";
+
+
+points.forEach(
+(
+point,
+index
+) => {
+
+d +=
+index === 0
+? `M ${point.x} ${point.y}`
+: ` L ${point.x} ${point.y}`;
+
+}
+);
+
+
+path.setAttribute(
+"d",
+d
+);
+
+
+const lastPoint =
+points[
+points.length - 1
+];
+
+
+const firstPoint =
+points[0];
+
+
+const fillD =
+d +
+` L ${lastPoint.x} ${height}` +
+` L ${firstPoint.x} ${height} Z`;
+
+
+fill.setAttribute(
+"d",
+fillD
+);
+
+}
+
+
+/* =======================================================
+GPS
+======================================================== */
+
+function startGPS(){
+
+
+if(
+gpsStarted
+){
+
+return;
+
+}
+
+
+gpsStarted =
+true;
+
+
+if(
+!(
+"geolocation"
+in navigator
+)
+){
+
+altitudeValue.textContent =
+"-- m";
+
+
+speedValue.textContent =
+"-- km/h";
+
+
+return;
+
+}
+
+
+navigator.geolocation.watchPosition(
+
+function(position){
+
+const coords =
+position.coords;
+
+updateSatelliteMap(coords);
+
+
+/* =================================================
+RAKIM
+================================================== */
+
+if(
+coords.altitude !== null &&
+Number.isFinite(
+coords.altitude
+)
+){
+
+const altitude =
+coords.altitude;
+
+
+if(
+altitudeFiltered === null
+){
+
+altitudeFiltered =
+altitude;
+
+}else{
+
+altitudeFiltered +=
+(
+altitude -
+altitudeFiltered
+) *
+ALTITUDE_ALPHA;
+
+}
+
+
+altitudeValue.textContent =
+Math.round(
+altitudeFiltered
+) +
+" m";
+
+}
+
+
+/* =================================================
+HIZ
+================================================== */
+
+if(
+coords.speed !== null &&
+Number.isFinite(
+coords.speed
+)
+){
+
+let speedKmh =
+coords.speed *
+3.6;
+
+
+if(
+speedKmh < 1
+){
+
+speedKmh =
+0;
+
+}
+
+
+speedFiltered +=
+(
+speedKmh -
+speedFiltered
+) *
+SPEED_ALPHA;
+
+
+if(
+speedFiltered < 1
+){
+
+speedFiltered =
+0;
+
+}
+
+
+speedValue.textContent =
+Math.round(
+speedFiltered
+) +
+" km/h";
+
+}
+
+
+/* =================================================
+RAKIM GEÇMİŞİ
+================================================== */
+
+if(
+altitudeFiltered !== null &&
+coords.latitude !== null &&
+coords.longitude !== null
+){
+
+if(
+lastGPSPosition
+){
+
+const distance =
+calculateDistance(
+
+lastGPSPosition.latitude,
+
+lastGPSPosition.longitude,
+
+coords.latitude,
+
+coords.longitude
+
+);
+
+
+/*
+* GPS'in küçük
+* oynamalarını
+* mesafe kabul etme.
+*/
+
+if(
+distance >= 3
+){
+
+totalDistance +=
+distance;
+
+
+altitudeHistory.push({
+
+distance:
+totalDistance,
+
+altitude:
+altitudeFiltered
+
+});
+
+}
+
+}else{
+
+altitudeHistory.push({
+
+distance:0,
+
+altitude:
+altitudeFiltered
+
+});
+
+}
+
+
+lastGPSPosition = {
+
+latitude:
+coords.latitude,
+
+longitude:
+coords.longitude
+
+};
+
+
+/*
+* Seçilen menzilden
+* eski verileri çıkar.
+*/
+
+const minDistance =
+Math.max(
+0,
+totalDistance -
+historyRange
+);
+
+
+altitudeHistory =
+altitudeHistory.filter(
+point =>
+point.distance >=
+minDistance
+);
+
+
+drawAltitudeHistory();
+
+}
+
+},
+
+
+function(error){
+
+console.log(
+"GPS hatası:",
+error
+);
+
+},
+
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:1000,
+
+timeout:10000
+
+}
+
+);
+
+}
+
+
+/* =======================================================
+RAKIM MENZİL BUTONLARI
+======================================================== */
+
+document
+.querySelectorAll(
+".historyButtons button"
+)
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+document
+.querySelectorAll(
+".historyButtons button"
+)
+.forEach(
+b =>
+b.classList.remove(
+"active"
+)
+);
+
+
+this.classList.add(
+"active"
+);
+
+
+historyRange =
+Number(
+this.dataset.range
+);
+
+
+const minDistance =
+Math.max(
+0,
+totalDistance -
+historyRange
+);
+
+
+altitudeHistory =
+altitudeHistory.filter(
+point =>
+point.distance >=
+minDistance
+);
+
+
+drawAltitudeHistory();
+
+}
+);
+
+}
+);
+
+
+/* =======================================================
+SENSOR BAŞLAT
+======================================================== */
+
+async function startSensor(){
+
+
+try{
+
+
+/* iOS sensör izni */
+
+if(
+
+typeof DeviceMotionEvent !==
+"undefined" &&
+
+typeof
+DeviceMotionEvent
+.requestPermission ===
+"function"
+
+){
+
+const permission =
+await
+DeviceMotionEvent
+.requestPermission();
+
+
+if(
+permission !==
+"granted"
+){
+
+alert(
+"Hareket sensörü izni verilmedi."
+);
+
+
+return;
+
+}
+
+}
+
+
+/* DeviceMotion */
+
+window.addEventListener(
+"devicemotion",
+handleMotion,
+true
+);
+
+/* Pusula yönü */
+window.addEventListener(
+"deviceorientation",
+handleOrientation,
+true
+);
+
+initSatelliteMap();
+
+
+/* GPS */
+
+startGPS();
+
+
+/* Başlangıç ekranını kapat */
+
+startScreen.style.display =
+"none";
+
+
+}catch(error){
+
+console.error(
+"Sensör başlatma hatası:",
+error
+);
+
+
+alert(
+"Sensör başlatılamadı."
+);
+
+}
+
+}
+
+
+/* =======================================================
+BAŞLAT BUTONU
+======================================================== */
+
+startButton.addEventListener(
+"click",
+startSensor
+);
+
+
+/* =======================================================
+İLK DURUM
+======================================================== */
+
+updateLevel();
+
+drawAltitudeHistory();
+
+
 })();
-</script>
-</body>
-</html>
+
+</script></body></html>
