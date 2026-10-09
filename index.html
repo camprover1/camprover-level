@@ -1821,6 +1821,26 @@ height:240px;
 .coordinateItem strong{color:#35e27a;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
 @media(max-width:380px){.coordinateItem strong{font-size:12px;}}
 
+
+
+/* Koordinat kutusu: değerler ortalı, konum düğmesi kutunun üstünde ve aralıklı. */
+.directionSection{padding-bottom:20px !important;}
+.coordinatesWrap{position:relative;width:100%;margin:24px auto 0;}
+.coordinatesBox{margin:0 auto;padding:22px 14px 12px;}
+.coordinateItem{text-align:center;align-items:center;}
+.coordinateItem strong{text-align:center;}
+.coordinatesWrap .currentLocationButton{
+  position:absolute !important;
+  z-index:700;
+  right:12px !important;
+  top:-52px !important;
+  bottom:auto !important;
+  width:38px;
+  height:38px;
+}
+@media(max-width:700px){
+  .coordinatesWrap .currentLocationButton{right:10px !important;top:-52px !important;}
+}
 </style></head><body><div id="startScreen"><video class="startBackgroundVideo" autoplay muted loop playsinline preload="metadata" aria-hidden="true"><source src="background.MP4" type="video/mp4"></video><div class="startBox"><div class="startTitle">
 CAMPROVER
 </div><div class="startText">
