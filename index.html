@@ -862,9 +862,8 @@ grid-template-rows:
 300px
 155px;
 
-/* Kutucuklar arasında tutarlı ve eşit dikey/yatay boşluk. */
-row-gap:12px;
-column-gap:12px;
+/* Terazi kutusu ile alt göstergeler arasında küçük boşluk. */
+gap:6px;
 
 /* Tüm ana alanı yukarı taşı. */
 padding:
@@ -1851,7 +1850,7 @@ height:240px;
 /* =======================================================
    CAMPROVER ORTAK SES / BAS-KONUŞ PANELİ
 ======================================================== */
-.voicePanel{width:min(100% - 28px,900px);margin:12px auto 12px;padding:20px;box-sizing:border-box;border:1px solid rgba(53,226,122,.25);border-radius:18px;background:linear-gradient(145deg,rgba(10,24,31,.97),rgba(5,12,18,.97));box-shadow:0 12px 32px rgba(0,0,0,.24);color:#eef5f7}
+.voicePanel{width:min(100% - 28px,900px);margin:26px auto 30px;padding:20px;box-sizing:border-box;border:1px solid rgba(53,226,122,.25);border-radius:18px;background:linear-gradient(145deg,rgba(10,24,31,.97),rgba(5,12,18,.97));box-shadow:0 12px 32px rgba(0,0,0,.24);color:#eef5f7}
 .voiceHeader{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .voiceIcon{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:13px;background:rgba(53,226,122,.12);color:#35e27a}
 .voiceIcon svg{width:23px;height:23px}
@@ -1895,6 +1894,66 @@ height:240px;
 /* Başlangıç/ÖLÇÜMÜ BAŞLAT ekranında gizli; ölçüm ekranında üst başlığın sağında. */
 body:has(#startScreen:not([style*="display: none"])) #screenWakeLockButton{display:none!important;}
 @media(max-width:480px){#screenWakeLockButton{top:5px;right:10px;width:40px;height:24px;min-width:40px;min-height:24px;}#screenWakeLockButton .wakeDot{width:18px;height:18px;}#screenWakeLockButton.is-active .wakeDot{transform:translateX(16px);}}
+
+
+
+/* SON YERLEŞİM DÜZENLEMELERİ */
+.brand{
+  left:12px !important;
+  transform:none !important;
+  font-size:22px !important;
+  letter-spacing:4px !important;
+  text-align:left;
+}
+.gpsInfo{
+  top:48px !important;
+}
+#screenWakeLockButton{
+  width:44px;
+  height:26px;
+  transition:width .18s ease, background .18s ease;
+}
+#screenWakeLockLabel{
+  display:none !important;
+  color:#fff;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.15px;
+  white-space:nowrap;
+  margin-left:21px;
+  line-height:1;
+}
+#screenWakeLockButton.is-active{
+  width:145px;
+  justify-content:flex-start;
+}
+#screenWakeLockButton.is-active #screenWakeLockLabel{
+  display:inline !important;
+}
+#screenWakeLockButton.is-active .wakeDot{
+  transform:translateX(18px);
+}
+@media(max-width:700px){
+  .brand{
+    left:12px !important;
+    top:5px !important;
+    font-size:21px !important;
+    letter-spacing:3px !important;
+  }
+  .gpsInfo{
+    top:48px !important;
+  }
+  .dashboard{
+    padding-top:124px !important;
+  }
+}
+@media(max-width:480px){
+  #screenWakeLockButton{right:10px;top:5px;width:40px;height:24px;min-width:40px;min-height:24px;}
+  #screenWakeLockButton.is-active{width:145px;}
+  #screenWakeLockButton .wakeDot{width:18px;height:18px;}
+  #screenWakeLockButton.is-active .wakeDot{transform:translateX(16px);}
+  #screenWakeLockLabel{font-size:10px;margin-left:19px;}
+}
 
 </style>
 <!-- Cloudflare Web Analytics -->
@@ -4030,7 +4089,7 @@ drawAltitudeHistory();
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
     button.setAttribute('aria-label', active ? 'Ekranı açık tutma etkin' : 'Ekranı açık tutma kapalı');
-    label.textContent = text || (active ? 'EKRAN AÇIK' : 'EKRANI AÇIK TUT');
+    label.textContent = text || (active ? 'HEP AÇIK EKRAN' : '');
   }
 
   async function enableWakeLock() {
@@ -4043,7 +4102,7 @@ drawAltitudeHistory();
     requestInProgress = true;
     try {
       wakeLock = await navigator.wakeLock.request('screen');
-      updateButton(true, 'EKRAN AÇIK');
+      updateButton(true, 'HEP AÇIK EKRAN');
       wakeLock.addEventListener('release', () => {
         wakeLock = null;
         if (keepAwake && document.visibilityState === 'visible') {
