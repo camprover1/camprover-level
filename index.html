@@ -3053,7 +3053,16 @@ handleOrientation,
 true
 );
 
-initSatelliteMap();
+/* Harita yüklenemese bile ölçüm ekranı açılsın. */
+try {
+  initSatelliteMap();
+} catch (mapError) {
+  console.error("Uydu haritası başlatılamadı:", mapError);
+  const mapMessageElement = document.getElementById("mapMessage");
+  if (mapMessageElement) {
+    mapMessageElement.textContent = "Harita yüklenemedi; GPS ölçümü devam ediyor";
+  }
+}
 
 
 /* GPS */
