@@ -1198,6 +1198,17 @@ font-weight:600;
 }
 
 
+.historyButtons button#altitudeResetButton{
+color:#ff9aa2;
+border-color:#63323a;
+background:#241519;
+}
+
+.historyButtons button#altitudeResetButton:active{
+transform:scale(.96);
+background:#51232a;
+}
+
 .historyButtons button.active{
 
 color:#fff;
@@ -1695,6 +1706,10 @@ class="vehicle"
 alt="Discovery roll"></div></section></div><section class="altitudeHistory"><div class="historyHeader"><div class="historyTitle">
 RAKIM GEÇMİŞİ
 </div><div class="historyButtons"><button
+id="altitudeResetButton"
+type="button"
+title="Rakım grafiğini sıfırla"
+aria-label="Rakım geçmişini sıfırla">SIFIRLA</button><button
 data-range="100">
 100 m
 </button><button
@@ -1733,7 +1748,7 @@ stop-color="#00A8FF"
 stop-opacity=".25"></stop><stop
 offset="100%"
 stop-color="#00A8FF"
-stop-opacity="0"></stop></linearGradient></defs><path
+stop-opacity="0"></stop></linearGradient></defs><g id="altitudeAxes"></g><path
 id="altitudeFill"
 class="altitudeFill"></path><path
 id="altitudePath"
@@ -2867,252 +2882,100 @@ RAKIM GRAFİĞİ
 
 function drawAltitudeHistory(){
 
+const path = document.getElementById("altitudePath");
+const fill = document.getElementById("altitudeFill");
+const noData = document.getElementById("chartNoData");
+const minElement = document.getElementById("historyMin");
+const maxElement = document.getElementById("historyMax");
+const diffElement = document.getElementById("historyDiff");
+const axes = document.getElementById("altitudeAxes");
 
-const path =
-document.getElementById(
-"altitudePath"
-);
+const width = 1000;
+const height = 320;
+const left = 76;
+const right = 20;
+const top = 20;
+const bottom = 48;
+const plotWidth = width - left - right;
+const plotHeight = height - top - bottom;
 
+const values = altitudeHistory.map(point => point.altitude);
+const hasData = values.length >= 2;
+const min = values.length ? Math.min(...values) : 0;
+const max = values.length ? Math.max(...values) : 10;
+const range = Math.max(10, max - min);
 
-const fill =
-document.getElementById(
-"altitudeFill"
-);
+const startDistance = Math.max(0, totalDistance - historyRange);
+const endDistance = Math.max(historyRange, totalDistance);
+const distanceRange = Math.max(1, endDistance - startDistance);
 
+/* Eksen ve ızgara çizgileri: Y rakım (m), X mesafe (m/km). */
+let axisMarkup = "";
+const yTicks = 4;
+const altitudePadding = Math.max(5, range * 0.08);
+const axisMin = hasData ? min - altitudePadding : 0;
+const axisMax = hasData ? max + altitudePadding : 10;
+const axisRange = Math.max(1, axisMax - axisMin);
 
-const noData =
-document.getElementById(
-"chartNoData"
-);
-
-
-const minElement =
-document.getElementById(
-"historyMin"
-);
-
-
-const maxElement =
-document.getElementById(
-"historyMax"
-);
-
-
-const diffElement =
-document.getElementById(
-"historyDiff"
-);
-
-
-if(
-altitudeHistory.length < 2
-){
-
-path.setAttribute(
-"d",
-""
-);
-
-
-fill.setAttribute(
-"d",
-""
-);
-
-
-noData.style.display =
-"flex";
-
-
-return;
-
+for(let i = 0; i <= yTicks; i++){
+  const y = top + (plotHeight * i / yTicks);
+  const value = axisMax - (axisRange * i / yTicks);
+  axisMarkup += '<line x1="' + left + '" y1="' + y + '" x2="' + (width-right) + '" y2="' + y + '" stroke="rgba(255,255,255,.12)" stroke-width="1"/>';
+  axisMarkup += '<text x="' + (left-10) + '" y="' + (y+4) + '" text-anchor="end" fill="#9aa7b0" font-size="15">' + Math.round(value) + '</text>';
 }
 
-
-noData.style.display =
-"none";
-
-
-const values =
-altitudeHistory.map(
-point =>
-point.altitude
-);
-
-
-const min =
-Math.min(
-...values
-);
-
-
-const max =
-Math.max(
-...values
-);
-
-
-const range =
-Math.max(
-10,
-max - min
-);
-
-
-minElement.textContent =
-Math.round(min) +
-" m";
-
-
-maxElement.textContent =
-Math.round(max) +
-" m";
-
-
-const difference =
-max - min;
-
-
-diffElement.textContent =
-"+" +
-Math.round(
-difference
-) +
-" m";
-
-
-const width =
-1000;
-
-
-const height =
-320;
-
-
-const padding =
-20;
-
-
-const startDistance =
-Math.max(
-0,
-totalDistance -
-historyRange
-);
-
-
-const endDistance =
-Math.max(
-historyRange,
-totalDistance
-);
-
-
-const distanceRange =
-Math.max(
-1,
-endDistance -
-startDistance
-);
-
-
-const points =
-altitudeHistory.map(
-point => {
-
-
-const x =
-padding +
-
-(
-(
-point.distance -
-startDistance
-) /
-distanceRange
-) *
-
-(
-width -
-padding * 2
-);
-
-
-const normalized =
-(
-point.altitude -
-min
-) /
-range;
-
-
-const y =
-height -
-padding -
-
-normalized *
-(
-height -
-padding * 2
-);
-
-
-return {
-x,
-y
-};
-
+const xTicks = 4;
+for(let i = 0; i <= xTicks; i++){
+  const x = left + (plotWidth * i / xTicks);
+  const distanceValue = startDistance + (distanceRange * i / xTicks);
+  const label = historyRange >= 1000
+    ? (distanceValue / 1000).toFixed(distanceValue % 1000 === 0 ? 0 : 1) + " km"
+    : Math.round(distanceValue) + " m";
+  axisMarkup += '<line x1="' + x + '" y1="' + top + '" x2="' + x + '" y2="' + (height-bottom) + '" stroke="rgba(255,255,255,.07)" stroke-width="1"/>';
+  axisMarkup += '<text x="' + x + '" y="' + (height-25) + '" text-anchor="middle" fill="#9aa7b0" font-size="14">' + label + '</text>';
 }
-);
 
+axisMarkup += '<text x="17" y="' + (top + plotHeight/2) + '" text-anchor="middle" fill="#b5c0c8" font-size="15" font-weight="700" transform="rotate(-90 17 ' + (top + plotHeight/2) + ')">Rakım (m)</text>';
+axisMarkup += '<text x="' + (left + plotWidth/2) + '" y="' + (height-5) + '" text-anchor="middle" fill="#b5c0c8" font-size="15" font-weight="700">Mesafe</text>';
+axes.innerHTML = axisMarkup;
+
+if(values.length){
+  minElement.textContent = Math.round(min) + " m";
+  maxElement.textContent = Math.round(max) + " m";
+  diffElement.textContent = "+" + Math.round(max-min) + " m";
+}else{
+  minElement.textContent = "-- m";
+  maxElement.textContent = "-- m";
+  diffElement.textContent = "-- m";
+}
+
+if(!hasData){
+  path.setAttribute("d", "");
+  fill.setAttribute("d", "");
+  noData.style.display = "flex";
+  return;
+}
+
+noData.style.display = "none";
+
+const points = altitudeHistory.map(point => {
+  const x = left + ((point.distance - startDistance) / distanceRange) * plotWidth;
+  const normalized = (point.altitude - axisMin) / axisRange;
+  const y = top + plotHeight - normalized * plotHeight;
+  return {x, y};
+});
 
 let d = "";
+points.forEach((point, index) => {
+  d += index === 0 ? `M ${point.x} ${point.y}` : ` L ${point.x} ${point.y}`;
+});
 
+path.setAttribute("d", d);
 
-points.forEach(
-(
-point,
-index
-) => {
-
-d +=
-index === 0
-? `M ${point.x} ${point.y}`
-: ` L ${point.x} ${point.y}`;
-
+const lastPoint = points[points.length - 1];
+const firstPoint = points[0];
+fill.setAttribute("d", d + ` L ${lastPoint.x} ${height-bottom}` + ` L ${firstPoint.x} ${height-bottom} Z`);
 }
-);
-
-
-path.setAttribute(
-"d",
-d
-);
-
-
-const lastPoint =
-points[
-points.length - 1
-];
-
-
-const firstPoint =
-points[0];
-
-
-const fillD =
-d +
-` L ${lastPoint.x} ${height}` +
-` L ${firstPoint.x} ${height} Z`;
-
-
-fill.setAttribute(
-"d",
-fillD
-);
-
-}
-
 
 /* =======================================================
 GPS
@@ -3390,6 +3253,18 @@ timeout:10000
 );
 
 }
+
+
+/* =======================================================
+RAKIM GRAFİĞİ SIFIRLAMA — TEK BASIŞ
+======================================================== */
+
+document.getElementById("altitudeResetButton").addEventListener("click", function(){
+  altitudeHistory = [];
+  totalDistance = 0;
+  lastGPSPosition = null;
+  drawAltitudeHistory();
+});
 
 
 /* =======================================================
