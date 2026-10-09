@@ -1874,6 +1874,23 @@ height:240px;
 .voiceFootnote{margin-top:10px;color:#7f9099;font-size:11px;line-height:1.55}
 @media(max-width:480px){.voicePanel{padding:16px}.voiceForm{flex-direction:column}.voiceJoinButton{width:100%}.voiceControls{flex-direction:column}.voicePttButton{min-height:72px}.voiceHeading{font-size:16px}}
 
+
+/* EKRANI AÇIK TUT DÜĞMESİ */
+#screenWakeLockButton{
+  position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:1200;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:11px 14px;border:1px solid rgba(53,226,122,.7);
+  border-radius:999px;background:rgba(7,20,27,.96);color:#d7fbe4;
+  font:700 12px/1.2 system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  box-shadow:0 5px 18px rgba(0,0,0,.4);cursor:pointer;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+#screenWakeLockButton .wakeDot{width:8px;height:8px;border-radius:50%;background:#8b969d;flex:0 0 auto;}
+#screenWakeLockButton.is-active{background:#35e27a;color:#06110a;border-color:#35e27a;}
+#screenWakeLockButton.is-active .wakeDot{background:#075b2a;box-shadow:0 0 0 3px rgba(5,91,42,.15);}
+#screenWakeLockButton:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+@media(max-width:480px){#screenWakeLockButton{right:10px;bottom:calc(10px + env(safe-area-inset-bottom));font-size:11px;padding:10px 12px;}}
+
 </style>
 <!-- Cloudflare Web Analytics -->
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3ca594a42f884456a7b819f5944a04bf"}'></script>
@@ -3972,4 +3989,79 @@ drawAltitudeHistory();
 
 })();
 
-</script></body></html>
+</script>
+<button id="screenWakeLockButton" type="button" aria-pressed="false" title="Ekran uykuya geçmesin">
+  <span class="wakeDot" aria-hidden="true"></span><span id="screenWakeLockLabel">EKRANI AÇIK TUT</span>
+</button>
+<script>
+/* Ekran kilidini önleme: yalnızca kullanıcı düğmeye bastığında etkinleşir. */
+(() => {
+  const button = document.getElementById('screenWakeLockButton');
+  const label = document.getElementById('screenWakeLockLabel');
+  if (!button || !label) return;
+
+  let wakeLock = null;
+  let keepAwake = false;
+  let requestInProgress = false;
+
+  function updateButton(active, text) {
+    button.classList.toggle('is-active', active);
+    button.setAttribute('aria-pressed', String(active));
+    label.textContent = text || (active ? 'EKRAN AÇIK' : 'EKRANI AÇIK TUT');
+  }
+
+  async function enableWakeLock() {
+    if (requestInProgress || wakeLock || !keepAwake) return;
+    if (!('wakeLock' in navigator)) {
+      keepAwake = false;
+      updateButton(false, 'TARAYICI DESTEKLEMİYOR');
+      return;
+    }
+    requestInProgress = true;
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      updateButton(true, 'EKRAN AÇIK');
+      wakeLock.addEventListener('release', () => {
+        wakeLock = null;
+        if (keepAwake && document.visibilityState === 'visible') {
+          enableWakeLock().catch(() => {});
+        } else if (!keepAwake) {
+          updateButton(false);
+        }
+      }, { once: true });
+    } catch (error) {
+      keepAwake = false;
+      wakeLock = null;
+      updateButton(false, 'TEKRAR DENE');
+      button.title = 'Ekranı açık tutmak için yeniden dokunun. Tarayıcı veya güç tasarrufu bunu engelliyor olabilir.';
+    } finally {
+      requestInProgress = false;
+    }
+  }
+
+  button.addEventListener('click', async () => {
+    if (keepAwake) {
+      keepAwake = false;
+      const current = wakeLock;
+      wakeLock = null;
+      if (current) {
+        try { await current.release(); } catch (_) {}
+      }
+      updateButton(false);
+      button.title = 'Ekran uykuya geçmesin';
+      return;
+    }
+    keepAwake = true;
+    button.title = 'Ekran uykuya geçmesin; kapatmak için tekrar dokunun.';
+    await enableWakeLock();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && keepAwake && !wakeLock) {
+      enableWakeLock().catch(() => {});
+    }
+  });
+})();
+</script>
+
+</body></html>
