@@ -1485,7 +1485,9 @@ height:240px;
   font-size:12px;
   font-weight:800;
   text-shadow:0 1px 4px #000,0 0 5px #000;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,-50%) rotate(0deg);
+  transform-origin:center center;
+  /* Her harfin kendi açısı JS tarafından güncellenir; yazı yatay ve okunaklı kalır. */
 }
 .compassN{left:50%;top:7%;}
 .compassNE{left:80%;top:20%;}
@@ -1959,8 +1961,13 @@ if(compassMapRotator && smoothedHeading !== null){
   compassMapRotator.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
 }
 if(compassRing && smoothedHeading !== null){
-  /* Harflerin de haritayla birlikte dönmesini sağla. */
-  compassRing.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
+  /* Halka yöne göre döner; her harf kendi içinde ters yönde döndürülerek yatay okunur. */
+  const mapAngle = -smoothedHeading;
+  compassRing.style.transform = "rotate(" + mapAngle + "deg)";
+  compassRing.querySelectorAll(".compassCardinal").forEach(function(label){
+    label.style.transform =
+      "translate(-50%,-50%) rotate(" + (-mapAngle) + "deg)";
+  });
 }
 }
 
