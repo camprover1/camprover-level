@@ -1840,7 +1840,12 @@ height:240px;
 }
 @media(max-width:700px){
   .coordinatesWrap .currentLocationButton{right:10px !important;top:-52px !important;}
+  .coordinatesWrap .shareLocationButton{right:56px !important;top:-52px !important;}
 }
+.shareLocationButton{position:absolute !important;z-index:700;right:58px !important;top:-52px !important;bottom:auto !important;width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(53,226,122,.85);border-radius:8px;background:rgba(5,15,22,.95);color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35);}
+.shareLocationButton:active{transform:scale(.94);}
+.shareLocationButton svg{display:block;width:20px;height:20px;}
+.shareLocationButton:focus-visible{outline:2px solid #35e27a;outline-offset:2px;}
 </style></head><body><div id="startScreen"><video class="startBackgroundVideo" autoplay muted loop playsinline preload="metadata" aria-hidden="true"><source src="background.MP4" type="video/mp4"></video><div class="startBox"><div class="startTitle">
 CAMPROVER
 </div><div class="startText">
@@ -1899,7 +1904,7 @@ id="rollValue">
 +0<span class="unit">°</span></div><div class="vehicleWrap"><img
 id="rollImage"
 class="vehicle"
-alt="Discovery roll"></div></section></div><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="routeToolbar" role="group" aria-label="Rota kaydı kontrolleri"><div class="routeTimer" id="routeTimer" role="timer" aria-label="Geçen süre">00:00</div><button class="routeControlButton" id="routeStartButton" type="button" aria-label="Rotayı başlat" title="Başlat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8v14.4L19 12 7 4.8Z" fill="currentColor"/></svg><span class="buttonText">Başlat</span></button><button class="routeControlButton" id="routePauseButton" type="button" aria-label="Rotayı duraklat" title="Duraklat / devam et" aria-pressed="false" disabled><svg id="routePauseIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM15 5h4v14h-4z" fill="currentColor"/></svg><span class="buttonText">Duraklat / devam et</span></button><button class="routeControlButton" id="routeStopButton" type="button" aria-label="Rotayı durdur" title="Durdur" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5" fill="currentColor"/></svg><span class="buttonText">Durdur</span></button><button class="routeControlButton" id="routeResetButton" type="button" aria-label="Sıfırlamak için 3 saniye basılı tut" title="3 saniye basılı tut: rotayı ve süreyi sıfırla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 11a7.5 7.5 0 1 1 2.1 5.2M4.5 4.8V11h6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="buttonText">3 saniye basılı tutarak sıfırla</span></button></div></div><div class="routeStatusLine" id="routeStatusLine" aria-live="polite">Başlat'a basınca rota kaydı başlar</div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div></div><div class="coordinatesWrap"><button id="currentLocationButton" class="currentLocationButton" type="button" aria-label="Mevcut konumu göster" title="Mevcut konumu göster"><svg class="locationIcon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="coordinatesBox"><div class="coordinateItem"><span>ENLEM</span><strong id="latitudeValue">GPS bekleniyor</strong></div><div class="coordinateItem"><span>BOYLAM</span><strong id="longitudeValue">GPS bekleniyor</strong></div></div></div></section><section class="altitudeHistory"><div class="historyHeader"><div class="historyTitle">
+alt="Discovery roll"></div></section></div><section class="directionSection" aria-label="Uydu haritası ve yön pusulası"><div class="directionHeader"><div><div class="directionTitle">YÖN / UYDU HARİTASI</div><div class="gpsStatus" id="gpsStatus">GPS BEKLENİYOR</div></div><div class="routeToolbar" role="group" aria-label="Rota kaydı kontrolleri"><div class="routeTimer" id="routeTimer" role="timer" aria-label="Geçen süre">00:00</div><button class="routeControlButton" id="routeStartButton" type="button" aria-label="Rotayı başlat" title="Başlat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8v14.4L19 12 7 4.8Z" fill="currentColor"/></svg><span class="buttonText">Başlat</span></button><button class="routeControlButton" id="routePauseButton" type="button" aria-label="Rotayı duraklat" title="Duraklat / devam et" aria-pressed="false" disabled><svg id="routePauseIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM15 5h4v14h-4z" fill="currentColor"/></svg><span class="buttonText">Duraklat / devam et</span></button><button class="routeControlButton" id="routeStopButton" type="button" aria-label="Rotayı durdur" title="Durdur" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="1.5" fill="currentColor"/></svg><span class="buttonText">Durdur</span></button><button class="routeControlButton" id="routeResetButton" type="button" aria-label="Sıfırlamak için 3 saniye basılı tut" title="3 saniye basılı tut: rotayı ve süreyi sıfırla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 11a7.5 7.5 0 1 1 2.1 5.2M4.5 4.8V11h6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="buttonText">3 saniye basılı tutarak sıfırla</span></button></div></div><div class="routeStatusLine" id="routeStatusLine" aria-live="polite">Başlat'a basınca rota kaydı başlar</div><div class="compassMapFrame" id="compassMapFrame"><div class="compassMapRotator" id="compassMapRotator"><div id="satelliteMap" aria-label="Uydu haritası"></div></div><div class="compassRing" aria-hidden="true"><span class="compassCardinal compassN">N</span><span class="compassCardinal compassNE">NE</span><span class="compassCardinal compassE">E</span><span class="compassCardinal compassSE">SE</span><span class="compassCardinal compassS">S</span><span class="compassCardinal compassSW">SW</span><span class="compassCardinal compassW">W</span><span class="compassCardinal compassNW">NW</span></div><div class="compassCenterArrow" aria-hidden="true"></div><div class="mapMessage" id="mapMessage">GPS konumu bekleniyor</div></div><div class="coordinatesWrap"><button id="currentLocationButton" class="currentLocationButton" type="button" aria-label="Mevcut konumu göster" title="Mevcut konumu göster"><svg class="locationIcon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M12 1.8v4M12 18.2v4M1.8 12h4M18.2 12h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><button id="shareLocationButton" class="shareLocationButton" type="button" aria-label="Konumu paylaş" title="Google Maps konum bağlantısını paylaş"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="6" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="19" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8.7 10.6 6.5-4.2M8.7 13.4l6.5 4.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="coordinatesBox"><div class="coordinateItem"><span>ENLEM</span><strong id="latitudeValue">GPS bekleniyor</strong></div><div class="coordinateItem"><span>BOYLAM</span><strong id="longitudeValue">GPS bekleniyor</strong></div></div></div></section><section class="altitudeHistory"><div class="historyHeader"><div class="historyTitle">
 RAKIM GEÇMİŞİ
 </div><div class="historyButtons"><button
 id="altitudeResetButton"
@@ -2261,6 +2266,7 @@ const mapMessage = document.getElementById("mapMessage");
 const compassMapRotator = document.getElementById("compassMapRotator");
 const compassRing = document.querySelector(".compassRing");
 const currentLocationButton = document.getElementById("currentLocationButton");
+const shareLocationButton = document.getElementById("shareLocationButton");
 
 function normalizeHeading(value){
 return ((value % 360) + 360) % 360;
@@ -2594,6 +2600,40 @@ satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, 
 mapHasCentered = true;
 mapMessage.textContent = "MEVCUT KONUM";
 }
+});
+
+/* Google Maps bağlantısı sadece kullanıcı paylaş düğmesine bastığında oluşturulur. */
+shareLocationButton.addEventListener("click", async function(){
+  this.blur();
+  if(!lastKnownCoords || !Number.isFinite(lastKnownCoords.latitude) || !Number.isFinite(lastKnownCoords.longitude)){
+    mapMessage.textContent = "Paylaşmak için önce GPS konumu alınmalı";
+    alert("GPS konumu henüz alınmadı. Konum bilgisi geldikten sonra tekrar deneyin.");
+    return;
+  }
+  const latitude = lastKnownCoords.latitude.toFixed(6);
+  const longitude = lastKnownCoords.longitude.toFixed(6);
+  const mapsUrl = "https://www.google.com/maps?q=" + latitude + "," + longitude;
+  const shareText = "Camprover Level konumum: " + latitude + ", " + longitude;
+  try{
+    if(navigator.share){
+      await navigator.share({title:"Camprover Level konumum", text:shareText, url:mapsUrl});
+    }else if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(mapsUrl);
+      alert("Google Maps konum bağlantısı kopyalandı. İstediğiniz kişiye gönderebilirsiniz.\n" + mapsUrl);
+    }else{
+      window.prompt("Google Maps konum bağlantısını kopyalayın:", mapsUrl);
+    }
+  }catch(error){
+    if(error && error.name === "AbortError") return;
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(mapsUrl);
+        alert("Paylaşım açılamadı; bağlantı panoya kopyalandı.\n" + mapsUrl);
+      }else{
+        window.prompt("Bağlantıyı kopyalayıp gönderebilirsiniz:", mapsUrl);
+      }
+    }catch(copyError){window.prompt("Google Maps konum bağlantısı:", mapsUrl);}
+  }
 });
 
 let altitudeHistory = [];
