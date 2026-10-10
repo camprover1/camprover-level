@@ -2704,6 +2704,12 @@ L.tileLayer(
 {maxZoom:19}
 ).addTo(satelliteMap);
 
+/* Esri reference overlay: yer isimleri, sınırlar ve yol etiketleri (hibrit görünüm). */
+L.tileLayer(
+"https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+{maxZoom:19, opacity:1}
+).addTo(satelliteMap);
+
 mapTrackLine = L.polyline([], {
 color:"#35e6a1",
 weight:4,
