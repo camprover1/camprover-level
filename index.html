@@ -2625,6 +2625,8 @@ const routePauseIcon = document.getElementById("routePauseIcon");
 
 let currentHeading = null;
 let mapHasCentered = false;
+/* GPS haritayı yalnızca kullanıcı takip modundayken ortalasın. */
+let mapFollowGps = true;
 let lastKnownCoords = null;
 
 /* GPS titreşimini iz çizgisine taşımamak için minimum hareket mesafesi. */
@@ -2694,16 +2696,22 @@ if(satelliteMap || typeof L === "undefined") return;
 satelliteMap = L.map("satelliteMap", {
 zoomControl:false,
 attributionControl:false,
-dragging:false,
-scrollWheelZoom:false,
+dragging:true,
+touchZoom:true,
+scrollWheelZoom:true,
 doubleClickZoom:false,
 boxZoom:false,
 keyboard:false,
-tap:false,
+tap:true,
 zoomAnimation:false,
 fadeAnimation:false,
 markerZoomAnimation:false
 }).setView([39, 35], 5);
+
+/* Kullanıcı haritayı sürükler veya yakınlaştırırsa GPS takibini bırak.
+   Böylece sonraki GPS güncellemeleri haritayı zorla mevcut konuma döndürmez. */
+satelliteMap.on("dragstart", function(){ mapFollowGps = false; });
+satelliteMap.on("zoomstart", function(){ mapFollowGps = false; });
 
 /* Esri World Imagery: gerçek uydu/fotoğraf katmanı. */
 L.tileLayer(
@@ -2781,7 +2789,7 @@ if(routeRecording && !routePaused && !routeStopped && accuracyForTrack <= 35){
 if(!mapHasCentered){
 satelliteMap.setView(latlng, 17, {animate:false});
 mapHasCentered = true;
-}else{
+}else if(mapFollowGps){
 satelliteMap.panTo(latlng, {animate:false});
 }
 
@@ -2990,8 +2998,9 @@ return;
 }
 initSatelliteMap();
 if(satelliteMap){
-satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, {animate:true});
+satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, {animate:false});
 mapHasCentered = true;
+mapFollowGps = true;
 mapMessage.textContent = "MEVCUT KONUM";
 }
 });
