@@ -1935,16 +1935,23 @@ body:has(#startScreen:not([style*="display: none"])) #screenWakeLockButton{displ
 }
 #screenWakeLockLabel{
   display:none !important;
+  position:absolute;
+  right:54px;
+  top:50%;
+  transform:translateY(-50%);
   color:#fff;
   font-size:10px;
   font-weight:600;
   letter-spacing:.15px;
   white-space:nowrap;
-  margin-left:21px;
+  margin:0;
   line-height:1;
+  pointer-events:none;
 }
+/* Açık durum yazısı anahtarın SOLUNDA; anahtarın boyutu değişmez. */
 #screenWakeLockButton.is-active{
-  width:145px;
+  width:44px !important;
+  min-width:44px;
   justify-content:flex-start;
 }
 #screenWakeLockButton.is-active #screenWakeLockLabel{
@@ -1969,10 +1976,10 @@ body:has(#startScreen:not([style*="display: none"])) #screenWakeLockButton{displ
 }
 @media(max-width:480px){
   #screenWakeLockButton{right:10px;top:5px;width:40px;height:24px;min-width:40px;min-height:24px;}
-  #screenWakeLockButton.is-active{width:145px;}
+  #screenWakeLockButton.is-active{width:40px !important;min-width:40px;}
   #screenWakeLockButton .wakeDot{width:18px;height:18px;}
   #screenWakeLockButton.is-active .wakeDot{transform:translateX(16px);}
-  #screenWakeLockLabel{font-size:10px;margin-left:19px;}
+  #screenWakeLockLabel{font-size:10px;right:50px;}
 }
 
 </style>
