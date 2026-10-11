@@ -3030,20 +3030,36 @@ updateRouteTimer();
 updateRouteDistance();
 
 currentLocationButton.addEventListener("click", function(){
-/* Buton yalnızca tıklama anında çalışır; basılı/aktif kalmaz. */
-this.blur();
+  /* Konum düğmesi: GPS noktasını dönen harita alanının tam merkezine,
+     yani ekrandaki sabit yeşil okun ucuna getir. */
+  this.blur();
+  if(!lastKnownCoords){
+    mapMessage.textContent = "GPS konumu henüz alınmadı";
+    return;
+  }
+  initSatelliteMap();
+  if(!satelliteMap) return;
 
-if(!lastKnownCoords){
-mapMessage.textContent = "GPS konumu henüz alınmadı";
-return;
-}
-initSatelliteMap();
-if(satelliteMap){
-satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, {animate:false});
-mapHasCentered = true;
-mapFollowGps = true;
-mapMessage.textContent = "MEVCUT KONUM";
-}
+  const target = L.latLng(lastKnownCoords.latitude, lastKnownCoords.longitude);
+  mapFollowGps = true;
+  mapHasCentered = true;
+  if(mapMarker) mapMarker.setLatLng(target);
+
+  /* Döndürülmüş/büyütülmüş harita konteynerinin ölçülerini önce yenile,
+     ardından görünür çerçevenin merkezi için Leaflet merkezini yeniden ayarla. */
+  fitRotatingMapToFrame();
+  satelliteMap.invalidateSize({animate:false, pan:false});
+  requestAnimationFrame(function(){
+    if(!satelliteMap) return;
+    satelliteMap.setView(target, satelliteMap.getZoom() || 17, {animate:false});
+    requestAnimationFrame(function(){
+      if(!satelliteMap) return;
+      satelliteMap.invalidateSize({animate:false, pan:false});
+      satelliteMap.setView(target, satelliteMap.getZoom() || 17, {animate:false});
+      if(mapMarker) mapMarker.setLatLng(target);
+    });
+  });
+  mapMessage.textContent = "MEVCUT KONUM";
 });
 
 /* Google Maps bağlantısı sadece kullanıcı paylaş düğmesine bastığında oluşturulur. */
