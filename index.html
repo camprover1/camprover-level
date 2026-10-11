@@ -1547,17 +1547,27 @@ height:240px;
   border:4px solid #27343d;
   box-shadow:inset 0 0 20px rgba(0,0,0,.55),0 0 24px rgba(0,0,0,.35);
 }
-.compassMapRotator,
+.compassMapRotator{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:100%;
+  height:100%;
+  transform:translate(-50%,-50%) rotate(0deg);
+  transform-origin:50% 50%;
+  transition:none;
+  will-change:transform;
+  overflow:hidden;
+}
 #satelliteMap{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
-  border-radius:10px;
+  background:#172128;
+  border-radius:0;
   overflow:hidden;
 }
-.compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:none;will-change:transform;}
-#satelliteMap{background:#172128;border-radius:10px;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
   position:absolute;
@@ -2663,7 +2673,7 @@ function updateHeadingDisplay(){
 /* Pusula yönünü yumuşatılmış açıyla uygula.
    Harita ve yön harfleri birlikte döner. */
 if(compassMapRotator && smoothedHeading !== null){
-  compassMapRotator.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
+  compassMapRotator.style.transform = "translate(-50%,-50%) rotate(" + (-smoothedHeading) + "deg)";
 }
 if(compassRing && smoothedHeading !== null){
   /* CSS geçişi kullanılmaz; kesintisiz JS filtresi titreşimi azaltır. */
@@ -2693,6 +2703,26 @@ if(heading === null || !Number.isFinite(heading)) return;
 currentHeading = normalizeHeading(heading);
   smoothedHeading = smoothAngle(smoothedHeading, currentHeading);
 updateHeadingDisplay();
+}
+
+function fitRotatingMapToFrame(){
+  const frame = document.getElementById("compassMapFrame");
+  if(!frame || !compassMapRotator) return;
+  const width = frame.clientWidth;
+  const height = frame.clientHeight;
+  if(!width || !height) return;
+  /* Kare uydu alanı, dikdörtgen çerçevenin dönerken köşelerini de kapatır. */
+  const side = Math.ceil(Math.sqrt(width * width + height * height));
+  compassMapRotator.style.left = "50%";
+  compassMapRotator.style.top = "50%";
+  compassMapRotator.style.right = "auto";
+  compassMapRotator.style.bottom = "auto";
+  compassMapRotator.style.inset = "auto";
+  compassMapRotator.style.width = side + "px";
+  compassMapRotator.style.height = side + "px";
+  if(satelliteMap){
+    satelliteMap.invalidateSize({animate:false, pan:false});
+  }
 }
 
 function initSatelliteMap(){
@@ -2743,6 +2773,7 @@ fillOpacity:1
 }).addTo(satelliteMap);
 
 mapMessage.textContent = "GPS konumu bekleniyor";
+requestAnimationFrame(fitRotatingMapToFrame);
 }
 
 function updateSatelliteMap(coords){
@@ -4069,6 +4100,9 @@ true
 /* Harita yüklenemese bile ölçüm ekranı açılsın. */
 try {
   initSatelliteMap();
+  requestAnimationFrame(fitRotatingMapToFrame);
+  window.addEventListener("resize", function(){ requestAnimationFrame(fitRotatingMapToFrame); }, {passive:true});
+  window.addEventListener("orientationchange", function(){ setTimeout(function(){ requestAnimationFrame(fitRotatingMapToFrame); }, 250); }, {passive:true});
 } catch (mapError) {
   console.error("Uydu haritası başlatılamadı:", mapError);
   const mapMessageElement = document.getElementById("mapMessage");
