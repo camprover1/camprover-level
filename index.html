@@ -2720,7 +2720,11 @@ function fitRotatingMapToFrame(){
   compassMapRotator.style.width = side + "px";
   compassMapRotator.style.height = side + "px";
   if(satelliteMap){
-    satelliteMap.invalidateSize({pan:false});
+    satelliteMap.invalidateSize({pan:false, debounceMoveend:true});
+    /* Resizing the rotated viewport must not silently move its geographic center. */
+    if(mapFollowGps && lastKnownCoords){
+      satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], satelliteMap.getZoom(), {animate:false});
+    }
   }
 }
 
@@ -3081,42 +3085,48 @@ updateRouteTimer();
 updateRouteDistance();
 
 currentLocationButton.addEventListener("click", function(){
-/* Buton yalnızca tıklama anında çalışır; basılı/aktif kalmaz. */
-this.blur();
-
-mapFollowGps = true;
-if(lastKnownCoords){
+  this.blur();
+  mapFollowGps = true;
   initSatelliteMap();
-  if(satelliteMap){
-    satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], satelliteMap.getZoom(), {animate:false});
-    mapHasCentered = true;
-    mapMessage.textContent = "MEVCUT KONUM GÖSTERİLİYOR";
-  }
-}
-/* Butona basınca eski konumla yetinme; cihazdan yeni ve yüksek doğruluklu ölçüm iste. */
-if(navigator.geolocation){
-  mapMessage.textContent = "Güncel GPS konumu aranıyor…";
-  navigator.geolocation.getCurrentPosition(function(position){
-    updateSatelliteMap(position.coords);
+
+  function centerOnCoords(coords){
+    if(!coords || !Number.isFinite(coords.latitude) || !Number.isFinite(coords.longitude) || !satelliteMap) return;
+    lastKnownCoords = {latitude:coords.latitude, longitude:coords.longitude};
     mapFollowGps = true;
-    if(satelliteMap){
-      satelliteMap.setView([position.coords.latitude, position.coords.longitude], satelliteMap.getZoom(), {animate:false});
+    fitRotatingMapToFrame();
+    satelliteMap.invalidateSize({pan:false, debounceMoveend:true});
+    /* Apply after layout: center the actual GPS coordinate under the fixed green arrow. */
+    requestAnimationFrame(function(){
+      satelliteMap.invalidateSize({pan:false, debounceMoveend:true});
+      satelliteMap.setView([coords.latitude, coords.longitude], satelliteMap.getZoom(), {animate:false});
+      if(mapMarker) mapMarker.setLatLng([coords.latitude, coords.longitude]);
       mapHasCentered = true;
-    }
-    mapMessage.textContent = "GÜNCEL GPS KONUMU";
-  }, function(error){
-    console.warn("Güncel konum alınamadı:", error);
-    if(!lastKnownCoords){
-      mapMessage.textContent = error && error.code === 1
-        ? "Konum izni verilmeli"
-        : "GPS konumu alınamadı; açık alanda deneyin";
-    }else{
-      mapMessage.textContent = "Son GPS konumu gösteriliyor; yeni ölçüm alınamadı";
-    }
-  }, {enableHighAccuracy:true, maximumAge:0, timeout:20000});
-}else if(!lastKnownCoords){
-  mapMessage.textContent = "Bu tarayıcı konum desteği sunmuyor";
-}
+      mapFollowGps = true;
+    });
+  }
+
+  if(navigator.geolocation){
+    mapMessage.textContent = "Güncel GPS konumu aranıyor…";
+    navigator.geolocation.getCurrentPosition(function(position){
+      updateSatelliteMap(position.coords);
+      centerOnCoords(position.coords);
+      mapMessage.textContent = "GÜNCEL GPS KONUMU";
+    }, function(error){
+      console.warn("Güncel konum alınamadı:", error);
+      if(lastKnownCoords){
+        centerOnCoords(lastKnownCoords);
+        mapMessage.textContent = "Son GPS konumu gösteriliyor; yeni ölçüm alınamadı";
+      }else{
+        mapMessage.textContent = error && error.code === 1
+          ? "Konum izni verilmeli"
+          : "GPS konumu alınamadı; açık alanda deneyin";
+      }
+    }, {enableHighAccuracy:true, maximumAge:0, timeout:20000});
+  }else if(lastKnownCoords){
+    centerOnCoords(lastKnownCoords);
+  }else{
+    mapMessage.textContent = "Bu tarayıcı konum desteği sunmuyor";
+  }
 });
 
 /* Google Maps bağlantısı sadece kullanıcı paylaş düğmesine bastığında oluşturulur. */
