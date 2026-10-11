@@ -2691,21 +2691,27 @@ if(compassRing && smoothedHeading !== null){
 }
 
 function handleOrientation(event){
-let heading = null;
+  let heading = null;
 
-/* iOS Safari'nin sağladığı manyetik pusula açısı */
-if(Number.isFinite(event.webkitCompassHeading)){
-heading = event.webkitCompassHeading;
-}else if(Number.isFinite(event.alpha)){
-/* Standart alpha yedeği; cihaz yönüne göre değişebilir. */
-heading = 360 - event.alpha;
-}
+  /* iPhone Safari: webkitCompassHeading kuzeye göre pusula yönüdür. */
+  if (Number.isFinite(event.webkitCompassHeading)) {
+    heading = event.webkitCompassHeading;
+  } else if (event.absolute === true && Number.isFinite(event.alpha)) {
+    /* Standart mutlak yön sensörü yalnızca kuzeye referanslı olduğunda kullanılır. */
+    heading = 360 - event.alpha;
+  } else if (Number.isFinite(event.alpha) && smoothedHeading === null) {
+    /* Mutlak pusula verisi yoksa yaklaşık yön; cihaz kalibrasyonuna bağlıdır. */
+    heading = 360 - event.alpha;
+  }
 
-if(heading === null || !Number.isFinite(heading)) return;
-
-currentHeading = normalizeHeading(heading);
+  if (heading === null || !Number.isFinite(heading)) return;
+  currentHeading = normalizeHeading(heading);
   smoothedHeading = smoothAngle(smoothedHeading, currentHeading);
-updateHeadingDisplay();
+  updateHeadingDisplay();
+
+  if (gpsStatus && !Number.isFinite(event.webkitCompassHeading) && event.absolute !== true) {
+    gpsStatus.title = "Yön sensörü mutlak kuzey verisi vermiyor; pusula doğruluğu sınırlı olabilir.";
+  }
 }
 
 function fitRotatingMapToFrame(){
@@ -4048,42 +4054,23 @@ async function startSensor(){
 try{
 
 
-/* iOS sensör izni */
-
-if(
-
-typeof DeviceMotionEvent !==
-"undefined" &&
-
-typeof
-DeviceMotionEvent
-.requestPermission ===
-"function"
-
-){
-
-const permission =
-await
-DeviceMotionEvent
-.requestPermission();
-
-
-if(
-permission !==
-"granted"
-){
-
-alert(
-"Hareket sensörü izni verilmedi."
-);
-
-
-return;
-
+/* iOS sensör izinleri: hareket ve pusula izinleri ayrıdır. */
+if (typeof DeviceMotionEvent !== "undefined" &&
+    typeof DeviceMotionEvent.requestPermission === "function") {
+  const motionPermission = await DeviceMotionEvent.requestPermission();
+  if (motionPermission !== "granted") {
+    alert("Hareket sensörü izni verilmedi.");
+    return;
+  }
 }
 
+if (typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function") {
+  const orientationPermission = await DeviceOrientationEvent.requestPermission();
+  if (orientationPermission !== "granted") {
+    alert("Pusula/yön sensörü izni verilmedi. Harita telefonun yönüne göre dönemeyebilir.");
+  }
 }
-
 
 /* DeviceMotion */
 
