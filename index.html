@@ -3060,11 +3060,21 @@ function fitRecordedRouteToCircle(){
   satelliteMap.fitBounds(bounds, {padding:[pad,pad], maxZoom:18, animate:false});
 }
 
+let routeFitWarningTimeout = null;
+
 routeFitButton.addEventListener("click", function(){
   this.blur();
   if(!(routeRecording || routePaused || routeStopped)){
     routeStatusLine.textContent = "Rota geniş görünüm sadece kayıttayken çalışır.";
     routeStatusLine.style.color = "#ffbf47";
+    if(routeFitWarningTimeout) window.clearTimeout(routeFitWarningTimeout);
+    routeFitWarningTimeout = window.setTimeout(function(){
+      if(routeStatusLine && routeStatusLine.textContent === "Rota geniş görünüm sadece kayıttayken çalışır."){
+        routeStatusLine.textContent = "";
+        routeStatusLine.style.color = "";
+      }
+      routeFitWarningTimeout = null;
+    }, 5000);
     return;
   }
   routeStatusLine.style.color = "";
