@@ -2651,8 +2651,8 @@ return ((value % 360) + 360) % 360;
 }
 
 let smoothedHeading = null;
-const HEADING_SMOOTHING = 0.045; // Sensör gürültüsünü daha güçlü süz
-const HEADING_DEADBAND = 2.5;   // 2.5 dereceden küçük oynamaları yok say
+const HEADING_SMOOTHING = 0.18; // Yön değişimini geciktirmeden yumuşat
+const HEADING_DEADBAND = 0.7;   // Küçük sensör titreşimlerini azalt
 
 function smoothAngle(current, target){
   if(current === null || !Number.isFinite(current)) return target;
@@ -2680,21 +2680,25 @@ if(compassRing && smoothedHeading !== null){
 }
 
 function handleOrientation(event){
-let heading = null;
+  let heading = null;
 
-/* iOS Safari'nin sağladığı manyetik pusula açısı */
-if(Number.isFinite(event.webkitCompassHeading)){
-heading = event.webkitCompassHeading;
-}else if(Number.isFinite(event.alpha)){
-/* Standart alpha yedeği; cihaz yönüne göre değişebilir. */
-heading = 360 - event.alpha;
-}
+  /* iPhone Safari'nin verdiği pusula açısı en güvenilir kaynaktır. */
+  if(Number.isFinite(event.webkitCompassHeading)){
+    heading = event.webkitCompassHeading;
+  }else if(Number.isFinite(event.alpha) && event.absolute === true){
+    /* Android/standart API: yalnızca mutlak (kuzeye referanslı) ölçümü kullan. */
+    const screenAngle = (screen.orientation && Number.isFinite(screen.orientation.angle))
+      ? screen.orientation.angle
+      : (Number.isFinite(window.orientation) ? window.orientation : 0);
+    heading = 360 - event.alpha + screenAngle;
+  }
 
-if(heading === null || !Number.isFinite(heading)) return;
+  /* Mutlak pusula verisi yoksa yönü tahmin edip haritayı yanlış döndürme. */
+  if(heading === null || !Number.isFinite(heading)) return;
 
-currentHeading = normalizeHeading(heading);
+  currentHeading = normalizeHeading(heading);
   smoothedHeading = smoothAngle(smoothedHeading, currentHeading);
-updateHeadingDisplay();
+  updateHeadingDisplay();
 }
 
 function fitRotatingMapToFrame(){
@@ -2704,12 +2708,15 @@ function fitRotatingMapToFrame(){
   const width = frame.clientWidth;
   const height = frame.clientHeight;
   if(!width || !height) return;
-  const side = Math.ceil(Math.sqrt(width * width + height * height));
+  const side = Math.ceil(Math.hypot(width, height));
+  /* Dönen büyük kareyi çerçevenin tam geometrik merkezine sabitle. */
+  compassMapRotator.style.position = "absolute";
   compassMapRotator.style.left = "50%";
   compassMapRotator.style.top = "50%";
   compassMapRotator.style.right = "auto";
   compassMapRotator.style.bottom = "auto";
   compassMapRotator.style.inset = "auto";
+  compassMapRotator.style.margin = "0";
   compassMapRotator.style.width = side + "px";
   compassMapRotator.style.height = side + "px";
   if(satelliteMap){
@@ -3077,16 +3084,38 @@ currentLocationButton.addEventListener("click", function(){
 /* Buton yalnızca tıklama anında çalışır; basılı/aktif kalmaz. */
 this.blur();
 
-if(!lastKnownCoords){
-mapMessage.textContent = "GPS konumu henüz alınmadı";
-return;
-}
-initSatelliteMap();
-if(satelliteMap){
-satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], satelliteMap.getZoom(), {animate:false});
-mapHasCentered = true;
 mapFollowGps = true;
-mapMessage.textContent = "MEVCUT KONUM";
+if(lastKnownCoords){
+  initSatelliteMap();
+  if(satelliteMap){
+    satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], satelliteMap.getZoom(), {animate:false});
+    mapHasCentered = true;
+    mapMessage.textContent = "MEVCUT KONUM GÖSTERİLİYOR";
+  }
+}
+/* Butona basınca eski konumla yetinme; cihazdan yeni ve yüksek doğruluklu ölçüm iste. */
+if(navigator.geolocation){
+  mapMessage.textContent = "Güncel GPS konumu aranıyor…";
+  navigator.geolocation.getCurrentPosition(function(position){
+    updateSatelliteMap(position.coords);
+    mapFollowGps = true;
+    if(satelliteMap){
+      satelliteMap.setView([position.coords.latitude, position.coords.longitude], satelliteMap.getZoom(), {animate:false});
+      mapHasCentered = true;
+    }
+    mapMessage.textContent = "GÜNCEL GPS KONUMU";
+  }, function(error){
+    console.warn("Güncel konum alınamadı:", error);
+    if(!lastKnownCoords){
+      mapMessage.textContent = error && error.code === 1
+        ? "Konum izni verilmeli"
+        : "GPS konumu alınamadı; açık alanda deneyin";
+    }else{
+      mapMessage.textContent = "Son GPS konumu gösteriliyor; yeni ölçüm alınamadı";
+    }
+  }, {enableHighAccuracy:true, maximumAge:0, timeout:20000});
+}else if(!lastKnownCoords){
+  mapMessage.textContent = "Bu tarayıcı konum desteği sunmuyor";
 }
 });
 
@@ -3989,12 +4018,18 @@ drawAltitudeHistory();
 
 
 function(error){
-
-console.log(
-"GPS hatası:",
-error
-);
-
+  console.log("GPS hatası:", error);
+  const gpsMessage = document.getElementById("mapMessage");
+  const gpsStatusText = document.getElementById("gpsStatus");
+  if(error && error.code === 1){
+    if(gpsMessage) gpsMessage.textContent = "Konum izni kapalı; tarayıcı ayarlarından izin verin";
+    if(gpsStatusText) gpsStatusText.textContent = "KONUM İZNİ GEREKLİ";
+  }else if(error && error.code === 2){
+    if(gpsMessage) gpsMessage.textContent = "GPS konumu bulunamadı; açık alanda tekrar deneyin";
+    if(gpsStatusText) gpsStatusText.textContent = "GPS BULUNAMADI";
+  }else if(error && error.code === 3){
+    if(gpsMessage) gpsMessage.textContent = "GPS bekleme süresi doldu; konum aranıyor";
+  }
 },
 
 
@@ -4002,9 +4037,9 @@ error
 
 enableHighAccuracy:true,
 
-maximumAge:1000,
+maximumAge:0,
 
-timeout:10000
+timeout:20000
 
 }
 
@@ -4098,42 +4133,24 @@ async function startSensor(){
 try{
 
 
-/* iOS sensör izni */
-
-if(
-
-typeof DeviceMotionEvent !==
-"undefined" &&
-
-typeof
-DeviceMotionEvent
-.requestPermission ===
-"function"
-
-){
-
-const permission =
-await
-DeviceMotionEvent
-.requestPermission();
-
-
-if(
-permission !==
-"granted"
-){
-
-alert(
-"Hareket sensörü izni verilmedi."
-);
-
-
-return;
-
+/* iOS'ta iki izin isteğini de kullanıcı dokunuşu sürerken başlat. */
+const sensorPermissionJobs = [];
+if(typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function"){
+  sensorPermissionJobs.push(DeviceMotionEvent.requestPermission().then(function(value){ return {kind:"motion", value:value}; }));
 }
-
+if(typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function"){
+  sensorPermissionJobs.push(DeviceOrientationEvent.requestPermission().then(function(value){ return {kind:"orientation", value:value}; }));
 }
-
+const sensorPermissions = await Promise.all(sensorPermissionJobs);
+const motionPermissionDenied = sensorPermissions.some(function(item){ return item.kind === "motion" && item.value !== "granted"; });
+const orientationPermissionDenied = sensorPermissions.some(function(item){ return item.kind === "orientation" && item.value !== "granted"; });
+if(motionPermissionDenied){
+  alert("Hareket sensörü izni verilmedi.");
+  return;
+}
+if(orientationPermissionDenied){
+  alert("Pusula/yön sensörü izni verilmedi. Harita konumu çalışır ancak yön dönüşü çalışmayabilir.");
+}
 
 /* DeviceMotion */
 
@@ -4144,11 +4161,9 @@ true
 );
 
 /* Pusula yönü */
-window.addEventListener(
-"deviceorientation",
-handleOrientation,
-true
-);
+window.addEventListener("deviceorientation", handleOrientation, true);
+/* Bazı Android tarayıcıları mutlak kuzey yönünü ayrı olayda bildirir. */
+window.addEventListener("deviceorientationabsolute", handleOrientation, true);
 
 /* Harita yüklenemese bile ölçüm ekranı açılsın. */
 try {
