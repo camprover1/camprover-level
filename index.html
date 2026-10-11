@@ -1536,10 +1536,11 @@ height:240px;
 }
 .compassMapFrame{
   position:relative;
-  width:min(82vw,420px);
-  aspect-ratio:1 / 1;
+  width:100%;
+  max-width:620px;
+  aspect-ratio:4 / 3;
   margin:0 auto;
-  border-radius:50%;
+  border-radius:18px;
   overflow:hidden;
   isolation:isolate;
   background:#111820;
@@ -1552,19 +1553,19 @@ height:240px;
   inset:0;
   width:100%;
   height:100%;
-  border-radius:50%;
+  border-radius:18px;
   overflow:hidden;
 }
 .compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:none;will-change:transform;}
-#satelliteMap{background:#172128;}
+#satelliteMap{background:#172128;border-radius:18px;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
   position:absolute;
   inset:0;
   z-index:500;
   pointer-events:none;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.32);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.18);
   transform:rotate(0deg);
   transform-origin:50% 50%;
   transition:none;
@@ -1740,7 +1741,7 @@ height:240px;
   .directionHeader{align-items:flex-start;flex-direction:column;}
   .directionHeader .routeToolbar{align-self:flex-end;width:100%;}
   .routeStatusLine{margin-top:0;}
-  .compassMapFrame{width:min(86vw,360px);}
+  .compassMapFrame{width:100%;max-width:620px;aspect-ratio:4 / 3;border-radius:16px;}
   .currentLocationButton{right:8px;bottom:8px;font-size:11px;padding:8px 10px;}
 }
 
@@ -1777,7 +1778,7 @@ height:240px;
     margin:0;
     padding:105px 10px 0;
     grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    grid-template-rows:300px 155px;
+    grid-template-rows:250px 145px;
     gap:6px;
     align-items:stretch;
   }
@@ -1785,9 +1786,9 @@ height:240px;
   .centerPanel{
     grid-column:1 / 3;
     grid-row:1;
-    height:300px;
-    min-height:300px;
-    max-height:300px;
+    height:250px;
+    min-height:250px;
+    max-height:250px;
     align-self:start;
     justify-self:stretch;
     margin:0;
@@ -2719,11 +2720,7 @@ L.tileLayer(
 {maxZoom:19}
 ).addTo(satelliteMap);
 
-/* Esri reference overlay: yer isimleri, sınırlar ve yol etiketleri (hibrit görünüm). */
-L.tileLayer(
-"https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-{maxZoom:19, opacity:1}
-).addTo(satelliteMap);
+/* Yalnızca Esri World Imagery uydu katmanı kullanılır; şehir/yol etiketleri kaldırıldı. */
 
 mapTrackLine = L.polyline([], {
 color:"#35e6a1",
@@ -2787,6 +2784,7 @@ if(routeRecording && !routePaused && !routeStopped && accuracyForTrack <= 35){
 }
 
 if(!mapHasCentered){
+/* İlk GPS sabitlenmesinde varsayılan yakınlık 17; sonraki işlemler kullanıcının zoom seviyesini korur. */
 satelliteMap.setView(latlng, 17, {animate:false});
 mapHasCentered = true;
 }else if(mapFollowGps){
@@ -2998,7 +2996,7 @@ return;
 }
 initSatelliteMap();
 if(satelliteMap){
-satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, {animate:false});
+satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], satelliteMap.getZoom(), {animate:false});
 mapHasCentered = true;
 mapFollowGps = true;
 mapMessage.textContent = "MEVCUT KONUM";
