@@ -1550,14 +1550,20 @@ height:240px;
 .compassMapRotator,
 #satelliteMap{
   position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  border-radius:18px;
   overflow:hidden;
 }
-.compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:none;will-change:transform;}
-#satelliteMap{background:#172128;border-radius:18px;}
+.compassMapRotator{
+  left:50%;
+  top:50%;
+  width:100%;
+  height:100%;
+  transform:translate(-50%,-50%) rotate(0deg);
+  transform-origin:50% 50%;
+  transition:none;
+  will-change:transform;
+  border-radius:0;
+}
+#satelliteMap{inset:0;width:100%;height:100%;background:#172128;border-radius:0;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
   position:absolute;
@@ -1641,7 +1647,7 @@ height:240px;
 .currentLocationButton:active{transform:scale(.94);}
 .currentLocationButton:focus,
 .currentLocationButton:focus-visible{outline:none;box-shadow:0 2px 8px rgba(0,0,0,.35);}
-.compassMapRotator{transform-origin:center center;transition:none;}
+.compassMapRotator{transform-origin:center center;transition:none;overflow:hidden;}
 
 /* Konum düğmesi harita dairesinin değil, büyük harita kutusunun sağ altındadır. */
 .directionSection{position:relative;padding-bottom:68px;min-height:0;}
@@ -2657,9 +2663,9 @@ function smoothAngle(current, target){
 
 function updateHeadingDisplay(){
 /* Pusula yönünü yumuşatılmış açıyla uygula.
-   Harita ve yön harfleri birlikte döner. */
+   Harita, çerçevenin köşelerinde boşluk kalmaması için büyütülmüş kare alan içinde döner. */
 if(compassMapRotator && smoothedHeading !== null){
-  compassMapRotator.style.transform = "rotate(" + (-smoothedHeading) + "deg)";
+  compassMapRotator.style.transform = "translate(-50%,-50%) rotate(" + (-smoothedHeading) + "deg)";
 }
 if(compassRing && smoothedHeading !== null){
   /* CSS geçişi kullanılmaz; kesintisiz JS filtresi titreşimi azaltır. */
@@ -2691,8 +2697,25 @@ currentHeading = normalizeHeading(heading);
 updateHeadingDisplay();
 }
 
+function fitRotatingMapToFrame(){
+  const frame = document.getElementById("compassMapFrame");
+  if(!frame || !compassMapRotator) return;
+  /* Kare harita alanının köşegen uzunluğu, her dönüş açısında dış çerçeveyi kaplar. */
+  const width = frame.clientWidth;
+  const height = frame.clientHeight;
+  if(!width || !height) return;
+  const side = Math.ceil(Math.sqrt(width * width + height * height));
+  compassMapRotator.style.width = side + "px";
+  compassMapRotator.style.height = side + "px";
+  if(satelliteMap){
+    satelliteMap.invalidateSize({pan:false});
+  }
+}
+
 function initSatelliteMap(){
 if(satelliteMap || typeof L === "undefined") return;
+
+fitRotatingMapToFrame();
 
 satelliteMap = L.map("satelliteMap", {
 zoomControl:false,
@@ -2739,6 +2762,15 @@ fillOpacity:1
 }).addTo(satelliteMap);
 
 mapMessage.textContent = "GPS konumu bekleniyor";
+
+/* Ekran yönü veya pencere ölçüsü değişirse harita karesini yeniden boyutlandır. */
+const mapFrame = document.getElementById("compassMapFrame");
+if(mapFrame && typeof ResizeObserver !== "undefined"){
+  const mapResizeObserver = new ResizeObserver(function(){ fitRotatingMapToFrame(); });
+  mapResizeObserver.observe(mapFrame);
+}else{
+  window.addEventListener("resize", fitRotatingMapToFrame, {passive:true});
+}
 }
 
 function updateSatelliteMap(coords){
