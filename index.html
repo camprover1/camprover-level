@@ -1639,13 +1639,14 @@ height:240px;
 }
 .currentLocationButton:active{transform:scale(.94);}
 .routeFitButton{
-  position:absolute;z-index:620;left:12px;bottom:12px;width:40px;height:40px;
+  position:absolute;z-index:900;left:12px;bottom:12px;width:38px;height:38px;
   display:flex;align-items:center;justify-content:center;padding:0;
-  border:1px solid rgba(53,230,161,.9);border-radius:10px;
-  background:rgba(5,15,22,.96);color:#35e6a1;cursor:pointer;
+  border:1px solid rgba(0,168,255,.95);border-radius:8px;
+  background:rgba(5,15,22,.98);color:#fff;cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,.4);
 }
-.routeFitButton svg{width:23px;height:23px;display:block;}
+.routeFitButton svg{width:20px;height:20px;display:block;}
+.routeFitButton:disabled{opacity:.38;filter:grayscale(1);cursor:not-allowed;}
 .routeFitButton.is-active{background:#35e6a1;color:#07140f;border-color:#b8ffe1;}
 .routeFitButton:active{transform:scale(.94);}
 .routeFitButton:focus-visible{outline:2px solid #35e6a1;outline-offset:2px;}
@@ -2896,6 +2897,7 @@ routeStartButton.addEventListener("click", function(){
   routeRunStartedAt = Date.now();
   routeTimerInterval = window.setInterval(updateRouteTimer, 250);
   updateRouteControls();
+  updateRouteFitAvailability();
   updateRouteTimer();
 });
 
@@ -2911,6 +2913,7 @@ routePauseButton.addEventListener("click", function(){
   }
 
   updateRouteControls();
+  updateRouteFitAvailability();
   updateRouteTimer();
 });
 
@@ -2928,6 +2931,7 @@ routeStopButton.addEventListener("click", function(){
   }
 
   updateRouteControls();
+  updateRouteFitAvailability();
   updateRouteTimer();
 });
 
@@ -2961,6 +2965,9 @@ function beginResetHold(event){
       routeTimerInterval = null;
     }
 
+    exitRouteFitMode();
+    routeFitSavedView = null;
+    routeFitSavedHeading = null;
     mapTrackPoints = [];
     lastTrackPoint = null;
     if(mapTrackLine) mapTrackLine.setLatLngs([]);
@@ -2969,6 +2976,7 @@ function beginResetHold(event){
     routeResetButton.classList.remove("is-reset-holding");
     updateRouteTimer();
     updateRouteControls();
+  updateRouteFitAvailability();
     routeStatusLine.textContent = "Rota ve süre sıfırlandı";
     window.setTimeout(function(){
       if(!routeRecording && !routePaused && !routeStopped){
@@ -3002,8 +3010,38 @@ routeResetButton.addEventListener("pointercancel", endResetHold);
 routeResetButton.addEventListener("contextmenu", function(event){ event.preventDefault(); });
 
 updateRouteControls();
+  updateRouteFitAvailability();
 updateRouteTimer();
 updateRouteDistance();
+
+function updateRouteFitAvailability(){
+  const allowed = routeRecording || routePaused || routeStopped;
+  routeFitButton.disabled = !allowed;
+  routeFitButton.style.display = "flex";
+  routeFitButton.title = allowed ? "Tüm rotayı göster / eski görünüme dön" : "Rota kaydı başlatıldıktan sonra kullanılabilir";
+  if(!allowed && routeFitMode){
+    routeFitMode = false;
+    routeFitButton.classList.remove("is-active");
+    routeFitButton.setAttribute("aria-pressed","false");
+    routeFitButton.setAttribute("aria-label","Tüm rotayı daireye sığdır");
+    if(routeFitSavedView && satelliteMap) satelliteMap.setView(routeFitSavedView.center, routeFitSavedView.zoom, {animate:false});
+    if(routeFitSavedHeading !== null) smoothedHeading = routeFitSavedHeading;
+    updateHeadingDisplay();
+  }
+}
+
+function exitRouteFitMode(){
+  if(!routeFitMode) return;
+  routeFitMode = false;
+  routeFitButton.classList.remove("is-active");
+  routeFitButton.setAttribute("aria-pressed","false");
+  routeFitButton.setAttribute("aria-label","Tüm rotayı daireye sığdır");
+  if(routeFitSavedView && satelliteMap) satelliteMap.setView(routeFitSavedView.center, routeFitSavedView.zoom, {animate:false});
+  if(routeFitSavedHeading !== null) smoothedHeading = routeFitSavedHeading;
+  updateHeadingDisplay();
+  mapFollowGps = false;
+  mapMessage.textContent = "UYDU GÖRÜNTÜSÜ";
+}
 
 function fitRecordedRouteToCircle(){
   if(!satelliteMap || !mapTrackPoints.length) {
@@ -3020,6 +3058,7 @@ function fitRecordedRouteToCircle(){
 
 routeFitButton.addEventListener("click", function(){
   this.blur();
+  if(!(routeRecording || routePaused || routeStopped)) return;
   initSatelliteMap();
   if(!satelliteMap) return;
   if(!routeFitMode){
@@ -3038,17 +3077,7 @@ routeFitButton.addEventListener("click", function(){
     fitRecordedRouteToCircle();
     mapMessage.textContent = mapTrackPoints.length > 1 ? "TÜM ROTA · KUZEY ÜSTTE" : "ROTA NOKTALARI BEKLENİYOR";
   }else{
-    routeFitMode = false;
-    this.classList.remove("is-active");
-    this.setAttribute("aria-pressed","false");
-    this.setAttribute("aria-label","Tüm rotayı daireye sığdır");
-    if(routeFitSavedView){
-      satelliteMap.setView(routeFitSavedView.center, routeFitSavedView.zoom, {animate:false});
-    }
-    if(routeFitSavedHeading !== null){smoothedHeading = routeFitSavedHeading;}
-    updateHeadingDisplay();
-    mapFollowGps = false;
-    mapMessage.textContent = "UYDU GÖRÜNTÜSÜ";
+    exitRouteFitMode();
   }
 });
 
