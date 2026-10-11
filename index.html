@@ -1536,10 +1536,10 @@ height:240px;
 }
 .compassMapFrame{
   position:relative;
-  width:min(82vw,420px);
-  aspect-ratio:1 / 1;
+  width:min(94vw,560px);
+  aspect-ratio:3 / 4;
   margin:0 auto;
-  border-radius:50%;
+  border-radius:14px;
   overflow:hidden;
   isolation:isolate;
   background:#111820;
@@ -1552,18 +1552,18 @@ height:240px;
   inset:0;
   width:100%;
   height:100%;
-  border-radius:50%;
+  border-radius:12px;
   overflow:hidden;
 }
 .compassMapRotator{transform:rotate(0deg);transform-origin:50% 50%;transition:none;will-change:transform;}
-#satelliteMap{background:#172128;}
+#satelliteMap{background:#172128;border-radius:12px;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
   position:absolute;
   inset:0;
   z-index:500;
   pointer-events:none;
-  border-radius:50%;
+  border-radius:12px;
   border:1px solid rgba(255,255,255,.32);
   transform:rotate(0deg);
   transform-origin:50% 50%;
@@ -1580,14 +1580,14 @@ height:240px;
   transform-origin:center center;
   /* Her harfin kendi açısı JS tarafından güncellenir; yazı yatay ve okunaklı kalır. */
 }
-.compassN{left:50%;top:7%;}
-.compassNE{left:80%;top:20%;}
-.compassE{left:93%;top:50%;}
-.compassSE{left:80%;top:80%;}
-.compassS{left:50%;top:93%;}
-.compassSW{left:20%;top:80%;}
-.compassW{left:7%;top:50%;}
-.compassNW{left:20%;top:20%;}
+.compassN{left:50%;top:5%;}
+.compassNE{left:88%;top:15%;}
+.compassE{left:94%;top:50%;}
+.compassSE{left:88%;top:85%;}
+.compassS{left:50%;top:95%;}
+.compassSW{left:12%;top:85%;}
+.compassW{left:6%;top:50%;}
+.compassNW{left:12%;top:15%;}
 .compassCenterArrow{
   position:absolute;
   z-index:510;
@@ -1740,7 +1740,7 @@ height:240px;
   .directionHeader{align-items:flex-start;flex-direction:column;}
   .directionHeader .routeToolbar{align-self:flex-end;width:100%;}
   .routeStatusLine{margin-top:0;}
-  .compassMapFrame{width:min(86vw,360px);}
+  .compassMapFrame{width:min(94vw,560px);aspect-ratio:3 / 4;border-radius:12px;}
   .currentLocationButton{right:8px;bottom:8px;font-size:11px;padding:8px 10px;}
 }
 
