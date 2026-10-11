@@ -1555,11 +1555,11 @@ height:240px;
   inset:0;
   width:100%;
   height:100%;
-  border-radius:18px;
-  overflow:hidden;
+  border-radius:0;
+  overflow:visible;
 }
 .compassMapRotator{left:50%;top:50%;right:auto;bottom:auto;inset:auto;transform:translate(-50%,-50%) rotate(0deg);transform-origin:50% 50%;transition:none;will-change:transform;}
-#satelliteMap{background:#172128;border-radius:18px;}
+#satelliteMap{background:#172128;border-radius:0;overflow:visible;}
 #satelliteMap .leaflet-control-container{display:none;}
 .compassRing{
   position:absolute;
@@ -1643,7 +1643,7 @@ height:240px;
 .currentLocationButton:active{transform:scale(.94);}
 .currentLocationButton:focus,
 .currentLocationButton:focus-visible{outline:none;box-shadow:0 2px 8px rgba(0,0,0,.35);}
-.compassMapRotator{left:50%;top:50%;right:auto;bottom:auto;inset:auto;transform-origin:center center;transition:none;overflow:hidden;}
+.compassMapRotator{left:50%;top:50%;right:auto;bottom:auto;inset:auto;transform-origin:center center;transition:none;overflow:visible;}
 
 /* Konum düğmesi harita dairesinin değil, büyük harita kutusunun sağ altındadır. */
 .directionSection{position:relative;padding-bottom:68px;min-height:0;}
@@ -2719,12 +2719,29 @@ function fitRotatingMapToFrame(){
   compassMapRotator.style.margin = "0";
   compassMapRotator.style.width = side + "px";
   compassMapRotator.style.height = side + "px";
+  const mapElement = document.getElementById("satelliteMap");
+  if(mapElement){
+    /* Leaflet must use the full oversized square, not the frame's old dimensions. */
+    mapElement.style.width = side + "px";
+    mapElement.style.height = side + "px";
+    mapElement.style.position = "absolute";
+    mapElement.style.left = "0";
+    mapElement.style.top = "0";
+  }
   if(satelliteMap){
-    satelliteMap.invalidateSize({pan:false, debounceMoveend:true});
-    /* Resizing the rotated viewport must not silently move its geographic center. */
-    if(mapFollowGps && lastKnownCoords){
-      satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], satelliteMap.getZoom(), {animate:false});
-    }
+    const keepCenter = lastKnownCoords && mapFollowGps
+      ? [lastKnownCoords.latitude, lastKnownCoords.longitude]
+      : satelliteMap.getCenter();
+    const keepZoom = satelliteMap.getZoom();
+    /* Wait for layout to apply before asking Leaflet to fill the entire square with tiles. */
+    requestAnimationFrame(function(){
+      satelliteMap.invalidateSize({pan:false, debounceMoveend:false});
+      satelliteMap.setView(keepCenter, keepZoom, {animate:false});
+      requestAnimationFrame(function(){
+        satelliteMap.invalidateSize({pan:false, debounceMoveend:false});
+        satelliteMap.setView(keepCenter, keepZoom, {animate:false});
+      });
+    });
   }
 }
 
