@@ -1536,7 +1536,7 @@ height:240px;
 }
 .compassMapFrame{
   position:relative;
-  width:min(96vw,620px);
+  width:min(88vw,560px);
   aspect-ratio:1 / 1;
   margin:0 auto;
   border-radius:50%;
@@ -1740,7 +1740,7 @@ height:240px;
   .directionHeader{align-items:flex-start;flex-direction:column;}
   .directionHeader .routeToolbar{align-self:flex-end;width:100%;}
   .routeStatusLine{margin-top:0;}
-  .compassMapFrame{width:min(96vw,620px);}
+  .compassMapFrame{width:min(88vw,560px);}
   .currentLocationButton{right:8px;bottom:8px;font-size:11px;padding:8px 10px;}
 }
 
@@ -2998,7 +2998,7 @@ return;
 }
 initSatelliteMap();
 if(satelliteMap){
-satelliteMap.setView([lastKnownCoords.latitude, lastKnownCoords.longitude], 17, {animate:false});
+satelliteMap.panTo([lastKnownCoords.latitude, lastKnownCoords.longitude], {animate:false});
 mapHasCentered = true;
 mapFollowGps = true;
 mapMessage.textContent = "MEVCUT KONUM";
